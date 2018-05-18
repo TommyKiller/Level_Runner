@@ -9,6 +9,7 @@ namespace Level_Runner_Demo
 {
     public class Map
     {
+        private GameClient Parent { get; }
         public int[,] Terrain { get; set; }
         public int[,] Patency { get; set; }
         public int Width
@@ -26,19 +27,21 @@ namespace Level_Runner_Demo
             }
         }
 
-        public void Load(Map savedMap)
+        public Map(int sizeX, int sizeY, GameClient parent)
         {
-            Terrain = savedMap.Terrain;
-            Patency = savedMap.Patency;
-        }
-
-        public void New(int sizeX, int sizeY)
-        {
+            Parent = parent;
             Terrain = new int[sizeY, sizeX];
             Patency = new int[sizeY, sizeX];
             GeneratePlateau();
             GenerateRiver();
             ReWritePatency();
+        }
+
+        public Map(Map savedMap, GameClient parent)
+        {
+            Parent = parent;
+            Terrain = savedMap.Terrain;
+            Patency = savedMap.Patency;
         }
 
         private void GeneratePlateau() // !!!!!
@@ -117,9 +120,9 @@ namespace Level_Runner_Demo
                     else Patency[i, j] = 1;
                 }
             }
-            if (GameClient.actors.Count > 0)
+            if (Parent.actors.Count > 0)
             {
-                foreach (Character character in GameClient.actors)
+                foreach (Character character in Parent.actors)
                 {
                     Patency[character.Y, character.X] = 1;
                 }

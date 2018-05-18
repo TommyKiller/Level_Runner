@@ -15,27 +15,26 @@ namespace Level_Runner_Demo
     public partial class GameClient : Form
     {
         // Events
-        public static event Delegates.ActDelegate OnMoveKeyUp;
-        public static event Delegates.ActDelegate OnMoveKeyDown;
-        public static event Delegates.OnMoveKeyPressedDelegate OnMoveKeyPressed;
+        public event Delegates.ActDelegate OnMoveKeyUp;
+        public event Delegates.ActDelegate OnMoveKeyDown;
+        public event Delegates.OnMoveKeyPressedDelegate OnMoveKeyPressed;
 
         // Objects
-        private static System.Windows.Forms.Timer timer;
-        public static Map map;
-        public static Scene scene;
-        public static Settings settings;
-        public static List<Thread> characterThreads;
-        public static List<Character> actors;
-        public static List<Image> terrainImageList;
-        public static List<Image> characterImageList;
+        private System.Windows.Forms.Timer timer;
+        public Map map;
+        public Scene scene;
+        public Settings settings;
+        public List<Character> actors;
+        public List<Image> terrainImageList;
+        public List<Image> characterImageList;
 
         // Debugging
-        public static bool debug = false;
-        public static long summ = 0;
-        public static long counter = 0;
-        public static int wounded = 0;
-        public static int died = 0;
-        public static int respawned = 0;
+        public bool debug = false;
+        public long summ = 0;
+        public long counter = 0;
+        public int wounded = 0;
+        public int died = 0;
+        public int respawned = 0;
 
         public GameClient()
         {// All that is connected to form
@@ -52,10 +51,6 @@ namespace Level_Runner_Demo
                 new Character.Characteristics(40, 5, 1, "melee", 1.5, 2, 80), // Melee template
                 new Character.Characteristics(40, 5, 1, "range", 9, 3, 80), // Range template
                 16); // Timer interval
-            map = new Map();
-            int height = Convert.ToInt32(Math.Floor((double)(ClientSize.Height / settings.chunkSize.Height)));
-            int width = Convert.ToInt32(Math.Floor((double)(ClientSize.Width / settings.chunkSize.Width)));
-            scene = new Scene(new Point(0, 0), new Size(width, height), this);
 
             // Lists
             actors = new List<Character>();
@@ -80,9 +75,19 @@ namespace Level_Runner_Demo
 
         private void GameClient_Load(object sender, EventArgs e)
         {// All that is connected to game world
-            map.New(
+            #region SceneRegion
+            int height = Convert.ToInt32(Math.Floor((double)(ClientSize.Height / settings.chunkSize.Height)));
+            int width = Convert.ToInt32(Math.Floor((double)(ClientSize.Width / settings.chunkSize.Width)));
+            scene = new Scene(new Point(0, 0), new Size(width, height), this);
+            #endregion
+
+            #region MapRegion
+            map = new Map(
                 Convert.ToInt32(Math.Floor((double)ClientSize.Width / settings.chunkSize.Width)),
-                Convert.ToInt32(Math.Floor((double)ClientSize.Height / settings.chunkSize.Height)));
+                Convert.ToInt32(Math.Floor((double)ClientSize.Height / settings.chunkSize.Height)),
+                this);
+            #endregion
+
             AddActors(50); // Actors adding
             scene.Repaint();
             SetTimer(settings.timerInterval);
@@ -131,8 +136,9 @@ namespace Level_Runner_Demo
             Monitor.Exit(actors);
         }
 
-        private static void SetTimer(int interval)
+        private void SetTimer(int interval)
         {
+
             timer = new System.Windows.Forms.Timer
             {
                 Interval = interval,
@@ -141,7 +147,7 @@ namespace Level_Runner_Demo
             timer.Tick += Timer_Tick;
         }
 
-        private static void Timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             scene.Repaint();
 

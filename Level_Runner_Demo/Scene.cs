@@ -15,16 +15,18 @@ namespace Level_Runner_Demo
         private List<Point> oldChunks;
 
         // Propereties
-        private static Graphics Canvas { get; set; }
+        public GameClient Parent { get; }
+        private Graphics Canvas { get; }
         private bool Saved { get; set; }
-        public Point Coordinates { get; set; }
-        public Size Size { get; set; }
+        public Point Coordinates { get; private set; }
+        public Size Size { get; private set; }
 
-        public Scene(Point coordinates, Size size, Form parentForm)
+        public Scene(Point coordinates, Size size, GameClient parent)
         {
+            Parent = parent;
             Coordinates = coordinates;
             Size = size;
-            Canvas = parentForm.CreateGraphics();
+            Canvas = Parent.CreateGraphics();
             oldChunks = new List<Point>();
             Saved = false;
         }
@@ -42,11 +44,12 @@ namespace Level_Runner_Demo
 
         private void RepaintBackGround()
         {
+            GameClient.Settings settings = Parent.settings;
             for (int i = Coordinates.X; i < (Coordinates.X + Size.Width); i++)
             {
                 for (int j = Coordinates.Y; j < (Coordinates.Y + Size.Height); j++)
                 {
-                    Canvas.DrawImage(GameClient.terrainImageList[GameClient.map.Terrain[j, i]], new Point((i * GameClient.settings.chunkSize.Width), (j * GameClient.settings.chunkSize.Height)));
+                    Canvas.DrawImage(Parent.terrainImageList[Parent.map.Terrain[j, i]], new Point((i * settings.chunkSize.Width), (j * settings.chunkSize.Height)));
                 }
             }
         }
@@ -56,7 +59,7 @@ namespace Level_Runner_Demo
             Monitor.Enter(oldChunks);
             foreach (Point point in oldChunks)
             {
-                if ((point.X < GameClient.map.Width) && (point.Y < GameClient.map.Height) &&
+                if ((point.X < Parent.map.Width) && (point.Y < Parent.map.Height) &&
                     (point.X >= 0) && (point.Y >= 0))
                 {
                     RepaintChunk(point);
@@ -68,8 +71,9 @@ namespace Level_Runner_Demo
 
         private void RepaintChunk(Point point)
         {
-            Canvas.DrawImage(GameClient.terrainImageList[GameClient.map.Terrain[point.Y, point.X]],
-                new Point(point.X * GameClient.settings.chunkSize.Width, point.Y * GameClient.settings.chunkSize.Height));
+            GameClient.Settings settings = Parent.settings;
+            Canvas.DrawImage(Parent.terrainImageList[Parent.map.Terrain[point.Y, point.X]],
+                new Point(point.X * settings.chunkSize.Width, point.Y * settings.chunkSize.Height));
         }
 
         public void AddOldChunk(Point point)
@@ -81,20 +85,21 @@ namespace Level_Runner_Demo
 
         private void RepaintActors()
         {
-            Monitor.Enter(GameClient.actors);
-            if (GameClient.actors.Count > 0)
+            GameClient.Settings settings = Parent.settings;
+            Monitor.Enter(Parent.actors);
+            if (Parent.actors.Count > 0)
             {
-                foreach (Character character in GameClient.actors)
+                foreach (Character character in Parent.actors)
                 {
                     if ((character.X >= Coordinates.X) &&
                         (character.X <= Size.Width) &&
                         (character.Y >= Coordinates.Y) &&
                         (character.Y <= Size.Height))
-                        Canvas.DrawImage(character.image, new Point(character.X * GameClient.settings.chunkSize.Width,
-                            character.Y * GameClient.settings.chunkSize.Height));
+                        Canvas.DrawImage(character.image, new Point(character.X * settings.chunkSize.Width,
+                            character.Y * settings.chunkSize.Height));
                 }
             }
-            Monitor.Exit(GameClient.actors);
+            Monitor.Exit(Parent.actors);
         }
     }
 }

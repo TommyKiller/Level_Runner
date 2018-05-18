@@ -9,7 +9,10 @@ namespace Level_Runner_Demo
 {
     static class Program
     {
+        // Forms
         public static ApplicationContext Context { get; set; }
+        public static GameClient GameClient { get; set; }
+        public static MainMenu MainMenu { get; set; }
 
         /// <summary>
         /// Главная точка входа для приложения.
@@ -19,8 +22,8 @@ namespace Level_Runner_Demo
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Context = new ApplicationContext(new MainMenu());
-            Application.Run(Context);
+            MainMenu = new MainMenu();
+            Application.Run(MainMenu);
         }
     }
 }

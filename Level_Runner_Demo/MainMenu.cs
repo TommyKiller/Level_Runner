@@ -19,7 +19,8 @@ namespace Level_Runner_Demo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Program.Context.MainForm = new GameClient();
+            Program.GameClient = new GameClient();
+            Program.Context.MainForm = Program.GameClient;
             Close();
             Program.Context.MainForm.Show();
         }

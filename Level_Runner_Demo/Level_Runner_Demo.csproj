@@ -45,14 +45,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="About.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="Character.cs" />
+    <Compile Include="Delegates.cs" />
+    <Compile Include="GameClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameClient.Designer.cs">
+      <DependentUpon>GameClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainMenu.Designer.cs">
+      <DependentUpon>MainMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Map.cs" />
+    <Compile Include="Mechanics.cs" />
+    <Compile Include="NPC.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scene.cs" />
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameClient.resx">
+      <DependentUpon>GameClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainMenu.resx">
+      <DependentUpon>MainMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -61,6 +89,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -74,6 +103,39 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MeleePlayer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MeleeWarA.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MeleeWarB.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RangeWarA.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RangeWarB.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Grass.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RoadLeft-Right.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RoadTop-Bottom.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stone.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Water.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WoodenBridge.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

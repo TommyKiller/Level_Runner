@@ -10,11 +10,18 @@ using System.Windows.Forms;
 
 namespace Level_Runner_Demo
 {
-    public partial class Form1 : Form
+    public partial class MainMenu : Form
     {
-        public Form1()
+        public MainMenu()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Program.Context.MainForm = new GameClient();
+            Close();
+            Program.Context.MainForm.Show();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -8,6 +9,8 @@ namespace Level_Runner_Demo
 {
     static class Program
     {
+        public static ApplicationContext Context { get; set; }
+
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
@@ -16,7 +19,8 @@ namespace Level_Runner_Demo
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Context = new ApplicationContext(new MainMenu());
+            Application.Run(Context);
         }
     }
 }

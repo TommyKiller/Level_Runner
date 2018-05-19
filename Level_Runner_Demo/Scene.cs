@@ -95,7 +95,7 @@ namespace Level_Runner_Demo
                         (character.X <= Size.Width) &&
                         (character.Y >= Coordinates.Y) &&
                         (character.Y <= Size.Height))
-                        Canvas.DrawImage(character.image, new Point(character.X * settings.chunkSize.Width,
+                        Canvas.DrawImage(character.Image, new Point(character.X * settings.chunkSize.Width,
                             character.Y * settings.chunkSize.Height));
                 }
             }

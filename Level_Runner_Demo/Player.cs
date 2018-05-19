@@ -14,7 +14,7 @@ namespace Level_Runner_Demo
         public Player(string name, Point coordinates, Bitmap image, Characteristics characteristics, string fraction)
             : base(name, coordinates, image, characteristics, fraction)
         {
-            destination = new Point(X, Y);
+
         }
 
         protected override void Action_Guard()
@@ -32,7 +32,7 @@ namespace Level_Runner_Demo
         protected override void OnDeath()
         {
             base.OnDeath();
-            Mechanics.RespawnPlayer(name, Mechanics.GetRandomFreePoint(), image, characteristics, fraction);
+            Mechanics.RespawnPlayer(Name, Mechanics.GetRandomFreePoint(), Image, characteristics, Fraction);
         }
     }
 }

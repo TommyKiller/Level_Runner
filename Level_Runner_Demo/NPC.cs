@@ -20,82 +20,82 @@ namespace Level_Runner_Demo
 
         protected override void Action_Guard()
         {
-            if (target == null)
+            if (Target == null)
             {
                 ScanArea();
             }
 
-            if (target != null)
+            if (Target != null)
             {
-                if (GetDistance(Coordinates, target.Coordinates) <= AttackRange) actionStack.Push(Delegates.CurrentAct = Action_Attack);
-                else actionStack.Push(Delegates.CurrentAct = Action_Move);
+                if (Mechanics.GetDistance(Coordinates, Target.Coordinates) <= AttackRange) ActionStack.Push(Delegates.CurrentAct = Action_Attack);
+                else ActionStack.Push(Delegates.CurrentAct = Action_Move);
             }
-            else actionStack.Push(Delegates.CurrentAct = Action_Guard);
+            else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
         }
 
         protected override void Action_Attack()
         {
-            if (target != null)
+            if (Target != null)
             {
-                destination = target.Coordinates;
-                if (GetDistance(Coordinates, destination) <= AttackRange)
+                Destination = Target.Coordinates;
+                if (Mechanics.GetDistance(Coordinates, Destination) <= AttackRange)
                 {
-                    if (canAttack)
+                    if (CanAttack)
                     {
                         Thread dealDamageThread = new Thread(DealDamage)
                         {
-                            Name = "DealDamageThread of " + name
+                            Name = "DealDamageThread of " + Name
                         };
-                        if (target != null) Monitor.Enter(target);
+                        if (Target != null) Monitor.Enter(Target);
                         dealDamageThread.Start();
-                        if (target != null) Monitor.Exit(target);
+                        if (Target != null) Monitor.Exit(Target);
                         OnAttack();
-                        actionStack.Push(Delegates.CurrentAct = Action_Attack);
+                        ActionStack.Push(Delegates.CurrentAct = Action_Attack);
                     }
-                    else actionStack.Push(Delegates.CurrentAct = Action_Guard);
+                    else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
                 }
-                else actionStack.Push(Delegates.CurrentAct = Action_Move);
+                else ActionStack.Push(Delegates.CurrentAct = Action_Move);
             }
-            else actionStack.Push(Delegates.CurrentAct = Action_Guard);
+            else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
         }
 
         protected override void Action_Move() // !!!
         {
-            if (target != null)
+            if (Target != null)
             {
-                destination = target.Coordinates;
-                if (GetDistance(Coordinates, destination) > AttackRange)
+                Destination = Target.Coordinates;
+                if (Mechanics.GetDistance(Coordinates, Destination) > AttackRange)
                 {
-                    if (canMove)
+                    if (CanMove)
                     {
                         int newX;
                         int newY;
 
-                        if (Math.Abs(destination.X - X) > 1)
-                            newX = X + (destination.X - X) / Math.Abs(destination.X - X);
+                        if (Math.Abs(Destination.X - X) > 1)
+                            newX = X + (Destination.X - X) / Math.Abs(Destination.X - X);
                         else newX = X;
 
-                        if (Math.Abs(destination.Y - Y) > 1)
-                            newY = Y + (destination.Y - Y) / Math.Abs(destination.Y - Y);
+                        if (Math.Abs(Destination.Y - Y) > 1)
+                            newY = Y + (Destination.Y - Y) / Math.Abs(Destination.Y - Y);
                         else newY = Y;
 
                         if (Mechanics.CheckPoint(new Point(newX, newY)))
                         {
-                            destinationReached = true;
+                            DestinationReached = true;
                             Coordinates = new Point(newX, newY);
                         }
                     }
-                    else actionStack.Push(Delegates.CurrentAct = Action_Guard);
+                    else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
                 }
-                else actionStack.Push(Delegates.CurrentAct = Action_Attack);
+                else ActionStack.Push(Delegates.CurrentAct = Action_Attack);
             }
-            else actionStack.Push(Delegates.CurrentAct = Action_Guard);
+            else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
         }
 
         protected void ScanArea()
         {
-            Monitor.Enter(GameClient.actors);
-            foreach (Character character in GameClient.actors)
+            Monitor.Enter(Program.GameClient.actors);
+            foreach (Character character in Program.GameClient.actors)
             {
                 if (Math.Pow((character.X - X), 2) +
                     Math.Pow((character.Y - Y), 2) <=
@@ -103,36 +103,30 @@ namespace Level_Runner_Demo
                 {
                     if (CheckStatus(character) == "hostile")
                     {
-                        if (target != null)
+                        if (Target != null)
                         {
-                            if (GetDistance(Coordinates, character.Coordinates)
+                            if (Mechanics.GetDistance(Coordinates, character.Coordinates)
                                 <
-                                GetDistance(Coordinates, target.Coordinates))
-                                target = character;
+                                Mechanics.GetDistance(Coordinates, Target.Coordinates))
+                                Target = character;
                         }
-                        else target = character;
+                        else Target = character;
                     }
                 }
             }
-            Monitor.Exit(GameClient.actors);
+            Monitor.Exit(Program.GameClient.actors);
         }
 
         protected string CheckStatus(Character character)
         {
-            return GameClient.settings.relationsTable[fraction][character.fraction];
-        }
-
-        protected double GetDistance(Point point1, Point point2)
-        {
-            return Math.Sqrt(
-                Math.Pow(point2.X - point1.X, 2) +
-                Math.Pow(point2.Y - point1.Y, 2));
+            GameClient.Settings settings = Program.GameClient.settings;
+            return settings.relationsTable[Fraction][character.Fraction];
         }
 
         protected override void OnDeath()
         {
             base.OnDeath();
-            Mechanics.RespawnNPC(name, Mechanics.GetRandomFreePoint(), image, characteristics, fraction);
+            Mechanics.RespawnNPC(Name, Mechanics.GetRandomFreePoint(), Image, characteristics, Fraction);
         }
     }
 }

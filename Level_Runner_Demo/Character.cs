@@ -14,77 +14,58 @@ namespace Level_Runner_Demo
         // Events
         public static event Delegates.DeleteTargetDelegate DeleteTargetEvent;
 
-        // Data
-        public string name;
-        public string fraction;
+        // Propereties
+        public string Name { get; }
+        public string Fraction { get; }
         private Point coordinates;
         public Point Coordinates
         {
-            get
-            {
-                return coordinates;
-            }
+            get => coordinates;
             set
             {
-                Monitor.Enter(GameClient.scene);
-                GameClient.scene.AddOldChunk(Coordinates);
-                Monitor.Exit(GameClient.scene);
+                Monitor.Enter(Program.GameClient.scene);
+                Program.GameClient.scene.AddOldChunk(Coordinates);
+                Monitor.Exit(Program.GameClient.scene);
 
-                Monitor.Enter(GameClient.map);
-                GameClient.map.Patency[coordinates.Y, coordinates.X] = 0;
+                Monitor.Enter(Program.GameClient.map);
+                Program.GameClient.map.Patency[coordinates.Y, coordinates.X] = 0;
                 coordinates = value;
-                GameClient.map.Patency[coordinates.Y, coordinates.X] = 1;
-                Monitor.Exit(GameClient.map);
+                Program.GameClient.map.Patency[coordinates.Y, coordinates.X] = 1;
+                Monitor.Exit(Program.GameClient.map);
 
-                if (destinationReached) OnMove();
+                if (DestinationReached) OnMove();
             }
         }
-        protected Point destination;
-        protected bool destinationReached;
-        protected bool canAttack;
-        protected bool canMove;
-        private bool alive;
-        public readonly Bitmap image;
-        protected Character target;
-        protected Queue<Point> path;
-        protected Stack<Delegates.ActDelegate> actionStack;
-        protected System.Timers.Timer coolDownTimer;
-        protected System.Timers.Timer movementSpeedTimer;
-        public Thread characterThread;
+        protected Point Destination { get; set; }
+        protected bool DestinationReached { get; set; }
+        protected bool CanAttack { get; set; }
+        protected bool CanMove { get; set; }
+        private bool Alive { get; set; }
+        public Bitmap Image { get; }
+        protected Character Target { get; set; }
+        protected Stack<Delegates.ActDelegate> ActionStack { get; set; }
+        protected System.Timers.Timer CoolDownTimer { get; }
+        protected System.Timers.Timer MovementSpeedTimer { get; }
+        public Thread CharacterThread { get; }
 
         // Characteristics
-        public int X
-        {
-            get
-            {
-                return Coordinates.X;
-            }
-        }
-        public int Y
-        {
-            get
-            {
-                return Coordinates.Y;
-            }
-        }
-        protected readonly Characteristics characteristics;
+        public int X { get; }
+        public int Y { get; }
+        protected Characteristics characteristics;
         private int health;
         public int Health
         {
-            get
-            {
-                return health;
-            }
+            get => health;
             set
             {
                 health += value;
-                if ((alive) && (health <= 0))
+                if ((Alive) && (health <= 0))
                 {
                     // Debugging
-                    if (GameClient.debug)
+                    if (Program.GameClient.debug)
                     {
-                        GameClient.wounded++;
-                        Console.WriteLine("{0} deadly wounded", name);
+                        Program.GameClient.wounded++;
+                        Console.WriteLine("{0} deadly wounded", Name);
                         Console.WriteLine(Thread.CurrentThread.Name);
                     }
 
@@ -92,48 +73,12 @@ namespace Level_Runner_Demo
                 }
             }
         }
-        protected int Damage
-        {
-            get
-            {
-                return characteristics.damage;
-            }
-        }
-        protected double AttackSpeed
-        {
-            get
-            {
-                return characteristics.attackSpeed;
-            }
-        }
-        protected string AttackType
-        {
-            get
-            {
-                return characteristics.attackType;
-            }
-        }
-        protected double AttackRange
-        {
-            get
-            {
-                return characteristics.attackRange;
-            }
-        }
-        protected int Speed
-        {
-            get
-            {
-                return characteristics.speed;
-            }
-        }
-        protected int SightRange
-        {
-            get
-            {
-                return characteristics.sightRange;
-            }
-        }
+        protected int Damage { get; }
+        protected double AttackSpeed { get; }
+        protected string AttackType { get; }
+        protected double AttackRange { get; }
+        protected int Speed { get; }
+        protected int SightRange { get; }
 
         public struct Characteristics
         {
@@ -163,28 +108,27 @@ namespace Level_Runner_Demo
             this.characteristics = characteristics;
             health = characteristics.fullHealth;
 
-            this.name = name;
-            this.fraction = fraction;
-            this.image = image;
-            this.image.MakeTransparent(Color.White);
+            Name = name;
+            Fraction = fraction;
+            Image = image;
+            Image.MakeTransparent(Color.White);
             Coordinates = coordinates;
-            canAttack = true;
-            canMove = true;
-            alive = true;
-            path = new Queue<Point>();
-            actionStack = new Stack<Delegates.ActDelegate>();
-            characterThread = new Thread(Action_Execute)
+            CanAttack = true;
+            CanMove = true;
+            Alive = true;
+            ActionStack = new Stack<Delegates.ActDelegate>();
+            CharacterThread = new Thread(Action_Execute)
             {
                 Name = name,
                 IsBackground = false
             };
-            coolDownTimer = new System.Timers.Timer
+            CoolDownTimer = new System.Timers.Timer
             {
                 Interval = AttackSpeed * 1000,
                 Enabled = false,
                 AutoReset = false
             };
-            movementSpeedTimer = new System.Timers.Timer
+            MovementSpeedTimer = new System.Timers.Timer
             {
                 Interval = Convert.ToInt32(Math.Floor((double)(1000 / Speed))),
                 Enabled = false,
@@ -192,29 +136,33 @@ namespace Level_Runner_Demo
             };
 
             // Events
-            coolDownTimer.Elapsed += CoolDownTimer_Elapsed;
-            movementSpeedTimer.Elapsed += MovementSpeedTimer_Elapsed;
+            CoolDownTimer.Elapsed += CoolDownTimer_Elapsed;
+            MovementSpeedTimer.Elapsed += MovementSpeedTimer_Elapsed;
             DeleteTargetEvent += DeleteTarget;
         }
 
         protected void CoolDownTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            coolDownTimer.Stop();
-            canAttack = true;
+            CoolDownTimer.Stop();
+            CanAttack = true;
         }
 
         protected void MovementSpeedTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            movementSpeedTimer.Stop();
-            canMove = true;
+            MovementSpeedTimer.Stop();
+            CanMove = true;
         }
 
         protected void Action_Execute()
         {
-            while (alive)
+            while (Alive)
             {
-                if (actionStack.Count == 0) actionStack.Push(Delegates.CurrentAct = Action_Guard);
-                actionStack.Pop()();
+                if (ActionStack.Count == 0)
+                {
+                    ActionStack.Push(Delegates.CurrentAct = Action_Guard);
+                }
+
+                ActionStack.Pop()();
             }
         }
 
@@ -226,31 +174,37 @@ namespace Level_Runner_Demo
 
         protected void OnAttack()
         {
-            canAttack = false;
-            coolDownTimer.Start();
+            CanAttack = false;
+            CoolDownTimer.Start();
         }
 
         protected void OnMove()
         {
-            canMove = false;
-            destinationReached = false;
-            movementSpeedTimer.Start();
+            CanMove = false;
+            DestinationReached = false;
+            MovementSpeedTimer.Start();
         }
 
         protected void DealDamage()
         {
-            if (target != null) target.Health = -Damage;
+            if (Target != null)
+            {
+                Target.Health = -Damage;
+            }
         }
 
         public void DeleteTarget(Character target)
         {
             // Debug
-            if (GameClient.debug)
+            if (Program.GameClient.debug)
             {
-                Console.WriteLine("Delete target for {0} is managed by {1}", name, Thread.CurrentThread.Name);
+                Console.WriteLine("Delete target for {0} is managed by {1}", Name, Thread.CurrentThread.Name);
             }
 
-            if (this.target == target) this.target = null;
+            if (Target == target)
+            {
+                Target = null;
+            }
         }
 
         // IDisposable
@@ -268,22 +222,22 @@ namespace Level_Runner_Demo
 
             if (disposing)
             {
-                characterThread.Abort();
-                alive = false;
+                CharacterThread.Abort();
+                Alive = false;
 
-                Monitor.Enter(GameClient.actors);
-                GameClient.actors.Remove(this);
-                Monitor.Exit(GameClient.actors);
+                Monitor.Enter(Program.GameClient.actors);
+                Program.GameClient.actors.Remove(this);
+                Monitor.Exit(Program.GameClient.actors);
 
                 DeleteTargetEvent(this);
 
-                Monitor.Enter(GameClient.scene);
-                GameClient.scene.AddOldChunk(new Point(X, Y));
-                Monitor.Exit(GameClient.scene);
+                Monitor.Enter(Program.GameClient.scene);
+                Program.GameClient.scene.AddOldChunk(new Point(X, Y));
+                Monitor.Exit(Program.GameClient.scene);
 
-                Monitor.Enter(GameClient.map);
-                GameClient.map.Patency[Y, X] = 0;
-                Monitor.Exit(GameClient.map);
+                Monitor.Enter(Program.GameClient.map);
+                Program.GameClient.map.Patency[Y, X] = 0;
+                Monitor.Exit(Program.GameClient.map);
 
                 OnDeath();
                 GC.Collect();
@@ -296,14 +250,14 @@ namespace Level_Runner_Demo
         protected virtual void OnDeath()
         {
             // Debugging
-            if (GameClient.debug)
+            if (Program.GameClient.debug)
             {
-                GameClient.died++;
-                Console.WriteLine("{0} died", name);
+                Program.GameClient.died++;
+                Console.WriteLine("{0} died", Name);
             }
 
-            coolDownTimer.Elapsed -= CoolDownTimer_Elapsed;
-            movementSpeedTimer.Elapsed -= MovementSpeedTimer_Elapsed;
+            CoolDownTimer.Elapsed -= CoolDownTimer_Elapsed;
+            MovementSpeedTimer.Elapsed -= MovementSpeedTimer_Elapsed;
             DeleteTargetEvent -= DeleteTarget;
         }
 

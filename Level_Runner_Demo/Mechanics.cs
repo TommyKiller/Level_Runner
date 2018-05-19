@@ -16,31 +16,38 @@ namespace Level_Runner_Demo
         public static void RespawnPlayer(string name, Point coordinates, Bitmap image, Character.Characteristics characteristics, string fraction)
         {
             // Debugging
-            if (GameClient.debug)
+            if (Program.GameClient.debug)
             {
-                GameClient.respawned++;
+                Program.GameClient.respawned++;
                 Console.WriteLine("{0} respawned", name);
             }
 
-            Monitor.Enter(GameClient.actors);
-            GameClient.actors.Add(new Player(name, coordinates, image, characteristics, fraction));
-            GameClient.actors.Last().characterThread.Start();
-            Monitor.Exit(GameClient.actors);
+            Monitor.Enter(Program.GameClient.actors);
+            Program.GameClient.actors.Add(new Player(name, coordinates, image, characteristics, fraction));
+            Program.GameClient.actors.Last().CharacterThread.Start();
+            Monitor.Exit(Program.GameClient.actors);
+        }
+        
+        public static double GetDistance(Point point1, Point point2)
+        {
+            return Math.Sqrt(
+                Math.Pow(point2.X - point1.X, 2) +
+                Math.Pow(point2.Y - point1.Y, 2));
         }
 
         public static void RespawnNPC(string name, Point coordinates, Bitmap image, Character.Characteristics characteristics, string fraction)
         {
             // Debugging
-            if (GameClient.debug)
+            if (Program.GameClient.debug)
             {
-                GameClient.respawned++;
+                Program.GameClient.respawned++;
                 Console.WriteLine("{0} respawned", name);
             }
 
-            Monitor.Enter(GameClient.actors);
-            GameClient.actors.Add(new NPC(name, coordinates, image, characteristics, fraction));
-            GameClient.actors.Last().characterThread.Start();
-            Monitor.Exit(GameClient.actors);
+            Monitor.Enter(Program.GameClient.actors);
+            Program.GameClient.actors.Add(new NPC(name, coordinates, image, characteristics, fraction));
+            Program.GameClient.actors.Last().CharacterThread.Start();
+            Monitor.Exit(Program.GameClient.actors);
         }
 
         public static Point GetDirection(Point point1, Point point2)
@@ -62,22 +69,22 @@ namespace Level_Runner_Demo
 
         public static Point GetRandomPoint(int x = -1, int y = -1)
         {
-            if (x < 0) x = random.Next(GameClient.map.Width);
-            if (y < 0) y = random.Next(GameClient.map.Height);
+            if (x < 0) x = random.Next(Program.GameClient.map.Width);
+            if (y < 0) y = random.Next(Program.GameClient.map.Height);
             return new Point(x, y);
         }
 
         public static bool CheckPoint(Point point)
         {
-            Monitor.Enter(GameClient.map);
-            if (GameClient.map.Patency[point.Y, point.X] == 0)
+            Monitor.Enter(Program.GameClient.map);
+            if (Program.GameClient.map.Patency[point.Y, point.X] == 0)
             {
-                Monitor.Exit(GameClient.map);
+                Monitor.Exit(Program.GameClient.map);
                 return true;
             }
             else
             {
-                Monitor.Exit(GameClient.map);
+                Monitor.Exit(Program.GameClient.map);
                 return false;
             }
         }

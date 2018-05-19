@@ -12,7 +12,7 @@ using Level_Runner_Demo.Properties;
 
 namespace Level_Runner_Demo
 {
-    public partial class GameClient : Form
+    public partial class World : Form
     {
         // Events
         public event Delegates.ActDelegate OnMoveKeyUp;
@@ -20,14 +20,16 @@ namespace Level_Runner_Demo
         public event Delegates.OnMoveKeyPressedDelegate OnMoveKeyPressed;
 
         // Objects
-        private System.Windows.Forms.Timer timer;
+        public System.Windows.Forms.Timer timer;
         public Map map;
         public Scene scene;
         public Settings settings;
+
+        // Lists
         public List<Character> actors;
         public List<Image> terrainImageList;
         public List<Image> characterImageList;
-
+        
         // Debugging
         public bool debug = false;
         public long summ = 0;
@@ -36,7 +38,7 @@ namespace Level_Runner_Demo
         public int died = 0;
         public int respawned = 0;
 
-        public GameClient()
+        public World()
         {// All that is connected to form
             InitializeComponent();
 
@@ -73,24 +75,24 @@ namespace Level_Runner_Demo
             };
         }
 
-        private void GameClient_Load(object sender, EventArgs e)
+        private void World_Load(object sender, EventArgs e)
         {// All that is connected to game world
             #region SceneRegion
-            int height = Convert.ToInt32(Math.Floor((double)(ClientSize.Height / settings.chunkSize.Height)));
-            int width = Convert.ToInt32(Math.Floor((double)(ClientSize.Width / settings.chunkSize.Width)));
+            int height = Convert.ToInt32(Math.Floor((double)(ClientSize.Height / settings.ChunkSize.Height)));
+            int width = Convert.ToInt32(Math.Floor((double)(ClientSize.Width / settings.ChunkSize.Width)));
             scene = new Scene(new Point(0, 0), new Size(width, height), this);
             #endregion
 
             #region MapRegion
             map = new Map(
-                Convert.ToInt32(Math.Floor((double)ClientSize.Width / settings.chunkSize.Width)),
-                Convert.ToInt32(Math.Floor((double)ClientSize.Height / settings.chunkSize.Height)),
+                Convert.ToInt32(Math.Floor((double)ClientSize.Width / settings.ChunkSize.Width)),
+                Convert.ToInt32(Math.Floor((double)ClientSize.Height / settings.ChunkSize.Height)),
                 this);
             #endregion
 
-            AddActors(50); // Actors adding
+            //AddActors(50); // Actors adding
             scene.Repaint();
-            SetTimer(settings.timerInterval);
+            SetTimer(settings.TimerInterval);
             StartActors();
         }
 
@@ -103,16 +105,16 @@ namespace Level_Runner_Demo
                 switch (res)
                 {
                     case 0:
-                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mechanics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.MeleeDefChars, "A"));
+                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.MeleeDefChars, "A"));
                         break;
                     case 1:
-                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mechanics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.RangeDefChars, "A"));
+                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.RangeDefChars, "A"));
                         break;
                     case 2:
-                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mechanics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.MeleeDefChars, "B"));
+                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.MeleeDefChars, "B"));
                         break;
                     case 3:
-                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mechanics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.RangeDefChars, "B"));
+                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.RangeDefChars, "B"));
                         break;
                 }
             }
@@ -122,7 +124,7 @@ namespace Level_Runner_Demo
         {
             foreach (Character character in actors)
             {
-                character.characterThread.Start();
+                character.CharacterThread.Start();
             }
         }
 
@@ -131,7 +133,7 @@ namespace Level_Runner_Demo
             Monitor.Enter(actors);
             foreach (Character character in actors)
             {
-                character.characterThread.Abort();
+                character.CharacterThread.Abort();
             }
             Monitor.Exit(actors);
         }
@@ -166,81 +168,12 @@ namespace Level_Runner_Demo
             }
         }
 
-        public struct Settings
-        {
-            public int timerInterval;
-            public Character.Characteristics MeleeDefChars;
-            public Character.Characteristics RangeDefChars;
-            public readonly Size chunkSize;
-            public readonly Dictionary<string, Dictionary<string, string>> relationsTable;
-            public Settings(Size chunkSize, Character.Characteristics MeleeDefChars, Character.Characteristics RangeDefChars, int timerInterval)
-            {
-                relationsTable = new Dictionary<string, Dictionary<string, string>>
-                {
-                    { "A", new Dictionary<string, string>() },
-                    { "B", new Dictionary<string, string>() }
-                };
-                relationsTable["A"].Add("A", "friendly");
-                relationsTable["A"].Add("B", "hostile");
-                relationsTable["B"].Add("A", "hostile");
-                relationsTable["B"].Add("B", "friendly");
-                this.timerInterval = timerInterval;
-                this.chunkSize = chunkSize;
-                this.MeleeDefChars = MeleeDefChars;
-                this.RangeDefChars = RangeDefChars;
-            }
-        }
-
-        private void GameClient_KeyDown(object sender, KeyEventArgs e)
-        {
-            Keys[] moveKeys = new Keys[]
-            {
-                Keys.W, Keys.A, Keys.S, Keys.D
-            };
-            if (moveKeys.Contains(e.KeyCode)) OnMoveKeyDown?.Invoke();
-        }
-
-        private void GameClient_KeyPress(object sender, KeyPressEventArgs e) // !!!!
-        {
-            char[] moveKeys = new char[]
-            {
-                'W', 'A', 'S', 'D'
-            };
-            if (moveKeys.Contains(e.KeyChar))
-            {
-                switch (e.KeyChar)
-                {
-                    case 'W':
-                        OnMoveKeyPressed?.Invoke(0, 1);
-                        break;
-                    case 'A':
-                        OnMoveKeyPressed?.Invoke(-1, 0);
-                        break;
-                    case 'S':
-                        OnMoveKeyPressed?.Invoke(0, -1);
-                        break;
-                    case 'D':
-                        OnMoveKeyPressed?.Invoke(1, 0);
-                        break;
-                }
-            }
-        }
-
-        private void GameClient_KeyUp(object sender, KeyEventArgs e)
-        {
-            Keys[] moveKeys = new Keys[]
-            {
-                Keys.W, Keys.A, Keys.S, Keys.D
-            };
-            if (moveKeys.Contains(e.KeyCode)) OnMoveKeyUp?.Invoke();
-        }
-
-        private void GameClient_Paint(object sender, PaintEventArgs e)
+        private void World_Paint(object sender, PaintEventArgs e)
         {
             scene.Repaint();
         }
 
-        private void GameClient_FormClosing(object sender, FormClosingEventArgs e)
+        private void World_FormClosing(object sender, FormClosingEventArgs e)
         {
             StopActors();
         }

@@ -27,7 +27,7 @@ namespace Level_Runner_Demo
 
             if (Target != null)
             {
-                if (Mechanics.GetDistance(Coordinates, Target.Coordinates) <= AttackRange) ActionStack.Push(Delegates.CurrentAct = Action_Attack);
+                if (Mathematics.GetDistance(Coordinates, Target.Coordinates) <= AttackRange) ActionStack.Push(Delegates.CurrentAct = Action_Attack);
                 else ActionStack.Push(Delegates.CurrentAct = Action_Move);
             }
             else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
@@ -38,7 +38,7 @@ namespace Level_Runner_Demo
             if (Target != null)
             {
                 Destination = Target.Coordinates;
-                if (Mechanics.GetDistance(Coordinates, Destination) <= AttackRange)
+                if (Mathematics.GetDistance(Coordinates, Destination) <= AttackRange)
                 {
                     if (CanAttack)
                     {
@@ -64,7 +64,7 @@ namespace Level_Runner_Demo
             if (Target != null)
             {
                 Destination = Target.Coordinates;
-                if (Mechanics.GetDistance(Coordinates, Destination) > AttackRange)
+                if (Mathematics.GetDistance(Coordinates, Destination) > AttackRange)
                 {
                     if (CanMove)
                     {
@@ -79,7 +79,7 @@ namespace Level_Runner_Demo
                             newY = Y + (Destination.Y - Y) / Math.Abs(Destination.Y - Y);
                         else newY = Y;
 
-                        if (Mechanics.CheckPoint(new Point(newX, newY)))
+                        if (Mathematics.CheckPoint(new Point(newX, newY)))
                         {
                             DestinationReached = true;
                             Coordinates = new Point(newX, newY);
@@ -94,8 +94,8 @@ namespace Level_Runner_Demo
 
         protected void ScanArea()
         {
-            Monitor.Enter(Program.GameClient.actors);
-            foreach (Character character in Program.GameClient.actors)
+            Monitor.Enter(Program.World.actors);
+            foreach (Character character in Program.World.actors)
             {
                 if (Math.Pow((character.X - X), 2) +
                     Math.Pow((character.Y - Y), 2) <=
@@ -105,28 +105,42 @@ namespace Level_Runner_Demo
                     {
                         if (Target != null)
                         {
-                            if (Mechanics.GetDistance(Coordinates, character.Coordinates)
+                            if (Mathematics.GetDistance(Coordinates, character.Coordinates)
                                 <
-                                Mechanics.GetDistance(Coordinates, Target.Coordinates))
+                                Mathematics.GetDistance(Coordinates, Target.Coordinates))
                                 Target = character;
                         }
                         else Target = character;
                     }
                 }
             }
-            Monitor.Exit(Program.GameClient.actors);
+            Monitor.Exit(Program.World.actors);
         }
 
         protected string CheckStatus(Character character)
         {
-            GameClient.Settings settings = Program.GameClient.settings;
-            return settings.relationsTable[Fraction][character.Fraction];
+            return Program.World.settings.relationsTable[Fraction][character.Fraction];
         }
 
         protected override void OnDeath()
         {
             base.OnDeath();
-            Mechanics.RespawnNPC(Name, Mechanics.GetRandomFreePoint(), Image, characteristics, Fraction);
+            RespawnCharacter();
+        }
+
+        protected override void RespawnCharacter()
+        {
+            // Debugging
+            if (Program.World.debug)
+            {
+                Program.World.respawned++;
+                Console.WriteLine("{0} respawned", Name);
+            }
+
+            Monitor.Enter(Program.World.actors);
+            Program.World.actors.Add(new NPC(Name, Coordinates, Image, characteristics, Fraction));
+            Program.World.actors.Last().CharacterThread.Start();
+            Monitor.Exit(Program.World.actors);
         }
     }
 }

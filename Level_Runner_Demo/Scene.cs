@@ -15,13 +15,13 @@ namespace Level_Runner_Demo
         private List<Point> oldChunks;
 
         // Propereties
-        public GameClient Parent { get; }
+        public World Parent { get; }
         private Graphics Canvas { get; }
         private bool Saved { get; set; }
         public Point Coordinates { get; private set; }
         public Size Size { get; private set; }
 
-        public Scene(Point coordinates, Size size, GameClient parent)
+        public Scene(Point coordinates, Size size, World parent)
         {
             Parent = parent;
             Coordinates = coordinates;
@@ -44,12 +44,11 @@ namespace Level_Runner_Demo
 
         private void RepaintBackGround()
         {
-            GameClient.Settings settings = Parent.settings;
             for (int i = Coordinates.X; i < (Coordinates.X + Size.Width); i++)
             {
                 for (int j = Coordinates.Y; j < (Coordinates.Y + Size.Height); j++)
                 {
-                    Canvas.DrawImage(Parent.terrainImageList[Parent.map.Terrain[j, i]], new Point((i * settings.chunkSize.Width), (j * settings.chunkSize.Height)));
+                    Canvas.DrawImage(Parent.terrainImageList[Parent.map.Terrain[j, i]], new Point((i * Parent.settings.ChunkSize.Width), (j * Parent.settings.ChunkSize.Height)));
                 }
             }
         }
@@ -71,9 +70,8 @@ namespace Level_Runner_Demo
 
         private void RepaintChunk(Point point)
         {
-            GameClient.Settings settings = Parent.settings;
             Canvas.DrawImage(Parent.terrainImageList[Parent.map.Terrain[point.Y, point.X]],
-                new Point(point.X * settings.chunkSize.Width, point.Y * settings.chunkSize.Height));
+                new Point(point.X * Parent.settings.ChunkSize.Width, point.Y * Parent.settings.ChunkSize.Height));
         }
 
         public void AddOldChunk(Point point)
@@ -85,7 +83,6 @@ namespace Level_Runner_Demo
 
         private void RepaintActors()
         {
-            GameClient.Settings settings = Parent.settings;
             Monitor.Enter(Parent.actors);
             if (Parent.actors.Count > 0)
             {
@@ -95,8 +92,8 @@ namespace Level_Runner_Demo
                         (character.X <= Size.Width) &&
                         (character.Y >= Coordinates.Y) &&
                         (character.Y <= Size.Height))
-                        Canvas.DrawImage(character.Image, new Point(character.X * settings.chunkSize.Width,
-                            character.Y * settings.chunkSize.Height));
+                        Canvas.DrawImage(character.Image, new Point(character.X * Parent.settings.ChunkSize.Width,
+                            character.Y * Parent.settings.ChunkSize.Height));
                 }
             }
             Monitor.Exit(Parent.actors);

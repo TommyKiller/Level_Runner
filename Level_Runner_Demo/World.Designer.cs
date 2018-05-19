@@ -1,6 +1,6 @@
 ﻿namespace Level_Runner_Demo
 {
-    partial class GameClient
+    partial class World
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.SuspendLayout();
             // 
-            // GameClient
+            // World
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -38,10 +38,12 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1360, 768);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "GameClient";
+            this.Name = "World";
             this.Text = "Level Runner";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.GameClient_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.World_FormClosing);
+            this.Load += new System.EventHandler(this.World_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.World_Paint);
             this.ResumeLayout(false);
 
         }

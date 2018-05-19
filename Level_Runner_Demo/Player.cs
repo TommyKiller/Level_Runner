@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Level_Runner_Demo
@@ -32,7 +33,22 @@ namespace Level_Runner_Demo
         protected override void OnDeath()
         {
             base.OnDeath();
-            Mechanics.RespawnPlayer(Name, Mechanics.GetRandomFreePoint(), Image, characteristics, Fraction);
+            RespawnCharacter();
+        }
+
+        protected override void RespawnCharacter()
+        {
+            // Debugging
+            if (Program.World.debug)
+            {
+                Program.World.respawned++;
+                Console.WriteLine("{0} respawned", Name);
+            }
+
+            Monitor.Enter(Program.World.actors);
+            Program.World.actors.Add(new Player(Name, Coordinates, Image, characteristics, Fraction));
+            Program.World.actors.Last().CharacterThread.Start();
+            Monitor.Exit(Program.World.actors);
         }
     }
 }

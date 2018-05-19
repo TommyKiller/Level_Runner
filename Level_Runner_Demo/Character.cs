@@ -23,15 +23,15 @@ namespace Level_Runner_Demo
             get => coordinates;
             set
             {
-                Monitor.Enter(Program.GameClient.scene);
-                Program.GameClient.scene.AddOldChunk(Coordinates);
-                Monitor.Exit(Program.GameClient.scene);
+                Monitor.Enter(Program.World.scene);
+                Program.World.scene.AddOldChunk(Coordinates);
+                Monitor.Exit(Program.World.scene);
 
-                Monitor.Enter(Program.GameClient.map);
-                Program.GameClient.map.Patency[coordinates.Y, coordinates.X] = 0;
+                Monitor.Enter(Program.World.map);
+                Program.World.map.Patency[coordinates.Y, coordinates.X] = 0;
                 coordinates = value;
-                Program.GameClient.map.Patency[coordinates.Y, coordinates.X] = 1;
-                Monitor.Exit(Program.GameClient.map);
+                Program.World.map.Patency[coordinates.Y, coordinates.X] = 1;
+                Monitor.Exit(Program.World.map);
 
                 if (DestinationReached) OnMove();
             }
@@ -62,9 +62,9 @@ namespace Level_Runner_Demo
                 if ((Alive) && (health <= 0))
                 {
                     // Debugging
-                    if (Program.GameClient.debug)
+                    if (Program.World.debug)
                     {
-                        Program.GameClient.wounded++;
+                        Program.World.wounded++;
                         Console.WriteLine("{0} deadly wounded", Name);
                         Console.WriteLine(Thread.CurrentThread.Name);
                     }
@@ -74,11 +74,34 @@ namespace Level_Runner_Demo
             }
         }
         protected int Damage { get; }
-        protected double AttackSpeed { get; }
-        protected string AttackType { get; }
-        protected double AttackRange { get; }
-        protected int Speed { get; }
-        protected int SightRange { get; }
+        protected double AttackSpeed
+        {
+            get
+            {
+                return characteristics.attackSpeed;
+            }
+        }
+        protected double AttackRange
+        {
+            get
+            {
+                return characteristics.attackRange;
+            }
+        }
+        protected int Speed
+        {
+            get
+            {
+                return characteristics.speed;
+            }
+        }
+        protected int SightRange
+        {
+            get
+            {
+                return characteristics.sightRange;
+            }
+        }
 
         public struct Characteristics
         {
@@ -196,7 +219,7 @@ namespace Level_Runner_Demo
         public void DeleteTarget(Character target)
         {
             // Debug
-            if (Program.GameClient.debug)
+            if (Program.World.debug)
             {
                 Console.WriteLine("Delete target for {0} is managed by {1}", Name, Thread.CurrentThread.Name);
             }
@@ -225,19 +248,19 @@ namespace Level_Runner_Demo
                 CharacterThread.Abort();
                 Alive = false;
 
-                Monitor.Enter(Program.GameClient.actors);
-                Program.GameClient.actors.Remove(this);
-                Monitor.Exit(Program.GameClient.actors);
+                Monitor.Enter(Program.World.actors);
+                Program.World.actors.Remove(this);
+                Monitor.Exit(Program.World.actors);
 
                 DeleteTargetEvent(this);
 
-                Monitor.Enter(Program.GameClient.scene);
-                Program.GameClient.scene.AddOldChunk(new Point(X, Y));
-                Monitor.Exit(Program.GameClient.scene);
+                Monitor.Enter(Program.World.scene);
+                Program.World.scene.AddOldChunk(new Point(X, Y));
+                Monitor.Exit(Program.World.scene);
 
-                Monitor.Enter(Program.GameClient.map);
-                Program.GameClient.map.Patency[Y, X] = 0;
-                Monitor.Exit(Program.GameClient.map);
+                Monitor.Enter(Program.World.map);
+                Program.World.map.Patency[Y, X] = 0;
+                Monitor.Exit(Program.World.map);
 
                 OnDeath();
                 GC.Collect();
@@ -250,9 +273,9 @@ namespace Level_Runner_Demo
         protected virtual void OnDeath()
         {
             // Debugging
-            if (Program.GameClient.debug)
+            if (Program.World.debug)
             {
-                Program.GameClient.died++;
+                Program.World.died++;
                 Console.WriteLine("{0} died", Name);
             }
 
@@ -260,6 +283,8 @@ namespace Level_Runner_Demo
             MovementSpeedTimer.Elapsed -= MovementSpeedTimer_Elapsed;
             DeleteTargetEvent -= DeleteTarget;
         }
+
+        protected abstract void RespawnCharacter();
 
         ~Character()
         {

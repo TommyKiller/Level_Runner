@@ -9,7 +9,7 @@ namespace Level_Runner_Demo
 {
     public class Map
     {
-        private GameClient Parent { get; }
+        private World Parent { get; }
         public int[,] Terrain { get; set; }
         public int[,] Patency { get; set; }
         public int Width
@@ -27,7 +27,7 @@ namespace Level_Runner_Demo
             }
         }
 
-        public Map(int sizeX, int sizeY, GameClient parent)
+        public Map(int sizeX, int sizeY, World parent)
         {
             Parent = parent;
             Terrain = new int[sizeY, sizeX];
@@ -37,7 +37,7 @@ namespace Level_Runner_Demo
             ReWritePatency();
         }
 
-        public Map(Map savedMap, GameClient parent)
+        public Map(Map savedMap, World parent)
         {
             Parent = parent;
             Terrain = savedMap.Terrain;
@@ -57,56 +57,13 @@ namespace Level_Runner_Demo
 
         private void GenerateRiver() // !!!!!
         {
-            Point start = Mechanics.GetRandomPoint(y: 0);
+            Point start = new Point(Mathematics.GetRandomCoordinate(Width), 0);
             Point end = new Point(start.X, Height - 1);
             Point currentChunk = start;
-            Point direction = Mechanics.GetDirection(start, end);
+            Point direction = Mathematics.GetDirection(start, end);
             while (currentChunk.Y <= end.Y)
             {
                 Terrain[currentChunk.Y++, currentChunk.X] = 5;
-                /*
-                if ((currentChunk.X == end.X) || (currentChunk.Y == end.Y))
-                {
-                    currentChunk = new Point(currentChunk.X + (end.X - currentChunk.X), currentChunk.Y + (end.Y - currentChunk.Y));
-                    Terrain[currentChunk.Y, currentChunk.X] = 5;
-                    Patency[currentChunk.Y, currentChunk.X] = 0;
-                }
-                int sectionChose = new Random().Next(100);
-                if (sectionChose < 15)
-                {
-                    Terrain[currentChunk.Y, currentChunk.X] = 5;
-                    Patency[currentChunk.Y, currentChunk.X] = 0;
-                    currentChunk.Y += direction.Y;
-                    Terrain[currentChunk.Y, currentChunk.X] = 5;
-                    Patency[currentChunk.Y, currentChunk.X] = 0;
-                    currentChunk.X += direction.X;
-                    Terrain[currentChunk.Y, currentChunk.X] = 5;
-                    Patency[currentChunk.Y, currentChunk.X] = 0;
-                }
-                else if ((15 <= sectionChose) && (sectionChose < 30))
-                {
-                    Terrain[currentChunk.Y, currentChunk.X] = 5;
-                    Patency[currentChunk.Y, currentChunk.X] = 0;
-                    currentChunk.X += direction.X;
-                    Terrain[currentChunk.Y, currentChunk.X] = 5;
-                    Patency[currentChunk.Y, currentChunk.X] = 0;
-                    currentChunk.Y += direction.Y;
-                    Terrain[currentChunk.Y, currentChunk.X] = 5;
-                    Patency[currentChunk.Y, currentChunk.X] = 0;
-                }
-                else if ((30 <= sectionChose) && (sectionChose < 65))
-                {
-                    Terrain[currentChunk.Y, currentChunk.X] = 5;
-                    Patency[currentChunk.Y, currentChunk.X] = 0;
-                    currentChunk.X += direction.X;
-                }
-                else if (65 <= sectionChose)
-                {
-                    Terrain[currentChunk.Y, currentChunk.X] = 5;
-                    Patency[currentChunk.Y, currentChunk.X] = 0;
-                    currentChunk.Y += direction.Y;
-                }
-                */
             }
         }
 
@@ -120,6 +77,7 @@ namespace Level_Runner_Demo
                     else Patency[i, j] = 1;
                 }
             }
+
             if (Parent.actors.Count > 0)
             {
                 foreach (Character character in Parent.actors)

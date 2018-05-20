@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LevelRunner.Actors;
 using LevelRunner.Terrains;
 
-namespace LevelRunner.GameClient
+namespace LevelRunner.GameWorld
 {
     public class Map
     {

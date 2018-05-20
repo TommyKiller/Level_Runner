@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LevelRunner.Properties;
 using LevelRunner.Actors;
-using LevelRunner.GameClient;
+using LevelRunner.GameWorld;
 
 namespace LevelRunner
 {
@@ -62,13 +62,13 @@ namespace LevelRunner
 
         private void World_Load(object sender, EventArgs e)
         {// All that is connected to game world
-            #region SceneRegion
+            #region Scene
             int height = Convert.ToInt32(Math.Floor((double)(ClientSize.Height / Settings.ChunkSize.Height)));
             int width = Convert.ToInt32(Math.Floor((double)(ClientSize.Width / Settings.ChunkSize.Width)));
             Scene = new Scene(new Point(0, 0), new Size(width, height), this);
             #endregion
 
-            #region MapRegion
+            #region Map
             Map = new Map(
                 Convert.ToInt32(Math.Floor((double)ClientSize.Width / Settings.ChunkSize.Width)),
                 Convert.ToInt32(Math.Floor((double)ClientSize.Height / Settings.ChunkSize.Height)),

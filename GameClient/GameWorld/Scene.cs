@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LevelRunner.Actors;
 
-namespace LevelRunner.GameClient
+namespace LevelRunner.GameWorld
 {
     public class Scene
     {

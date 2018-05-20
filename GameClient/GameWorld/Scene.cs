@@ -51,7 +51,7 @@ namespace LevelRunner.GameWorld
             {
                 for (int j = Coordinates.Y; j < (Coordinates.Y + Size.Height); j++)
                 {
-                    Parent.Canvas.DrawImage(Parent.Map.Terrain[j, i].Image, new Point((i * Parent.Settings.ChunkSize.Width), (j * Parent.Settings.ChunkSize.Height)));
+                    Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[j, i].Image, new Point((i * Parent.Settings.ChunkSize.Width), (j * Parent.Settings.ChunkSize.Height)));
                 }
             }
         }
@@ -91,7 +91,7 @@ namespace LevelRunner.GameWorld
 
         private void RepaintChunk(Point point)
         {
-            Parent.Canvas.DrawImage(Parent.Map.Terrain[point.Y, point.X].Image,
+            Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[point.Y, point.X].Image,
                 new Point(point.X * Parent.Settings.ChunkSize.Width, point.Y * Parent.Settings.ChunkSize.Height));
         }
 

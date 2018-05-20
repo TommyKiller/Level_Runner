@@ -12,28 +12,28 @@ namespace LevelRunner.GameWorld
     public class Map
     {
         private World Parent { get; }
-        public Terrain[,] Terrain { get; set; }
-        public int[,] Patency { get; set; }
+        public Terrain[,] TerrainLayer { get; set; }
+        public Patency[,] PatencyLayer { get; set; }
         public int Width
         {
             get
             {
-                return Terrain.GetLength(1);
+                return TerrainLayer.GetLength(1);
             }
         }
         public int Height
         {
             get
             {
-                return Terrain.GetLength(0);
+                return TerrainLayer.GetLength(0);
             }
         }
 
         public Map(int sizeX, int sizeY, World parent)
         {
             Parent = parent;
-            Terrain = new Terrain[sizeY, sizeX];
-            Patency = new int[sizeY, sizeX];
+            TerrainLayer = new Terrain[sizeY, sizeX];
+            PatencyLayer = new Patency[sizeY, sizeX];
             GeneratePlateau();
             GenerateRiver();
             ReWritePatency();
@@ -42,8 +42,8 @@ namespace LevelRunner.GameWorld
         public Map(Map savedMap, World parent)
         {
             Parent = parent;
-            Terrain = savedMap.Terrain;
-            Patency = savedMap.Patency;
+            TerrainLayer = savedMap.TerrainLayer;
+            PatencyLayer = savedMap.PatencyLayer;
         }
 
         private void GeneratePlateau() // !!!!!
@@ -52,7 +52,7 @@ namespace LevelRunner.GameWorld
             {
                 for (int j = 0; j < Width; j++)
                 {
-                    Terrain[i, j] = new Grass();
+                    TerrainLayer[i, j] = new Grass();
                 }
             }
         }
@@ -65,7 +65,7 @@ namespace LevelRunner.GameWorld
             Point direction = Mathematics.GetDirection(start, end);
             while (currentChunk.Y <= end.Y)
             {
-                Terrain[currentChunk.Y++, currentChunk.X] = new Water();
+                TerrainLayer[currentChunk.Y++, currentChunk.X] = new Water();
             }
         }
 
@@ -75,7 +75,7 @@ namespace LevelRunner.GameWorld
             {
                 for (int j = 0; j < Width; j++)
                 {
-                    Patency[i, j] = Terrain[i, j].Patency;
+                    PatencyLayer[i, j] = TerrainLayer[i, j].Patency;
                 }
             }
 
@@ -83,7 +83,7 @@ namespace LevelRunner.GameWorld
             {
                 foreach (Character character in Parent.Actors)
                 {
-                    Patency[character.Y, character.X] = 1;
+                    PatencyLayer[character.Y, character.X] = Patency.AirOnly;
                 }
             }
         }

@@ -57,7 +57,7 @@ namespace LevelRunner
         public static bool CheckPoint(Point point)
         {
             Monitor.Enter(Program.World.Map);
-            if (Program.World.Map.Patency[point.Y, point.X] == 0)
+            if (Program.World.Map.PatencyLayer[point.Y, point.X] == 0)
             {
                 Monitor.Exit(Program.World.Map);
                 return true;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LevelRunner.GameWorld;
 
 namespace LevelRunner.Actors
 {
@@ -27,9 +28,9 @@ namespace LevelRunner.Actors
                 Monitor.Exit(Program.World.Scene);
 
                 Monitor.Enter(Program.World.Map);
-                Program.World.Map.Patency[coordinates.Y, coordinates.X] = 0;
+                Program.World.Map.PatencyLayer[coordinates.Y, coordinates.X] = Patency.Ground;
                 coordinates = value;
-                Program.World.Map.Patency[coordinates.Y, coordinates.X] = 1;
+                Program.World.Map.PatencyLayer[coordinates.Y, coordinates.X] = Patency.AirOnly;
                 Monitor.Exit(Program.World.Map);
 
                 if (DestinationReached) OnMove();
@@ -233,7 +234,7 @@ namespace LevelRunner.Actors
                 Monitor.Exit(Program.World.Scene);
 
                 Monitor.Enter(Program.World.Map);
-                Program.World.Map.Patency[Y, X] = 0;
+                Program.World.Map.PatencyLayer[Y, X] = 0;
                 Monitor.Exit(Program.World.Map);
 
                 OnDeath();

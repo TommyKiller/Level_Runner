@@ -4,10 +4,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LevelRunner.Actors;
 
-namespace Level_Runner_Demo
+namespace LevelRunner.GameClient
 {
-    public class Settings
+    public class GameSettings
     {
         public int TimerInterval { get; }
         public Size ChunkSize { get; }
@@ -15,7 +16,7 @@ namespace Level_Runner_Demo
         public Character.Characteristics MeleeDefChars;
         public Character.Characteristics RangeDefChars;
 
-        public Settings(Size chunkSize, Character.Characteristics MeleeDefChars, Character.Characteristics RangeDefChars, int timerInterval)
+        public GameSettings(Size chunkSize, Character.Characteristics MeleeDefChars, Character.Characteristics RangeDefChars, int timerInterval)
         {
             relationsTable = new Dictionary<string, Dictionary<string, string>>
                 {

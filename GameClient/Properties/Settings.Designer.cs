@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Level_Runner_Demo.Properties
+namespace LevelRunner.Properties
 {
 
 

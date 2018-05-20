@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LevelRunner.Actors;
 
-namespace Level_Runner_Demo
+namespace LevelRunner
 {
     public static class Delegates
     {

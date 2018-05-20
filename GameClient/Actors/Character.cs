@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Level_Runner_Demo
+namespace LevelRunner.Actors
 {
     public abstract class Character : IDisposable
     {
@@ -23,15 +22,15 @@ namespace Level_Runner_Demo
             get => coordinates;
             set
             {
-                Monitor.Enter(Program.World.scene);
-                Program.World.scene.AddOldChunk(Coordinates);
-                Monitor.Exit(Program.World.scene);
+                Monitor.Enter(Program.World.Scene);
+                Program.World.Scene.AddOldChunk(Coordinates);
+                Monitor.Exit(Program.World.Scene);
 
-                Monitor.Enter(Program.World.map);
-                Program.World.map.Patency[coordinates.Y, coordinates.X] = 0;
+                Monitor.Enter(Program.World.Map);
+                Program.World.Map.Patency[coordinates.Y, coordinates.X] = 0;
                 coordinates = value;
-                Program.World.map.Patency[coordinates.Y, coordinates.X] = 1;
-                Monitor.Exit(Program.World.map);
+                Program.World.Map.Patency[coordinates.Y, coordinates.X] = 1;
+                Monitor.Exit(Program.World.Map);
 
                 if (DestinationReached) OnMove();
             }
@@ -49,8 +48,8 @@ namespace Level_Runner_Demo
         public Thread CharacterThread { get; }
 
         // Characteristics
-        public int X { get; }
-        public int Y { get; }
+        public int X => Coordinates.X;
+        public int Y => Coordinates.Y;
         protected Characteristics characteristics;
         private int health;
         public int Health
@@ -73,35 +72,11 @@ namespace Level_Runner_Demo
                 }
             }
         }
-        protected int Damage { get; }
-        protected double AttackSpeed
-        {
-            get
-            {
-                return characteristics.attackSpeed;
-            }
-        }
-        protected double AttackRange
-        {
-            get
-            {
-                return characteristics.attackRange;
-            }
-        }
-        protected int Speed
-        {
-            get
-            {
-                return characteristics.speed;
-            }
-        }
-        protected int SightRange
-        {
-            get
-            {
-                return characteristics.sightRange;
-            }
-        }
+        protected int Damage => characteristics.damage;
+        protected double AttackSpeed => characteristics.attackSpeed;
+        protected double AttackRange => characteristics.attackRange;
+        protected int Speed => characteristics.speed;
+        protected int SightRange => characteristics.sightRange;
 
         public struct Characteristics
         {
@@ -129,8 +104,7 @@ namespace Level_Runner_Demo
         {
             // Characteristics
             this.characteristics = characteristics;
-            health = characteristics.fullHealth;
-
+            Health = characteristics.fullHealth;
             Name = name;
             Fraction = fraction;
             Image = image;
@@ -248,19 +222,19 @@ namespace Level_Runner_Demo
                 CharacterThread.Abort();
                 Alive = false;
 
-                Monitor.Enter(Program.World.actors);
-                Program.World.actors.Remove(this);
-                Monitor.Exit(Program.World.actors);
+                Monitor.Enter(Program.World.Actors);
+                Program.World.Actors.Remove(this);
+                Monitor.Exit(Program.World.Actors);
 
                 DeleteTargetEvent(this);
 
-                Monitor.Enter(Program.World.scene);
-                Program.World.scene.AddOldChunk(new Point(X, Y));
-                Monitor.Exit(Program.World.scene);
+                Monitor.Enter(Program.World.Scene);
+                Program.World.Scene.AddOldChunk(new Point(X, Y));
+                Monitor.Exit(Program.World.Scene);
 
-                Monitor.Enter(Program.World.map);
-                Program.World.map.Patency[Y, X] = 0;
-                Monitor.Exit(Program.World.map);
+                Monitor.Enter(Program.World.Map);
+                Program.World.Map.Patency[Y, X] = 0;
+                Monitor.Exit(Program.World.Map);
 
                 OnDeath();
                 GC.Collect();

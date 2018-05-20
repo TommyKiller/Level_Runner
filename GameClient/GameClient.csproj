@@ -45,41 +45,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="About.cs">
+    <Compile Include="Screens\About.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="About.Designer.cs">
+    <Compile Include="Screens\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Character.cs" />
+    <Compile Include="Actors\Character.cs" />
     <Compile Include="Delegates.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="World.cs">
+    <Compile Include="GameClient\GameSettings.cs" />
+    <Compile Include="Terrains\Grass.cs" />
+    <Compile Include="Terrains\Terrain.cs" />
+    <Compile Include="Screens\World.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="World.Designer.cs">
+    <Compile Include="Screens\World.Designer.cs">
       <DependentUpon>World.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainMenu.cs">
+    <Compile Include="Screens\MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainMenu.Designer.cs">
+    <Compile Include="Screens\MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Map.cs" />
+    <Compile Include="GameClient\Map.cs" />
     <Compile Include="Mathematics.cs" />
-    <Compile Include="NPC.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Actors\NPC.cs" />
+    <Compile Include="Actors\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scene.cs" />
-    <EmbeddedResource Include="About.resx">
+    <Compile Include="GameClient\Scene.cs" />
+    <Compile Include="Terrains\Water.cs" />
+    <EmbeddedResource Include="Screens\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="World.resx">
+    <EmbeddedResource Include="Screens\World.resx">
       <DependentUpon>World.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainMenu.resx">
+    <EmbeddedResource Include="Screens\MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

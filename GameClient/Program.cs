@@ -5,7 +5,7 @@ using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Level_Runner_Demo
+namespace LevelRunner
 {
     static class Program
     {

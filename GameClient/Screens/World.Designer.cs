@@ -1,4 +1,4 @@
-﻿namespace Level_Runner_Demo
+﻿namespace LevelRunner
 {
     partial class World
     {
@@ -34,10 +34,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(1360, 768);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.ClientSize = new System.Drawing.Size(800, 700);
             this.Name = "World";
             this.Text = "Level Runner";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

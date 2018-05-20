@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Level_Runner_Demo
+namespace LevelRunner
 {
     static class Mathematics
     {
@@ -32,7 +32,7 @@ namespace Level_Runner_Demo
             Point point;
             do
             {
-                point = GetRandomPoint(Program.World.map.Width, Program.World.map.Height);
+                point = GetRandomPoint(Program.World.Map.Width, Program.World.Map.Height);
             } while (!CheckPoint(point));
             return point;
         }
@@ -56,15 +56,15 @@ namespace Level_Runner_Demo
 
         public static bool CheckPoint(Point point)
         {
-            Monitor.Enter(Program.World.map);
-            if (Program.World.map.Patency[point.Y, point.X] == 0)
+            Monitor.Enter(Program.World.Map);
+            if (Program.World.Map.Patency[point.Y, point.X] == 0)
             {
-                Monitor.Exit(Program.World.map);
+                Monitor.Exit(Program.World.Map);
                 return true;
             }
             else
             {
-                Monitor.Exit(Program.World.map);
+                Monitor.Exit(Program.World.Map);
                 return false;
             }
         }

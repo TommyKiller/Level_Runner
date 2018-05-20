@@ -1,4 +1,4 @@
-﻿namespace Level_Runner_Demo
+﻿namespace LevelRunner
 {
     partial class MainMenu
     {

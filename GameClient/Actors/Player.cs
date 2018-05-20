@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Level_Runner_Demo
+namespace LevelRunner.Actors
 {
     class Player : Character, IDisposable // !!!
     {
@@ -45,10 +45,10 @@ namespace Level_Runner_Demo
                 Console.WriteLine("{0} respawned", Name);
             }
 
-            Monitor.Enter(Program.World.actors);
-            Program.World.actors.Add(new Player(Name, Coordinates, Image, characteristics, Fraction));
-            Program.World.actors.Last().CharacterThread.Start();
-            Monitor.Exit(Program.World.actors);
+            Monitor.Enter(Program.World.Actors);
+            Program.World.Actors.Add(new Player(Name, Coordinates, Image, characteristics, Fraction));
+            Program.World.Actors.Last().CharacterThread.Start();
+            Monitor.Exit(Program.World.Actors);
         }
     }
 }

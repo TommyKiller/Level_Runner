@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Level_Runner_Demo
+namespace LevelRunner
 {
     public partial class MainMenu : Form
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Level_Runner_Demo
+namespace LevelRunner.Actors
 {
     class NPC : Character
     {
@@ -20,14 +20,15 @@ namespace Level_Runner_Demo
 
         protected override void Action_Guard()
         {
-            if (Target == null)
+            Character target = Target;
+            if (target == null)
             {
                 ScanArea();
             }
 
-            if (Target != null)
+            if (target != null)
             {
-                if (Mathematics.GetDistance(Coordinates, Target.Coordinates) <= AttackRange) ActionStack.Push(Delegates.CurrentAct = Action_Attack);
+                if (Mathematics.GetDistance(Coordinates, target.Coordinates) <= AttackRange) ActionStack.Push(Delegates.CurrentAct = Action_Attack);
                 else ActionStack.Push(Delegates.CurrentAct = Action_Move);
             }
             else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
@@ -35,9 +36,10 @@ namespace Level_Runner_Demo
 
         protected override void Action_Attack()
         {
-            if (Target != null)
+            Character target = Target;
+            if (target != null)
             {
-                Destination = Target.Coordinates;
+                Destination = target.Coordinates;
                 if (Mathematics.GetDistance(Coordinates, Destination) <= AttackRange)
                 {
                     if (CanAttack)
@@ -61,9 +63,10 @@ namespace Level_Runner_Demo
 
         protected override void Action_Move() // !!!
         {
-            if (Target != null)
+            Character target = Target;
+            if (target != null)
             {
-                Destination = Target.Coordinates;
+                Destination = target.Coordinates;
                 if (Mathematics.GetDistance(Coordinates, Destination) > AttackRange)
                 {
                     if (CanMove)
@@ -94,8 +97,8 @@ namespace Level_Runner_Demo
 
         protected void ScanArea()
         {
-            Monitor.Enter(Program.World.actors);
-            foreach (Character character in Program.World.actors)
+            Monitor.Enter(Program.World.Actors);
+            foreach (Character character in Program.World.Actors)
             {
                 if (Math.Pow((character.X - X), 2) +
                     Math.Pow((character.Y - Y), 2) <=
@@ -114,12 +117,12 @@ namespace Level_Runner_Demo
                     }
                 }
             }
-            Monitor.Exit(Program.World.actors);
+            Monitor.Exit(Program.World.Actors);
         }
 
         protected string CheckStatus(Character character)
         {
-            return Program.World.settings.relationsTable[Fraction][character.Fraction];
+            return Program.World.Settings.relationsTable[Fraction][character.Fraction];
         }
 
         protected override void OnDeath()
@@ -137,10 +140,10 @@ namespace Level_Runner_Demo
                 Console.WriteLine("{0} respawned", Name);
             }
 
-            Monitor.Enter(Program.World.actors);
-            Program.World.actors.Add(new NPC(Name, Coordinates, Image, characteristics, Fraction));
-            Program.World.actors.Last().CharacterThread.Start();
-            Monitor.Exit(Program.World.actors);
+            Monitor.Enter(Program.World.Actors);
+            Program.World.Actors.Add(new NPC(Name, Mathematics.GetRandomFreePoint(), Image, characteristics, Fraction));
+            Program.World.Actors.Last().CharacterThread.Start();
+            Monitor.Exit(Program.World.Actors);
         }
     }
 }

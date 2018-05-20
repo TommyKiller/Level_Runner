@@ -4,13 +4,15 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LevelRunner.Actors;
+using LevelRunner.Terrains;
 
-namespace Level_Runner_Demo
+namespace LevelRunner.GameClient
 {
     public class Map
     {
         private World Parent { get; }
-        public int[,] Terrain { get; set; }
+        public Terrain[,] Terrain { get; set; }
         public int[,] Patency { get; set; }
         public int Width
         {
@@ -30,7 +32,7 @@ namespace Level_Runner_Demo
         public Map(int sizeX, int sizeY, World parent)
         {
             Parent = parent;
-            Terrain = new int[sizeY, sizeX];
+            Terrain = new Terrain[sizeY, sizeX];
             Patency = new int[sizeY, sizeX];
             GeneratePlateau();
             GenerateRiver();
@@ -50,7 +52,7 @@ namespace Level_Runner_Demo
             {
                 for (int j = 0; j < Width; j++)
                 {
-                    Terrain[i, j] = 0;
+                    Terrain[i, j] = new Grass();
                 }
             }
         }
@@ -63,7 +65,7 @@ namespace Level_Runner_Demo
             Point direction = Mathematics.GetDirection(start, end);
             while (currentChunk.Y <= end.Y)
             {
-                Terrain[currentChunk.Y++, currentChunk.X] = 5;
+                Terrain[currentChunk.Y++, currentChunk.X] = new Water();
             }
         }
 
@@ -73,14 +75,13 @@ namespace Level_Runner_Demo
             {
                 for (int j = 0; j < Width; j++)
                 {
-                    if (Terrain[i, j] < 6) Patency[i, j] = 0;
-                    else Patency[i, j] = 1;
+                    Patency[i, j] = Terrain[i, j].Patency;
                 }
             }
 
-            if (Parent.actors.Count > 0)
+            if (Parent.Actors.Count > 0)
             {
-                foreach (Character character in Parent.actors)
+                foreach (Character character in Parent.Actors)
                 {
                     Patency[character.Y, character.X] = 1;
                 }

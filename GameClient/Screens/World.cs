@@ -8,63 +8,48 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Level_Runner_Demo.Properties;
+using LevelRunner.Properties;
+using LevelRunner.Actors;
+using LevelRunner.GameClient;
 
-namespace Level_Runner_Demo
+namespace LevelRunner
 {
     public partial class World : Form
     {
-        // Events
-        public event Delegates.ActDelegate OnMoveKeyUp;
-        public event Delegates.ActDelegate OnMoveKeyDown;
-        public event Delegates.OnMoveKeyPressedDelegate OnMoveKeyPressed;
-
-        // Objects
-        public System.Windows.Forms.Timer timer;
-        public Map map;
-        public Scene scene;
-        public Settings settings;
-
-        // Lists
-        public List<Character> actors;
-        public List<Image> terrainImageList;
+        // Temporary
         public List<Image> characterImageList;
         
         // Debugging
-        public bool debug = false;
+        public bool debug = true;
         public long summ = 0;
         public long counter = 0;
         public int wounded = 0;
         public int died = 0;
         public int respawned = 0;
 
+        public List<Character> Actors { get; set; }
+        public Map Map { get; set; }
+        public Scene Scene { get; set; }
+        public GameSettings Settings { get; set; }
+        public Graphics Canvas { get; set; }
+        public System.Windows.Forms.Timer Timer { get; set; }
+
         public World()
         {// All that is connected to form
             InitializeComponent();
 
             // Settings
-            ClientSize = Screen.PrimaryScreen.Bounds.Size;
-
-            // Thread
+            WindowState = FormWindowState.Maximized;
             Thread.CurrentThread.IsBackground = true;
 
             // Objects
-            settings = new Settings(new Size(18, 24), // Standard chunk size
+            Settings = new GameSettings(new Size(18, 24), // Standard chunk size
                 new Character.Characteristics(40, 5, 1, "melee", 1.5, 2, 80), // Melee template
                 new Character.Characteristics(40, 5, 1, "range", 9, 3, 80), // Range template
                 16); // Timer interval
 
             // Lists
-            actors = new List<Character>();
-            terrainImageList = new List<Image>
-            {
-                Resources.Grass,
-                Resources.RoadLeft_Right,
-                Resources.RoadTop_Bottom,
-                Resources.WoodenBridge,
-                Resources.Stone,
-                Resources.Water
-            };
+            Actors = new List<Character>();
             characterImageList = new List<Image>
             {
                 Resources.MeleeWarA,
@@ -78,21 +63,21 @@ namespace Level_Runner_Demo
         private void World_Load(object sender, EventArgs e)
         {// All that is connected to game world
             #region SceneRegion
-            int height = Convert.ToInt32(Math.Floor((double)(ClientSize.Height / settings.ChunkSize.Height)));
-            int width = Convert.ToInt32(Math.Floor((double)(ClientSize.Width / settings.ChunkSize.Width)));
-            scene = new Scene(new Point(0, 0), new Size(width, height), this);
+            int height = Convert.ToInt32(Math.Floor((double)(ClientSize.Height / Settings.ChunkSize.Height)));
+            int width = Convert.ToInt32(Math.Floor((double)(ClientSize.Width / Settings.ChunkSize.Width)));
+            Scene = new Scene(new Point(0, 0), new Size(width, height), this);
             #endregion
 
             #region MapRegion
-            map = new Map(
-                Convert.ToInt32(Math.Floor((double)ClientSize.Width / settings.ChunkSize.Width)),
-                Convert.ToInt32(Math.Floor((double)ClientSize.Height / settings.ChunkSize.Height)),
+            Map = new Map(
+                Convert.ToInt32(Math.Floor((double)ClientSize.Width / Settings.ChunkSize.Width)),
+                Convert.ToInt32(Math.Floor((double)ClientSize.Height / Settings.ChunkSize.Height)),
                 this);
             #endregion
 
-            //AddActors(50); // Actors adding
-            scene.Repaint();
-            SetTimer(settings.TimerInterval);
+            AddActors(10);
+            Scene.Repaint();
+            SetTimer(Settings.TimerInterval);
             StartActors();
         }
 
@@ -105,16 +90,16 @@ namespace Level_Runner_Demo
                 switch (res)
                 {
                     case 0:
-                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.MeleeDefChars, "A"));
+                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], Settings.MeleeDefChars, "A"));
                         break;
                     case 1:
-                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.RangeDefChars, "A"));
+                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], Settings.RangeDefChars, "A"));
                         break;
                     case 2:
-                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.MeleeDefChars, "B"));
+                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], Settings.MeleeDefChars, "B"));
                         break;
                     case 3:
-                        actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], settings.RangeDefChars, "B"));
+                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], Settings.RangeDefChars, "B"));
                         break;
                 }
             }
@@ -122,7 +107,7 @@ namespace Level_Runner_Demo
 
         private void StartActors()
         {
-            foreach (Character character in actors)
+            foreach (Character character in Actors)
             {
                 character.CharacterThread.Start();
             }
@@ -130,28 +115,27 @@ namespace Level_Runner_Demo
 
         private void StopActors()
         {
-            Monitor.Enter(actors);
-            foreach (Character character in actors)
+            Monitor.Enter(Actors);
+            foreach (Character character in Actors)
             {
                 character.CharacterThread.Abort();
             }
-            Monitor.Exit(actors);
+            Monitor.Exit(Actors);
         }
 
         private void SetTimer(int interval)
         {
-
-            timer = new System.Windows.Forms.Timer
+            Timer = new System.Windows.Forms.Timer
             {
                 Interval = interval,
                 Enabled = true
             };
-            timer.Tick += Timer_Tick;
+            Timer.Tick += Timer_Tick;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            scene.Repaint();
+            Scene.Repaint();
 
             // Debugging
             if (debug)
@@ -159,7 +143,7 @@ namespace Level_Runner_Demo
                 if ((wounded > 0) || (died > 0) || (respawned > 0))
                 {
                     Console.WriteLine("____________________________________");
-                    Console.WriteLine("Actors count: {0}", actors.Count);
+                    Console.WriteLine("Actors count: {0}", Actors.Count);
                     Console.WriteLine("Were wounded: {0}. Died: {1}. Respawned: {2}", wounded, died, respawned);
                     wounded = 0;
                     died = 0;
@@ -170,7 +154,7 @@ namespace Level_Runner_Demo
 
         private void World_Paint(object sender, PaintEventArgs e)
         {
-            scene.Repaint();
+            Scene.Repaint();
         }
 
         private void World_FormClosing(object sender, FormClosingEventArgs e)

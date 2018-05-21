@@ -71,7 +71,7 @@ namespace LevelRunner
             #endregion
 
             #region Map
-            Map = new Map(width, height, this);
+            Map = new Map(width, height);
             #endregion
 
             AddActors(10);

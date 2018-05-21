@@ -11,7 +11,6 @@ namespace LevelRunner.GameWorld
 {
     public class Map
     {
-        private World Parent { get; }
         public Terrain[,] TerrainLayer { get; set; }
         public Patency[,] PatencyLayer { get; set; }
         public int Width
@@ -29,9 +28,8 @@ namespace LevelRunner.GameWorld
             }
         }
 
-        public Map(int sizeX, int sizeY, World parent)
+        public Map(int sizeX, int sizeY)
         {
-            Parent = parent;
             TerrainLayer = new Terrain[sizeY, sizeX];
             PatencyLayer = new Patency[sizeY, sizeX];
             GeneratePlateau();
@@ -39,9 +37,8 @@ namespace LevelRunner.GameWorld
             ReWritePatency();
         }
 
-        public Map(Map savedMap, World parent)
+        public Map(Map savedMap)
         {
-            Parent = parent;
             TerrainLayer = savedMap.TerrainLayer;
             PatencyLayer = savedMap.PatencyLayer;
         }
@@ -76,14 +73,6 @@ namespace LevelRunner.GameWorld
                 for (int j = 0; j < Width; j++)
                 {
                     PatencyLayer[i, j] = TerrainLayer[i, j].Patency;
-                }
-            }
-
-            if (Parent.Actors.Count > 0)
-            {
-                foreach (Character character in Parent.Actors)
-                {
-                    PatencyLayer[character.Y, character.X] = Patency.Occupied;
                 }
             }
         }

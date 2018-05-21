@@ -28,9 +28,9 @@ namespace LevelRunner.Actors
                 Monitor.Exit(Program.World.Scene);
 
                 Monitor.Enter(Program.World.Map);
-                Program.World.Map.PatencyLayer[coordinates.Y, coordinates.X] = Patency.Free;
+                Program.World.Map.PatencyLayer[Coordinates.Y, Coordinates.X] = Patency.Free;
                 coordinates = value;
-                Program.World.Map.PatencyLayer[coordinates.Y, coordinates.X] = Patency.Occupied;
+                Program.World.Map.PatencyLayer[Coordinates.Y, Coordinates.X] = Patency.Occupied;
                 Monitor.Exit(Program.World.Map);
 
                 if (DestinationReached) OnMove();

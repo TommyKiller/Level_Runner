@@ -11,7 +11,7 @@ namespace LevelRunner.Terrains
 {
     public class Water : Terrain
     {
-        public override Patency Patency { get; set; } = Patency.AirOnly;
+        public override Patency Patency { get; set; } = Patency.Occupied;
         public override Image Image { get; set; } = Resources.Water;
     }
 }

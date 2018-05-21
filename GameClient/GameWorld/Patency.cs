@@ -8,8 +8,7 @@ namespace LevelRunner.GameWorld
 {
     public enum Patency
     {
-        Ground = 0,
-        AirOnly = 1,
-        None = 3,
+        Free = 0,
+        Occupied = 1,
     }
 }

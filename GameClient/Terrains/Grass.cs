@@ -11,7 +11,7 @@ namespace LevelRunner.Terrains
 {
     public class Grass : Terrain
     {
-        public override Patency Patency { get; set; } = Patency.Ground;
+        public override Patency Patency { get; set; } = Patency.Free;
         public override Image Image { get; set; } = Resources.Grass;
     }
 }

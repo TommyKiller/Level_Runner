@@ -28,9 +28,9 @@ namespace LevelRunner.Actors
                 Monitor.Exit(Program.World.Scene);
 
                 Monitor.Enter(Program.World.Map);
-                Program.World.Map.PatencyLayer[coordinates.Y, coordinates.X] = Patency.Ground;
+                Program.World.Map.PatencyLayer[coordinates.Y, coordinates.X] = Patency.Free;
                 coordinates = value;
-                Program.World.Map.PatencyLayer[coordinates.Y, coordinates.X] = Patency.AirOnly;
+                Program.World.Map.PatencyLayer[coordinates.Y, coordinates.X] = Patency.Occupied;
                 Monitor.Exit(Program.World.Map);
 
                 if (DestinationReached) OnMove();
@@ -128,7 +128,7 @@ namespace LevelRunner.Actors
             };
             MovementSpeedTimer = new System.Timers.Timer
             {
-                Interval = Convert.ToInt32(Math.Floor((double)(1000 / Speed))),
+                Interval = 1000 / Speed,
                 Enabled = false,
                 AutoReset = false
             };

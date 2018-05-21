@@ -8,7 +8,7 @@ using LevelRunner.Actors;
 
 namespace LevelRunner.GameWorld
 {
-    public class GameSettings
+    public struct GameSettings
     {
         public int TimerInterval { get; }
         public Size ChunkSize { get; }

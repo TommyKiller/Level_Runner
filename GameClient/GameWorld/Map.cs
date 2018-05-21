@@ -83,7 +83,7 @@ namespace LevelRunner.GameWorld
             {
                 foreach (Character character in Parent.Actors)
                 {
-                    PatencyLayer[character.Y, character.X] = Patency.AirOnly;
+                    PatencyLayer[character.Y, character.X] = Patency.Occupied;
                 }
             }
         }

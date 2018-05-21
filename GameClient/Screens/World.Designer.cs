@@ -34,10 +34,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 700);
+            this.ClientSize = new System.Drawing.Size(684, 561);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "World";
             this.Text = "Level Runner";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.World_FormClosing);
             this.Load += new System.EventHandler(this.World_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.World_Paint);

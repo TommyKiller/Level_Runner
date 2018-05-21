@@ -5,16 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LevelRunner.GameWorld;
+using LevelRunner.GameWorld.Map;
 
 namespace LevelRunner.Actors
 {
     public abstract class Character : IDisposable
     {
         // Events
-        public static event Delegates.DeleteTargetDelegate DeleteTargetEvent;
+        private static event Delegates.DeleteTargetDelegate DeleteTargetEvent;
 
         // Propereties
+        public UnitType UnitType { get; }
         public string Name { get; }
         public string Fraction { get; }
         private Point coordinates;
@@ -28,9 +29,9 @@ namespace LevelRunner.Actors
                 Monitor.Exit(Program.World.Scene);
 
                 Monitor.Enter(Program.World.Map);
-                Program.World.Map.PatencyLayer[Coordinates.Y, Coordinates.X] = Patency.Free;
+                Program.World.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Free;
                 coordinates = value;
-                Program.World.Map.PatencyLayer[Coordinates.Y, Coordinates.X] = Patency.Occupied;
+                Program.World.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Occupied;
                 Monitor.Exit(Program.World.Map);
 
                 if (DestinationReached) OnMove();
@@ -104,6 +105,7 @@ namespace LevelRunner.Actors
         public Character(string name, Point coordinates, Bitmap image, Characteristics characteristics, string fraction)
         {
             // Characteristics
+            UnitType = UnitType.Ground;
             this.characteristics = characteristics;
             Health = characteristics.fullHealth;
             Name = name;
@@ -234,7 +236,7 @@ namespace LevelRunner.Actors
                 Monitor.Exit(Program.World.Scene);
 
                 Monitor.Enter(Program.World.Map);
-                Program.World.Map.PatencyLayer[Y, X] = 0;
+                Program.World.Map.PatencyLayer[Y, X].GroundPatency = GroundPatencyMode.Free;
                 Monitor.Exit(Program.World.Map);
 
                 OnDeath();

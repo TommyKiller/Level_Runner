@@ -9,10 +9,9 @@ namespace LevelRunner
 {
     public static class Delegates
     {
+        public delegate void EventDelegate();
         public delegate void ActDelegate();
-        public delegate void OnMoveKeyPressedDelegate(int xChange, int yChange);
         public delegate void DeleteTargetDelegate(Character target);
         public static ActDelegate CurrentAct;
-        public static OnMoveKeyPressedDelegate SetMoveTarget;
     }
 }

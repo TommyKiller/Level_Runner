@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LevelRunner.Actors;
 
 namespace LevelRunner
 {
@@ -19,22 +20,44 @@ namespace LevelRunner
                 Math.Pow(point2.X - point1.X, 2) +
                 Math.Pow(point2.Y - point1.Y, 2));
         }
-        
-        public static Point GetDirection(Point point1, Point point2)
-        {
-            int xDirection = (point2.X - point1.X + 1) / Math.Abs(point2.X - point1.X + 1);
-            int yDirection = (point2.Y - point1.Y + 1) / Math.Abs(point2.Y - point1.Y + 1);
-            return new Point(xDirection, yDirection);
-        }
 
-        public static Point GetRandomFreePoint()
+        public static Point GetRandomFreePoint(UnitType unitType)
         {
             Point point;
             do
             {
                 point = GetRandomPoint(Program.World.Map.Width, Program.World.Map.Height);
-            } while (!CheckPoint(point));
+            } while (!CheckPoint(point, unitType));
             return point;
+        }
+
+        public static bool CheckPoint(Point point, UnitType unitType)
+        {
+            bool isPointFree = false;
+            Monitor.Enter(Program.World.Map);
+            switch (unitType)
+            {
+                case UnitType.Ground:
+                    if (Program.World.Map.PatencyLayer[point.Y, point.X].GroundPatency == GameWorld.Map.GroundPatencyMode.Free)
+                    {
+                        isPointFree = true;
+                    }
+                    break;
+                case UnitType.Air:
+                    if (Program.World.Map.PatencyLayer[point.Y, point.X].AirPatency == GameWorld.Map.AirPatencyMode.Free)
+                    {
+                        isPointFree = true;
+                    }
+                    break;
+                case UnitType.Water:
+                    if (Program.World.Map.PatencyLayer[point.Y, point.X].WaterPatency == GameWorld.Map.WaterPatencyMode.Free)
+                    {
+                        isPointFree = true;
+                    }
+                    break;
+            }
+            Monitor.Exit(Program.World.Map);
+            return isPointFree;
         }
 
         public static Point GetRandomPoint(int xMax = 0, int yMax = 0)
@@ -44,29 +67,14 @@ namespace LevelRunner
             return new Point(x, y);
         }
 
-        public static int GetRandomCoordinate()
+        public static int GetRandom()
         {
             return random.Next();
         }
 
-        public static int GetRandomCoordinate(int max)
+        public static int GetRandom(int max)
         {
             return random.Next(max);
-        }
-
-        public static bool CheckPoint(Point point)
-        {
-            Monitor.Enter(Program.World.Map);
-            if (Program.World.Map.PatencyLayer[point.Y, point.X] == 0)
-            {
-                Monitor.Exit(Program.World.Map);
-                return true;
-            }
-            else
-            {
-                Monitor.Exit(Program.World.Map);
-                return false;
-            }
         }
     }
 }

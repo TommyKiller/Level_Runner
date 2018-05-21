@@ -44,12 +44,8 @@ namespace LevelRunner.Actors
                 {
                     if (CanAttack)
                     {
-                        Thread dealDamageThread = new Thread(DealDamage)
-                        {
-                            Name = "DealDamageThread of " + Name
-                        };
                         if (Target != null) Monitor.Enter(Target);
-                        dealDamageThread.Start();
+                        DealDamage();
                         if (Target != null) Monitor.Exit(Target);
                         OnAttack();
                         ActionStack.Push(Delegates.CurrentAct = Action_Attack);
@@ -82,7 +78,7 @@ namespace LevelRunner.Actors
                             newY = Y + (Destination.Y - Y) / Math.Abs(Destination.Y - Y);
                         else newY = Y;
 
-                        if (Mathematics.CheckPoint(new Point(newX, newY)))
+                        if (Mathematics.CheckPoint(new Point(newX, newY), UnitType))
                         {
                             DestinationReached = true;
                             Coordinates = new Point(newX, newY);
@@ -141,7 +137,7 @@ namespace LevelRunner.Actors
             }
 
             Monitor.Enter(Program.World.Actors);
-            Program.World.Actors.Add(new NPC(Name, Mathematics.GetRandomFreePoint(), Image, characteristics, Fraction));
+            Program.World.Actors.Add(new NPC(Name, Mathematics.GetRandomFreePoint(UnitType), Image, characteristics, Fraction));
             Program.World.Actors.Last().CharacterThread.Start();
             Monitor.Exit(Program.World.Actors);
         }

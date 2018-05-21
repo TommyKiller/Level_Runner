@@ -12,15 +12,13 @@ namespace LevelRunner.GameWorld
 {
     public class Scene
     {
-        // Components
+        // Fields
         private List<Point> oldChunks;
 
         // Propereties
         public World Parent { get; }
-        private bool Saved { get; set; }
         public Point Coordinates { get; private set; }
         public Size Size { get; private set; }
-        private GraphicsContainer CanvasBackgroundSave { get; set; }
 
         public Scene(Point coordinates, Size size, World parent)
         {
@@ -29,19 +27,15 @@ namespace LevelRunner.GameWorld
             Parent = parent;
             Parent.Canvas = Parent.CreateGraphics();
             oldChunks = new List<Point>();
-            Saved = false;
         }
 
-        public void Repaint()
+        public void Repaint(bool repaintBackGround = false)
         {
-            if (!Saved)
+            if (repaintBackGround)
             {
-                CanvasBackgroundSave = Parent.Canvas.BeginContainer();
                 RepaintBackGround();
-                Saved = true;
             }
             RepaintOldChunks();
-            Parent.Canvas.EndContainer(CanvasBackgroundSave);
             RepaintActors();
         }
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LevelRunner.Actors;
 using LevelRunner.Terrains;
 
-namespace LevelRunner.GameWorld
+namespace LevelRunner.GameWorld.Map
 {
     public class Map
     {
@@ -34,7 +34,6 @@ namespace LevelRunner.GameWorld
             PatencyLayer = new Patency[sizeY, sizeX];
             GeneratePlateau();
             GenerateRiver();
-            ReWritePatency();
         }
 
         public Map(Map savedMap)
@@ -50,30 +49,20 @@ namespace LevelRunner.GameWorld
                 for (int j = 0; j < Width; j++)
                 {
                     TerrainLayer[i, j] = new Grass();
+                    PatencyLayer[i, j] = TerrainLayer[i, j].Patency;
                 }
             }
         }
 
         private void GenerateRiver() // !!!!!
         {
-            Point start = new Point(Mathematics.GetRandomCoordinate(Width), 0);
+            Point start = new Point(Mathematics.GetRandom(Width), 0);
             Point end = new Point(start.X, Height - 1);
             Point currentChunk = start;
-            Point direction = Mathematics.GetDirection(start, end);
             while (currentChunk.Y <= end.Y)
             {
-                TerrainLayer[currentChunk.Y++, currentChunk.X] = new Water();
-            }
-        }
-
-        private void ReWritePatency()
-        {
-            for (int i = 0; i < Height; i++)
-            {
-                for (int j = 0; j < Width; j++)
-                {
-                    PatencyLayer[i, j] = TerrainLayer[i, j].Patency;
-                }
+                TerrainLayer[currentChunk.Y, currentChunk.X] = new Water();
+                PatencyLayer[currentChunk.Y, currentChunk.X] = TerrainLayer[currentChunk.Y++, currentChunk.X].Patency;
             }
         }
     }

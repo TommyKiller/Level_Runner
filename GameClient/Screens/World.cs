@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using LevelRunner.Properties;
 using LevelRunner.Actors;
 using LevelRunner.GameWorld;
+using LevelRunner.GameWorld.Map;
 
 namespace LevelRunner
 {
@@ -20,13 +21,14 @@ namespace LevelRunner
         public List<Image> characterImageList;
         
         // Debugging
-        public bool debug = true;
+        public bool debug = false;
         public long summ = 0;
         public long counter = 0;
         public int wounded = 0;
         public int died = 0;
         public int respawned = 0;
 
+        public bool ActorsActive { get; private set; }
         public List<Character> Actors { get; set; }
         public Map Map { get; set; }
         public Scene Scene { get; set; }
@@ -38,11 +40,12 @@ namespace LevelRunner
         {// All that is connected to form
             InitializeComponent();
 
-            // Settings
+            // Form settings
             WindowState = FormWindowState.Maximized;
             Thread.CurrentThread.IsBackground = true;
 
-            // Objects
+            // Propereties
+            ActorsActive = false;
             Settings = new GameSettings(new Size(18, 24), // Standard chunk size
                 new Character.Characteristics(40, 5, 1, "melee", 1.5, 2, 80), // Melee template
                 new Character.Characteristics(40, 5, 1, "range", 9, 3, 80), // Range template
@@ -75,9 +78,7 @@ namespace LevelRunner
             #endregion
 
             AddActors(10);
-            Scene.Repaint();
             SetTimer(Settings.TimerInterval);
-            StartActors();
         }
 
         private void AddActors(int number)
@@ -89,22 +90,22 @@ namespace LevelRunner
                 switch (res)
                 {
                     case 0:
-                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], Settings.MeleeDefChars, "A"));
+                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(UnitType.Ground), (Bitmap)characterImageList[res], Settings.MeleeDefChars, "A"));
                         break;
                     case 1:
-                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], Settings.RangeDefChars, "A"));
+                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(UnitType.Ground), (Bitmap)characterImageList[res], Settings.RangeDefChars, "A"));
                         break;
                     case 2:
-                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], Settings.MeleeDefChars, "B"));
+                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(UnitType.Ground), (Bitmap)characterImageList[res], Settings.MeleeDefChars, "B"));
                         break;
                     case 3:
-                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(), (Bitmap)characterImageList[res], Settings.RangeDefChars, "B"));
+                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(UnitType.Ground), (Bitmap)characterImageList[res], Settings.RangeDefChars, "B"));
                         break;
                 }
             }
         }
 
-        private void StartActors()
+        public void StartActors()
         {
             foreach (Character character in Actors)
             {
@@ -134,7 +135,16 @@ namespace LevelRunner
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            Scene.Repaint();
+            if (!ActorsActive)
+            {
+                Scene.Repaint(true);
+                StartActors();
+                ActorsActive = true;
+            }
+            else
+            {
+                Scene.Repaint();
+            }
 
             // Debugging
             if (debug)
@@ -153,7 +163,7 @@ namespace LevelRunner
 
         private void World_Paint(object sender, PaintEventArgs e)
         {
-            Scene.Repaint();
+            Scene.Repaint(true);
         }
 
         private void World_FormClosing(object sender, FormClosingEventArgs e)

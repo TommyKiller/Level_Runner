@@ -6,11 +6,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{23086F84-B67C-4686-A12C-728326D0AEF9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Level_Runner_Demo</RootNamespace>
+    <RootNamespace>LevelRunner</RootNamespace>
     <AssemblyName>Level_Runner_Demo</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -45,7 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameWorld\Patency.cs" />
+    <Compile Include="Actors\UnitType.cs" />
+    <Compile Include="GameWorld\Map\Patency.cs" />
     <Compile Include="Screens\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,7 +71,7 @@
     <Compile Include="Screens\MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameWorld\Map.cs" />
+    <Compile Include="GameWorld\Map\Map.cs" />
     <Compile Include="Mathematics.cs" />
     <Compile Include="Actors\NPC.cs" />
     <Compile Include="Actors\Player.cs" />
@@ -142,5 +144,6 @@
   <ItemGroup>
     <None Include="Resources\WoodenBridge.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

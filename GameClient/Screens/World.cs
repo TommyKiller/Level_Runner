@@ -77,7 +77,7 @@ namespace LevelRunner
             Map = new Map(width, height);
             #endregion
 
-            AddActors(10);
+            AddActors(50);
             SetTimer(Settings.TimerInterval);
         }
 

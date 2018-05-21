@@ -222,7 +222,6 @@ namespace LevelRunner.Actors
 
             if (disposing)
             {
-                CharacterThread.Abort();
                 Alive = false;
 
                 Monitor.Enter(Program.World.Actors);

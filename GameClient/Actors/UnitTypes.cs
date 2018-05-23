@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LevelRunner.Actors
 {
-    public enum UnitType
+    public enum UnitTypes
     {
-        Ground = 0,
-        Air = 1,
-        Water = 2,
+        GroundUnit = 0,
+        AirUnit = 1,
+        WaterUnit = 2
     }
 }

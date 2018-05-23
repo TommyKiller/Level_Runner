@@ -1,4 +1,7 @@
-﻿using System;
+﻿using LevelRunner.Actors.AttackTypes;
+using LevelRunner.Actors.Fractions;
+using LevelRunner.Properties;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -8,47 +11,47 @@ using System.Threading.Tasks;
 
 namespace LevelRunner.Actors
 {
-    class Player : Character, IDisposable // !!!
+    class Player : Character, IDisposable
     {
-        // Variables
+        // Propereties
+        public override string Name { get; }
 
-        public Player(string name, Point coordinates, Bitmap image, Characteristics characteristics, string fraction)
-            : base(name, coordinates, image, characteristics, fraction)
+        public Player(World parent, Fraction fraction, Point coordinates)
+            : base(parent, fraction, UnitTypes.GroundUnit, new GroundOnly(5, 1, 1.5), 40, 1, 80, coordinates, Resources.PWarrior)
         {
-
+            Name = Fraction.Name + " Player";
         }
 
-        protected override void Action_Guard()
+        protected override void Action_Execute()
         {
-        }
-
-        protected override void Action_Attack()
-        {
-        }
-
-        protected override void Action_Move()
-        {
+            while (Alive)
+            {
+                if (ActionStack.Count != 0)
+                {
+                    ActionStack.Pop()();
+                }
+            }
         }
 
         protected override void OnDeath()
         {
-            base.OnDeath();
             RespawnCharacter();
         }
 
-        protected override void RespawnCharacter()
+        protected void RespawnCharacter()
         {
-            // Debugging
-            if (Program.World.debug)
+            #region Debugging
+            if (Parent.debug)
             {
-                Program.World.respawned++;
+                Parent.respawned++;
                 Console.WriteLine("{0} respawned", Name);
             }
+            #endregion
 
-            Monitor.Enter(Program.World.Actors);
-            Program.World.Actors.Add(new Player(Name, Coordinates, Image, characteristics, Fraction));
-            Program.World.Actors.Last().CharacterThread.Start();
-            Monitor.Exit(Program.World.Actors);
+            Monitor.Enter(Parent.Actors);
+            Parent.Actors.Add(new Player(Parent, Fraction, Coordinates));
+            Parent.Actors.Last().CharacterThread.Start();
+            Monitor.Exit(Parent.Actors);
         }
     }
 }

@@ -46,7 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actors\UnitType.cs" />
+    <Compile Include="Actors\AttackTypes\UnitAttack.cs" />
+    <Compile Include="Actors\AttackTypes\GroundAndAir.cs" />
+    <Compile Include="Actors\AttackTypes\GroundOnly.cs" />
+    <Compile Include="Actors\Fractions\FMern.cs" />
+    <Compile Include="Actors\Fractions\Fraction.cs" />
+    <Compile Include="Actors\Fractions\FRivia.cs" />
+    <Compile Include="Actors\Fractions\Relations.cs" />
+    <Compile Include="Actors\NPC\Archer.cs" />
+    <Compile Include="Actors\NPC\Warrior.cs" />
+    <Compile Include="Actors\UnitTypes.cs" />
     <Compile Include="GameWorld\Map\Patency.cs" />
     <Compile Include="Screens\About.cs">
       <SubType>Form</SubType>
@@ -73,7 +82,7 @@
     </Compile>
     <Compile Include="GameWorld\Map\Map.cs" />
     <Compile Include="Mathematics.cs" />
-    <Compile Include="Actors\NPC.cs" />
+    <Compile Include="Actors\NPC\NPC.cs" />
     <Compile Include="Actors\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,19 +121,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MeleePlayer.png" />
+    <None Include="Resources\PWarrior.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MeleeWarA.png" />
+    <None Include="Resources\AIWarrior.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MeleeWarB.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\RangeWarA.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\RangeWarB.png" />
+    <None Include="Resources\AIArcher.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Grass.jpg" />
@@ -144,6 +147,5 @@
   <ItemGroup>
     <None Include="Resources\WoodenBridge.jpg" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

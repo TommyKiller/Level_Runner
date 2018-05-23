@@ -63,6 +63,26 @@ namespace LevelRunner.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AIArcher {
+            get {
+                object obj = ResourceManager.GetObject("AIArcher", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AIWarrior {
+            get {
+                object obj = ResourceManager.GetObject("AIWarrior", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Grass {
             get {
                 object obj = ResourceManager.GetObject("Grass", resourceCulture);
@@ -73,49 +93,9 @@ namespace LevelRunner.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap MeleePlayer {
+        internal static System.Drawing.Bitmap PWarrior {
             get {
-                object obj = ResourceManager.GetObject("MeleePlayer", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap MeleeWarA {
-            get {
-                object obj = ResourceManager.GetObject("MeleeWarA", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap MeleeWarB {
-            get {
-                object obj = ResourceManager.GetObject("MeleeWarB", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap RangeWarA {
-            get {
-                object obj = ResourceManager.GetObject("RangeWarA", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap RangeWarB {
-            get {
-                object obj = ResourceManager.GetObject("RangeWarB", resourceCulture);
+                object obj = ResourceManager.GetObject("PWarrior", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

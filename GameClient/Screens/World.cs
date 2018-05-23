@@ -12,21 +12,21 @@ using LevelRunner.Properties;
 using LevelRunner.Actors;
 using LevelRunner.GameWorld;
 using LevelRunner.GameWorld.Map;
+using LevelRunner.Actors.NPC;
+using LevelRunner.Actors.Fractions;
 
 namespace LevelRunner
 {
     public partial class World : Form
     {
-        // Temporary
-        public List<Image> characterImageList;
-        
-        // Debugging
+        #region Debugging
         public bool debug = false;
         public long summ = 0;
         public long counter = 0;
         public int wounded = 0;
         public int died = 0;
         public int respawned = 0;
+        #endregion
 
         public bool ActorsActive { get; private set; }
         public List<Character> Actors { get; set; }
@@ -47,20 +47,10 @@ namespace LevelRunner
             // Propereties
             ActorsActive = false;
             Settings = new GameSettings(new Size(18, 24), // Standard chunk size
-                new Character.Characteristics(40, 5, 1, "melee", 1.5, 2, 80), // Melee template
-                new Character.Characteristics(40, 5, 1, "range", 9, 3, 80), // Range template
                 16); // Timer interval
 
             // Lists
             Actors = new List<Character>();
-            characterImageList = new List<Image>
-            {
-                Resources.MeleeWarA,
-                Resources.RangeWarA,
-                Resources.MeleeWarB,
-                Resources.RangeWarB,
-                Resources.MeleePlayer
-            };
         }
 
         private void World_Load(object sender, EventArgs e)
@@ -77,7 +67,7 @@ namespace LevelRunner
             Map = new Map(width, height);
             #endregion
 
-            AddActors(50);
+            AddActors(10);
             SetTimer(Settings.TimerInterval);
         }
 
@@ -90,16 +80,16 @@ namespace LevelRunner
                 switch (res)
                 {
                     case 0:
-                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(UnitType.Ground), (Bitmap)characterImageList[res], Settings.MeleeDefChars, "A"));
+                        Actors.Add(new AIWarrior(this, new FMern(), Mathematics.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                     case 1:
-                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(UnitType.Ground), (Bitmap)characterImageList[res], Settings.RangeDefChars, "A"));
+                        Actors.Add(new AIArcher(this, new FMern(), Mathematics.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                     case 2:
-                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(UnitType.Ground), (Bitmap)characterImageList[res], Settings.MeleeDefChars, "B"));
+                        Actors.Add(new AIWarrior(this, new FRivia(), Mathematics.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                     case 3:
-                        Actors.Add(new NPC(String.Format("AI.NPC {0}", i), Mathematics.GetRandomFreePoint(UnitType.Ground), (Bitmap)characterImageList[res], Settings.RangeDefChars, "B"));
+                        Actors.Add(new AIArcher(this, new FRivia(), Mathematics.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                 }
             }
@@ -146,7 +136,7 @@ namespace LevelRunner
                 Scene.Repaint();
             }
 
-            // Debugging
+            #region Debugging
             if (debug)
             {
                 if ((wounded > 0) || (died > 0) || (respawned > 0))
@@ -159,6 +149,7 @@ namespace LevelRunner
                     respawned = 0;
                 }
             }
+            #endregion
         }
 
         private void World_Paint(object sender, PaintEventArgs e)

@@ -57,12 +57,12 @@ namespace LevelRunner.GameWorld
             {
                 foreach (Character character in Parent.Actors)
                 {
-                    if ((character.X >= Coordinates.X) &&
-                        (character.X <= Size.Width) &&
-                        (character.Y >= Coordinates.Y) &&
-                        (character.Y <= Size.Height))
-                        Parent.Canvas.DrawImage(character.Image, new Point(character.X * Parent.Settings.ChunkSize.Width,
-                            character.Y * Parent.Settings.ChunkSize.Height));
+                    if ((character.Coordinates.X >= Coordinates.X) &&
+                        (character.Coordinates.X <= Size.Width) &&
+                        (character.Coordinates.Y >= Coordinates.Y) &&
+                        (character.Coordinates.Y <= Size.Height))
+                        Parent.Canvas.DrawImage(character.Image, new Point(character.Coordinates.X * Parent.Settings.ChunkSize.Width,
+                            character.Coordinates.Y * Parent.Settings.ChunkSize.Height));
                 }
             }
             Monitor.Exit(Parent.Actors);

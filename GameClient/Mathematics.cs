@@ -21,7 +21,7 @@ namespace LevelRunner
                 Math.Pow(point2.Y - point1.Y, 2));
         }
 
-        public static Point GetRandomFreePoint(UnitType unitType)
+        public static Point GetRandomFreePoint(UnitTypes unitType)
         {
             Point point;
             do
@@ -31,25 +31,25 @@ namespace LevelRunner
             return point;
         }
 
-        public static bool CheckPoint(Point point, UnitType unitType)
+        public static bool CheckPoint(Point point, UnitTypes unitType)
         {
             bool isPointFree = false;
             Monitor.Enter(Program.World.Map);
             switch (unitType)
             {
-                case UnitType.Ground:
+                case UnitTypes.GroundUnit:
                     if (Program.World.Map.PatencyLayer[point.Y, point.X].GroundPatency == GameWorld.Map.GroundPatencyMode.Free)
                     {
                         isPointFree = true;
                     }
                     break;
-                case UnitType.Air:
+                case UnitTypes.AirUnit:
                     if (Program.World.Map.PatencyLayer[point.Y, point.X].AirPatency == GameWorld.Map.AirPatencyMode.Free)
                     {
                         isPointFree = true;
                     }
                     break;
-                case UnitType.Water:
+                case UnitTypes.WaterUnit:
                     if (Program.World.Map.PatencyLayer[point.Y, point.X].WaterPatency == GameWorld.Map.WaterPatencyMode.Free)
                     {
                         isPointFree = true;

@@ -80,21 +80,20 @@ namespace LevelRunner.Actors
             SightRange = sightRange;
             Coordinates = coordinates;
 
+            #region Image editing
             Image = image;
             Image.MakeTransparent(Color.White);
-
             for (int i = 0; i < Image.Width; i++)
             {
                 for (int j = 0; j < Image.Height; j++)
                 {
-                    Console.WriteLine(Image.GetPixel(i, j));
                     if (Image.GetPixel(i, j) == Color.FromArgb(255, 255, 0, 0))
                     {
                         Image.SetPixel(i, j, Fraction.Color);
                     }
                 }
-                
             }
+            #endregion
 
             CharacterThread = new Thread(Action_Execute)
             {

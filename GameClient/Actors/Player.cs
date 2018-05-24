@@ -24,13 +24,12 @@ namespace LevelRunner.Actors
 
         protected override void Action_Execute()
         {
-            while (Alive)
+            ActionThread = new Thread(new ThreadStart(ActionStack.Pop()))
             {
-                if (ActionStack.Count != 0)
-                {
-                    ActionStack.Pop()();
-                }
-            }
+                Name = Name,
+                IsBackground = false
+            };
+            ActionThread.Start();
         }
 
         protected override void OnDeath()
@@ -49,8 +48,7 @@ namespace LevelRunner.Actors
             #endregion
 
             Monitor.Enter(Parent.Actors);
-            Parent.Actors.Add(new Player(Parent, Fraction, Coordinates));
-            Parent.Actors.Last().CharacterThread.Start();
+            Parent.Actors.Add(new Player(Parent, Fraction, Mathematics.GetRandomFreePoint(UnitType)));
             Monitor.Exit(Parent.Actors);
         }
     }

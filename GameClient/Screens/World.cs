@@ -19,6 +19,9 @@ namespace LevelRunner
 {
     public partial class World : Form
     {
+        // Events
+        public event Delegates.EventDelegate OnTimer;
+
         #region Debugging
         public bool debug = false;
         public long summ = 0;
@@ -28,7 +31,6 @@ namespace LevelRunner
         public int respawned = 0;
         #endregion
 
-        public bool ActorsActive { get; private set; }
         public List<Character> Actors { get; set; }
         public Map Map { get; set; }
         public Scene Scene { get; set; }
@@ -45,7 +47,6 @@ namespace LevelRunner
             Thread.CurrentThread.IsBackground = true;
 
             // Propereties
-            ActorsActive = false;
             Settings = new GameSettings(new Size(18, 24), // Standard chunk size
                 16); // Timer interval
 
@@ -67,7 +68,7 @@ namespace LevelRunner
             Map = new Map(width, height);
             #endregion
 
-            AddActors(10);
+            AddActors(100);
             SetTimer(Settings.TimerInterval);
         }
 
@@ -95,24 +96,6 @@ namespace LevelRunner
             }
         }
 
-        public void StartActors()
-        {
-            foreach (Character character in Actors)
-            {
-                character.CharacterThread.Start();
-            }
-        }
-
-        private void StopActors()
-        {
-            Monitor.Enter(Actors);
-            foreach (Character character in Actors)
-            {
-                character.CharacterThread.Abort();
-            }
-            Monitor.Exit(Actors);
-        }
-
         private void SetTimer(int interval)
         {
             Timer = new System.Windows.Forms.Timer
@@ -125,16 +108,8 @@ namespace LevelRunner
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if (!ActorsActive)
-            {
-                Scene.Repaint(true);
-                StartActors();
-                ActorsActive = true;
-            }
-            else
-            {
-                Scene.Repaint();
-            }
+            Scene.Repaint();
+            OnTimer();
 
             #region Debugging
             if (debug)
@@ -154,12 +129,7 @@ namespace LevelRunner
 
         private void World_Paint(object sender, PaintEventArgs e)
         {
-            Scene.Repaint(true);
-        }
-
-        private void World_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            StopActors();
+            Scene.Repaint();
         }
     }
 }

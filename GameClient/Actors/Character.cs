@@ -65,8 +65,8 @@ namespace LevelRunner.Actors
         public Bitmap Image { get; }
         public abstract string Name { get; }
         protected bool Alive { get; set; }
-        public Thread CharacterThread { get; }
         protected Stack<Delegates.ActDelegate> ActionStack { get; set; }
+        protected Thread ActionThread { get; set; }
 
         public Character(World parent, Fraction fraction, UnitTypes unitType, UnitAttack unitAttack,
             int health, int speed, int sightRange, Point coordinates, Bitmap image)
@@ -95,11 +95,6 @@ namespace LevelRunner.Actors
             }
             #endregion
 
-            CharacterThread = new Thread(Action_Execute)
-            {
-                Name = Name,
-                IsBackground = false
-            };
             ActionStack = new Stack<Delegates.ActDelegate>();
         }
 

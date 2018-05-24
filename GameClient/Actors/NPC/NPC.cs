@@ -58,19 +58,21 @@ namespace LevelRunner.Actors.NPC
             DeleteTargetEvent += DeleteTarget;
             CoolDownTimer.Elapsed += CoolDownTimer_Elapsed;
             MovementSpeedTimer.Elapsed += MovementSpeedTimer_Elapsed;
+            Parent.OnTimer += Action_Execute;
         }
 
         protected override void Action_Execute()
         {
-            while (Alive)
+            if (ActionStack.Count == 0)
             {
-                if (ActionStack.Count == 0)
-                {
-                    ActionStack.Push(Delegates.CurrentAct = Action_Guard);
-                }
-
-                ActionStack.Pop()();
+                ActionStack.Push(Delegates.CurrentAct = Action_Guard);
             }
+            ActionThread = new Thread(new ThreadStart(ActionStack.Pop()))
+            {
+                Name = Name,
+                IsBackground = false
+            };
+            ActionThread.Start();
         }
 
         protected abstract void Action_Guard();
@@ -183,6 +185,7 @@ namespace LevelRunner.Actors.NPC
             DeleteTargetEvent -= DeleteTarget;
             CoolDownTimer.Elapsed -= CoolDownTimer_Elapsed;
             MovementSpeedTimer.Elapsed -= MovementSpeedTimer_Elapsed;
+            Parent.OnTimer -= Action_Execute;
 
             RespawnCharacter();
         }

@@ -17,7 +17,7 @@ namespace LevelRunner.Actors.NPC
         public override string Name { get; }
 
         public AIArcher(World parent, Fraction fraction, Point coordinates)
-            : base(parent, fraction, UnitTypes.GroundUnit, new GroundAndAir(7, 0.8, 8), 40, 2, 80, coordinates, Resources.AIArcher)
+            : base(parent, fraction, UnitTypes.GroundUnit, new GroundAndAir(8, 0.8, 8), 35, 2, 80, coordinates, Resources.AIArcher)
         {
             Name = Fraction.Name + " Archer";
         }
@@ -49,8 +49,9 @@ namespace LevelRunner.Actors.NPC
                     if (CanAttack)
                     {
                         if (Target != null) Monitor.Enter(Target);
-                        DealDamage();
+                        new Thread(DealDamage).Start();
                         if (Target != null) Monitor.Exit(Target);
+
                         OnAttack();
                         ActionStack.Push(Delegates.CurrentAct = Action_Attack);
                     }
@@ -114,8 +115,7 @@ namespace LevelRunner.Actors.NPC
             #endregion
 
             Monitor.Enter(Parent.Actors);
-            Parent.Actors.Add(new AIArcher(Parent, Fraction, Coordinates));
-            Parent.Actors.Last().CharacterThread.Start();
+            Parent.Actors.Add(new AIArcher(Parent, Fraction, Mathematics.GetRandomFreePoint(UnitType)));
             Monitor.Exit(Parent.Actors);
         }
     }

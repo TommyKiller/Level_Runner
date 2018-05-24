@@ -38,7 +38,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "World";
             this.Text = "Level Runner";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.World_FormClosing);
             this.Load += new System.EventHandler(this.World_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.World_Paint);
             this.ResumeLayout(false);

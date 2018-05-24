@@ -17,7 +17,7 @@ namespace LevelRunner.Actors.NPC
         public override string Name { get; }
 
         public AIWarrior(World parent, Fraction fraction, Point coordinates)
-            : base(parent, fraction, UnitTypes.GroundUnit, new GroundOnly(5, 1, 1.5), 40, 1, 80, coordinates, Resources.AIWarrior)
+            : base(parent, fraction, UnitTypes.GroundUnit, new GroundOnly(9, 1.1, 1.5), 45, 1, 80, coordinates, Resources.AIWarrior)
         {
             Name = Fraction.Name + " Warrior";
         }
@@ -114,8 +114,7 @@ namespace LevelRunner.Actors.NPC
             #endregion
 
             Monitor.Enter(Parent.Actors);
-            Parent.Actors.Add(new AIWarrior(Parent, Fraction, Coordinates));
-            Parent.Actors.Last().CharacterThread.Start();
+            Parent.Actors.Add(new AIWarrior(Parent, Fraction, Mathematics.GetRandomFreePoint(UnitType)));
             Monitor.Exit(Parent.Actors);
         }
     }

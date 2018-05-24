@@ -16,6 +16,7 @@ namespace LevelRunner.GameWorld
         private List<Point> oldChunks;
 
         // Propereties
+        private bool BackGroundRepaint { get; set; }
         public World Parent { get; }
         public Point Coordinates { get; private set; }
         public Size Size { get; private set; }
@@ -27,13 +28,15 @@ namespace LevelRunner.GameWorld
             Parent = parent;
             Parent.Canvas = Parent.CreateGraphics();
             oldChunks = new List<Point>();
+            BackGroundRepaint = true;
         }
 
-        public void Repaint(bool repaintBackGround = false)
+        public void Repaint()
         {
-            if (repaintBackGround)
+            if (BackGroundRepaint)
             {
                 RepaintBackGround();
+                BackGroundRepaint = false;
             }
             RepaintOldChunks();
             RepaintActors();

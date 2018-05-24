@@ -16,8 +16,7 @@ namespace LevelRunner.Actors
 
         // Propereties
         protected World Parent { get; }
-        public UnitTypes UnitType { get; }
-        public Fraction Fraction { get; }
+        public string Name { get; protected set; }
         public int Health
         {
             get => _health;
@@ -39,9 +38,10 @@ namespace LevelRunner.Actors
                 }
             }
         }
-        protected int Speed { get; }
-        public UnitAttack UnitAttack { get; }
-        protected int SightRange { get; }
+        public UnitTypes UnitType { get; protected set; }
+        public Fraction Fraction { get; }
+        public UnitAttack UnitAttack { get; protected set; }
+        protected int Speed { get; set; }
         public virtual Point Coordinates
         {
             get => _coordinates;
@@ -59,21 +59,19 @@ namespace LevelRunner.Actors
             }
         }
         public Bitmap Image { get; }
-        public abstract string Name { get; }
         protected bool Alive { get; set; }
+        protected System.Timers.Timer CoolDownTimer { get; }
+        protected System.Timers.Timer MovementSpeedTimer { get; }
         protected Thread ActionThread { get; set; }
 
-        public Character(World parent, Fraction fraction, UnitTypes unitType, UnitAttack unitAttack,
-            int health, int speed, int sightRange, Point coordinates, Bitmap image)
+        public Character(World parent, Fraction fraction, Point coordinates, Bitmap image)
         {
             Parent = parent;
             Fraction = fraction;
-            UnitType = unitType;
-            Health = health;
-            Speed = speed;
-            UnitAttack = unitAttack;
-            SightRange = sightRange;
             Coordinates = coordinates;
+            
+            CoolDownTimer = new System.Timers.Timer();
+            MovementSpeedTimer = new System.Timers.Timer();
 
             #region Image editing
             Image = image;
@@ -88,6 +86,21 @@ namespace LevelRunner.Actors
                     }
                 }
             }
+            #endregion
+        }
+
+        protected void SetUpTimers(double coolDownInterval, double movementSpeedInterval)
+        {
+            #region Attack cool down timer
+            CoolDownTimer.Interval = coolDownInterval;
+            CoolDownTimer.Enabled = false;
+            CoolDownTimer.AutoReset = false;
+            #endregion
+
+            #region Movement cool down timer
+            MovementSpeedTimer.Interval = movementSpeedInterval;
+            MovementSpeedTimer.Enabled = false;
+            MovementSpeedTimer.AutoReset = false;
             #endregion
         }
 

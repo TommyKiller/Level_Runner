@@ -24,32 +24,18 @@ namespace LevelRunner.Actors.NPC
         }
         protected Point Destination { get; set; }
         protected Character Target { get; set; }
+        protected int SightRange { get; set; }
         protected bool DestinationReached { get; set; }
         protected bool CanAttack { get; set; }
         protected bool CanMove { get; set; }
-        protected System.Timers.Timer CoolDownTimer { get; }
-        protected System.Timers.Timer MovementSpeedTimer { get; }
         protected Stack<Delegates.ActDelegate> ActionStack { get; }
 
-        public NPC(World parent, Fraction fraction, UnitTypes unitType, UnitAttack attackType,
-            int health, int speed, int sightRange, Point coordinates, Bitmap image)
-            : base(parent, fraction, unitType, attackType, health, speed, sightRange, coordinates, image)
+        public NPC(World parent, Fraction fraction, Point coordinates, Bitmap image)
+            : base(parent, fraction, coordinates, image)
         {
             CanAttack = true;
             CanMove = true;
             Alive = true;
-            CoolDownTimer = new System.Timers.Timer
-            {
-                Interval = UnitAttack.AttackSpeed * 1000,
-                Enabled = false,
-                AutoReset = false
-            };
-            MovementSpeedTimer = new System.Timers.Timer
-            {
-                Interval = 1000 / Speed,
-                Enabled = false,
-                AutoReset = false
-            };
             ActionStack = new Stack<Delegates.ActDelegate>();
 
             // Events

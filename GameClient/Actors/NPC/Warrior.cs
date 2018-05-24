@@ -9,13 +9,17 @@ namespace LevelRunner.Actors.NPC
 {
     class AIWarrior : NPC
     {
-        // Propereties
-        public override string Name { get; }
-
         public AIWarrior(World parent, Fraction fraction, Point coordinates)
-            : base(parent, fraction, UnitTypes.GroundUnit, new GroundOnly(9, 1.1, 1.5), 45, 1, 80, coordinates, Resources.AIWarrior)
+            : base(parent, fraction, coordinates, Resources.AIWarrior)
         {
             Name = Fraction.Name + " Warrior";
+            UnitType = UnitTypes.GroundUnit;
+            Health = 120;
+            Speed = 1;
+            UnitAttack = new GroundOnly(7, 1.1, 1.5);
+            SightRange = 80;
+
+            SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
         }
 
         protected override void DealDamage()

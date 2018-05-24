@@ -10,22 +10,31 @@ namespace LevelRunner.Actors
     class Player : Character, IDisposable
     {
         // Propereties
-        public override string Name { get; }
+        public Delegates.ActDelegate CurrentAct { get; set; }
 
-        public Player(World parent, Fraction fraction, Point coordinates)
-            : base(parent, fraction, UnitTypes.GroundUnit, new GroundOnly(5, 1, 1.5), 40, 1, 80, coordinates, Resources.PWarrior)
+        public Player(World parent, Fraction fraction, Point coordinates, string name)
+            : base(parent, fraction, coordinates, Resources.PWarrior)
         {
-            Name = Fraction.Name + " Player";
+            Name = name;
+            UnitType = UnitTypes.GroundUnit;
+            Health = 120;
+            Speed = 1;
+            UnitAttack = new GroundOnly(10, 1, 1.5);
+
+            SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
         }
 
         protected override void Action_Execute()
         {
-            ActionThread = new Thread(new ThreadStart(ActionStack.Pop()))
+            if (CurrentAct != null)
             {
-                Name = Name,
-                IsBackground = false
-            };
-            ActionThread.Start();
+                ActionThread = new Thread(new ThreadStart(CurrentAct))
+                {
+                    Name = Name,
+                    IsBackground = false
+                };
+                ActionThread.Start();
+            }
         }
 
         protected override void OnDeath()
@@ -44,7 +53,7 @@ namespace LevelRunner.Actors
             #endregion
 
             Monitor.Enter(Parent.Actors);
-            Parent.Actors.Add(new Player(Parent, Fraction, Mathematics.GetRandomFreePoint(UnitType)));
+            Parent.Actors.Add(new Player(Parent, Fraction, Mathematics.GetRandomFreePoint(UnitType), Name));
             Monitor.Exit(Parent.Actors);
         }
     }

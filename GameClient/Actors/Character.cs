@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using LevelRunner.Actors.AttackTypes;
+﻿using LevelRunner.Actors.AttackTypes;
 using LevelRunner.Actors.Fractions;
 using LevelRunner.GameWorld.Map;
+using System;
+using System.Drawing;
+using System.Threading;
 
 namespace LevelRunner.Actors
 {
@@ -65,7 +61,6 @@ namespace LevelRunner.Actors
         public Bitmap Image { get; }
         public abstract string Name { get; }
         protected bool Alive { get; set; }
-        protected Stack<Delegates.ActDelegate> ActionStack { get; set; }
         protected Thread ActionThread { get; set; }
 
         public Character(World parent, Fraction fraction, UnitTypes unitType, UnitAttack unitAttack,
@@ -94,8 +89,6 @@ namespace LevelRunner.Actors
                 }
             }
             #endregion
-
-            ActionStack = new Stack<Delegates.ActDelegate>();
         }
 
         protected abstract void Action_Execute();

@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using LevelRunner.Properties;
-using LevelRunner.Actors;
+﻿using LevelRunner.Actors;
+using LevelRunner.Actors.Fractions;
+using LevelRunner.Actors.NPC;
 using LevelRunner.GameWorld;
 using LevelRunner.GameWorld.Map;
-using LevelRunner.Actors.NPC;
-using LevelRunner.Actors.Fractions;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace LevelRunner
 {
@@ -48,7 +43,7 @@ namespace LevelRunner
 
             // Propereties
             Settings = new GameSettings(new Size(18, 24), // Standard chunk size
-                16); // Timer interval
+                1); // Timer interval
 
             // Lists
             Actors = new List<Character>();
@@ -68,7 +63,7 @@ namespace LevelRunner
             Map = new Map(width, height);
             #endregion
 
-            AddActors(100);
+            AddActors(50);
             SetTimer(Settings.TimerInterval);
         }
 
@@ -96,8 +91,17 @@ namespace LevelRunner
             }
         }
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool GetSystemTimeAdjustment(out long lpTimeAdjustment,
+            out long lpTimeIncrement, out bool lpTimeAdjustmentDisabled);
+
         private void SetTimer(int interval)
         {
+            if (GetSystemTimeAdjustment(out long timeAdjustment, out long timeIncrement, out bool timeAdjustmentDisabled))
+            {
+                interval = !timeAdjustmentDisabled ? (int)(timeIncrement / 10000) : interval;
+            }
+            Console.WriteLine(interval);
             Timer = new System.Windows.Forms.Timer
             {
                 Interval = interval,

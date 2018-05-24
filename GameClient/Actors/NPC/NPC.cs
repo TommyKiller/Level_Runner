@@ -1,13 +1,9 @@
 ﻿using LevelRunner.Actors.AttackTypes;
 using LevelRunner.Actors.Fractions;
-using LevelRunner.GameWorld.Map;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace LevelRunner.Actors.NPC
 {
@@ -27,12 +23,13 @@ namespace LevelRunner.Actors.NPC
             }
         }
         protected Point Destination { get; set; }
+        protected Character Target { get; set; }
         protected bool DestinationReached { get; set; }
         protected bool CanAttack { get; set; }
         protected bool CanMove { get; set; }
         protected System.Timers.Timer CoolDownTimer { get; }
         protected System.Timers.Timer MovementSpeedTimer { get; }
-        protected Character Target { get; set; }
+        protected Stack<Delegates.ActDelegate> ActionStack { get; }
 
         public NPC(World parent, Fraction fraction, UnitTypes unitType, UnitAttack attackType,
             int health, int speed, int sightRange, Point coordinates, Bitmap image)
@@ -53,6 +50,7 @@ namespace LevelRunner.Actors.NPC
                 Enabled = false,
                 AutoReset = false
             };
+            ActionStack = new Stack<Delegates.ActDelegate>();
 
             // Events
             DeleteTargetEvent += DeleteTarget;
@@ -75,11 +73,78 @@ namespace LevelRunner.Actors.NPC
             ActionThread.Start();
         }
 
-        protected abstract void Action_Guard();
+        protected virtual void Action_Guard()
+        {
+            Character target = Target;
+            if (target == null)
+            {
+                ScanArea();
+            }
 
-        protected abstract void Action_Attack();
+            if (target != null)
+            {
+                if (Mathematics.GetDistance(Coordinates, target.Coordinates) <= UnitAttack.AttackRange) ActionStack.Push(Delegates.CurrentAct = Action_Attack);
+                else ActionStack.Push(Delegates.CurrentAct = Action_Move);
+            }
+            else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
+        }
 
-        protected abstract void Action_Move();
+        protected virtual void Action_Attack()
+        {
+            Character target = Target;
+            if (target != null)
+            {
+                Destination = target.Coordinates;
+                if (Mathematics.GetDistance(Coordinates, Destination) <= UnitAttack.AttackRange)
+                {
+                    if (CanAttack)
+                    {
+                        if (Target != null) Monitor.Enter(Target);
+                        DealDamage();
+                        if (Target != null) Monitor.Exit(Target);
+                        OnAttack();
+                        ActionStack.Push(Delegates.CurrentAct = Action_Attack);
+                    }
+                    else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
+                }
+                else ActionStack.Push(Delegates.CurrentAct = Action_Move);
+            }
+            else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
+        }
+
+        protected virtual void Action_Move()
+        {
+            Character target = Target;
+            if (target != null)
+            {
+                Destination = target.Coordinates;
+                if (Mathematics.GetDistance(Coordinates, Destination) > UnitAttack.AttackRange)
+                {
+                    if (CanMove)
+                    {
+                        int newX;
+                        int newY;
+
+                        if (Math.Abs(Destination.X - Coordinates.X) > 1)
+                            newX = Coordinates.X + (Destination.X - Coordinates.X) / Math.Abs(Destination.X - Coordinates.X);
+                        else newX = Coordinates.X;
+
+                        if (Math.Abs(Destination.Y - Coordinates.Y) > 1)
+                            newY = Coordinates.Y + (Destination.Y - Coordinates.Y) / Math.Abs(Destination.Y - Coordinates.Y);
+                        else newY = Coordinates.Y;
+
+                        if (Mathematics.CheckPoint(new Point(newX, newY), UnitType))
+                        {
+                            DestinationReached = true;
+                            Coordinates = new Point(newX, newY);
+                        }
+                    }
+                    else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
+                }
+                else ActionStack.Push(Delegates.CurrentAct = Action_Attack);
+            }
+            else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
+        }
 
         protected abstract void DealDamage();
 

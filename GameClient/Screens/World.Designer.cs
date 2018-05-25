@@ -40,6 +40,8 @@
             this.Text = "Level Runner";
             this.Load += new System.EventHandler(this.World_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.World_Paint);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.World_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.World_KeyUp);
             this.ResumeLayout(false);
 
         }

@@ -1,4 +1,5 @@
-﻿using LevelRunner.Terrains;
+﻿using LevelRunner.Mathematics;
+using LevelRunner.Terrains;
 using System.Drawing;
 
 namespace LevelRunner.GameWorld.Map
@@ -50,7 +51,7 @@ namespace LevelRunner.GameWorld.Map
 
         private void GenerateRiver() // !!!!!
         {
-            Point start = new Point(Mathematics.GetRandom(Width), 0);
+            Point start = new Point(Calculate.GetRandom(Width), 0);
             Point end = new Point(start.X, Height - 1);
             Point currentChunk = start;
             while (currentChunk.Y <= end.Y)

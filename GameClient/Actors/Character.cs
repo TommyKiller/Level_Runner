@@ -2,6 +2,7 @@
 using LevelRunner.Actors.Fractions;
 using LevelRunner.GameWorld.Map;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 
@@ -41,7 +42,7 @@ namespace LevelRunner.Actors
         public UnitTypes UnitType { get; protected set; }
         public Fraction Fraction { get; }
         public UnitAttack UnitAttack { get; protected set; }
-        protected int Speed { get; set; }
+        protected double Speed { get; set; }
         public virtual Point Coordinates
         {
             get => _coordinates;
@@ -60,18 +61,22 @@ namespace LevelRunner.Actors
         }
         public Bitmap Image { get; }
         protected bool Alive { get; set; }
+        protected bool CanAttack { get; set; }
+        protected bool CanMove { get; set; }
         protected System.Timers.Timer CoolDownTimer { get; }
         protected System.Timers.Timer MovementSpeedTimer { get; }
+        protected Stack<Delegates.ActDelegate> ActionStack { get; }
         protected Thread ActionThread { get; set; }
 
         public Character(World parent, Fraction fraction, Point coordinates, Bitmap image)
         {
             Parent = parent;
             Fraction = fraction;
-            Coordinates = coordinates;
+            _coordinates = coordinates; // !!!
             
             CoolDownTimer = new System.Timers.Timer();
             MovementSpeedTimer = new System.Timers.Timer();
+            ActionStack = new Stack<Delegates.ActDelegate>();
 
             #region Image editing
             Image = image;
@@ -87,6 +92,10 @@ namespace LevelRunner.Actors
                 }
             }
             #endregion
+
+            CanAttack = true;
+            CanMove = true;
+            Alive = true;
         }
 
         protected void SetUpTimers(double coolDownInterval, double movementSpeedInterval)
@@ -106,6 +115,7 @@ namespace LevelRunner.Actors
 
         protected abstract void Action_Execute();
 
+        #region Dispose
         public void Dispose()
         {
             Dispose(true);
@@ -139,7 +149,34 @@ namespace LevelRunner.Actors
 
             disposed = true;
         }
+        #endregion
+
+        #region Events
+        protected void CoolDownTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            CoolDownTimer.Stop();
+            CanAttack = true;
+        }
+
+        protected void MovementSpeedTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            MovementSpeedTimer.Stop();
+            CanMove = true;
+        }
+
+        protected void OnAttack()
+        {
+            CanAttack = false;
+            CoolDownTimer.Start();
+        }
+
+        protected void OnMove()
+        {
+            CanMove = false;
+            MovementSpeedTimer.Start();
+        }
 
         protected abstract void OnDeath();
+        #endregion
     }
 }

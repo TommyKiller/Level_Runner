@@ -3,6 +3,7 @@ using LevelRunner.Actors.Fractions;
 using LevelRunner.Actors.NPC;
 using LevelRunner.GameWorld;
 using LevelRunner.GameWorld.Map;
+using LevelRunner.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -63,7 +64,8 @@ namespace LevelRunner
             Map = new Map(width, height);
             #endregion
 
-            AddActors(50);
+            Actors.Add(new Player(this, new FMern(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit), "Tommy"));
+            AddActors(15);
             SetTimer(Settings.TimerInterval);
         }
 
@@ -76,16 +78,16 @@ namespace LevelRunner
                 switch (res)
                 {
                     case 0:
-                        Actors.Add(new AIWarrior(this, new FMern(), Mathematics.GetRandomFreePoint(UnitTypes.GroundUnit)));
+                        Actors.Add(new AIWarrior(this, new FMern(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                     case 1:
-                        Actors.Add(new AIArcher(this, new FMern(), Mathematics.GetRandomFreePoint(UnitTypes.GroundUnit)));
+                        Actors.Add(new AIArcher(this, new FMern(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                     case 2:
-                        Actors.Add(new AIWarrior(this, new FRivia(), Mathematics.GetRandomFreePoint(UnitTypes.GroundUnit)));
+                        Actors.Add(new AIWarrior(this, new FRivia(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                     case 3:
-                        Actors.Add(new AIArcher(this, new FRivia(), Mathematics.GetRandomFreePoint(UnitTypes.GroundUnit)));
+                        Actors.Add(new AIArcher(this, new FRivia(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                 }
             }
@@ -113,7 +115,7 @@ namespace LevelRunner
         private void Timer_Tick(object sender, EventArgs e)
         {
             Scene.Repaint();
-            OnTimer();
+            OnTimer?.Invoke();
 
             #region Debugging
             if (debug)
@@ -134,6 +136,16 @@ namespace LevelRunner
         private void World_Paint(object sender, PaintEventArgs e)
         {
             Scene.Repaint();
+        }
+
+        private void World_KeyDown(object sender, KeyEventArgs e)
+        {
+            UserControl.ChangeState(e.KeyCode, true);
+        }
+
+        private void World_KeyUp(object sender, KeyEventArgs e)
+        {
+            UserControl.ChangeState(e.KeyCode, false);
         }
     }
 }

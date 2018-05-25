@@ -1,5 +1,6 @@
 ﻿using LevelRunner.Actors.AttackTypes;
 using LevelRunner.Actors.Fractions;
+using LevelRunner.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,31 +19,26 @@ namespace LevelRunner.Actors.NPC
             get => base.Coordinates;
             protected set
             {
-                base.Coordinates = value;
-                if (DestinationReached) OnMove();
+                if (CanMove)
+                {
+                    base.Coordinates = value;
+                    OnMove();
+                }
             }
         }
         protected Point Destination { get; set; }
         protected Character Target { get; set; }
         protected int SightRange { get; set; }
-        protected bool DestinationReached { get; set; }
-        protected bool CanAttack { get; set; }
-        protected bool CanMove { get; set; }
-        protected Stack<Delegates.ActDelegate> ActionStack { get; }
 
         public NPC(World parent, Fraction fraction, Point coordinates, Bitmap image)
             : base(parent, fraction, coordinates, image)
         {
-            CanAttack = true;
-            CanMove = true;
-            Alive = true;
-            ActionStack = new Stack<Delegates.ActDelegate>();
-
-            // Events
+            #region Events
             DeleteTargetEvent += DeleteTarget;
             CoolDownTimer.Elapsed += CoolDownTimer_Elapsed;
             MovementSpeedTimer.Elapsed += MovementSpeedTimer_Elapsed;
             Parent.OnTimer += Action_Execute;
+            #endregion
         }
 
         protected override void Action_Execute()
@@ -69,7 +65,7 @@ namespace LevelRunner.Actors.NPC
 
             if (target != null)
             {
-                if (Mathematics.GetDistance(Coordinates, target.Coordinates) <= UnitAttack.AttackRange) ActionStack.Push(Delegates.CurrentAct = Action_Attack);
+                if (Calculate.GetDistance(Coordinates, target.Coordinates) <= UnitAttack.AttackRange) ActionStack.Push(Delegates.CurrentAct = Action_Attack);
                 else ActionStack.Push(Delegates.CurrentAct = Action_Move);
             }
             else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
@@ -81,7 +77,7 @@ namespace LevelRunner.Actors.NPC
             if (target != null)
             {
                 Destination = target.Coordinates;
-                if (Mathematics.GetDistance(Coordinates, Destination) <= UnitAttack.AttackRange)
+                if (Calculate.GetDistance(Coordinates, Destination) <= UnitAttack.AttackRange)
                 {
                     if (CanAttack)
                     {
@@ -104,26 +100,22 @@ namespace LevelRunner.Actors.NPC
             if (target != null)
             {
                 Destination = target.Coordinates;
-                if (Mathematics.GetDistance(Coordinates, Destination) > UnitAttack.AttackRange)
+                if (Calculate.GetDistance(Coordinates, Destination) > UnitAttack.AttackRange)
                 {
-                    if (CanMove)
+                    int newX;
+                    int newY;
+
+                    if (Math.Abs(Destination.X - Coordinates.X) > 1)
+                        newX = Coordinates.X + (Destination.X - Coordinates.X) / Math.Abs(Destination.X - Coordinates.X);
+                    else newX = Coordinates.X;
+
+                    if (Math.Abs(Destination.Y - Coordinates.Y) > 1)
+                        newY = Coordinates.Y + (Destination.Y - Coordinates.Y) / Math.Abs(Destination.Y - Coordinates.Y);
+                    else newY = Coordinates.Y;
+
+                    if (Calculate.CheckPoint(new Point(newX, newY), UnitType))
                     {
-                        int newX;
-                        int newY;
-
-                        if (Math.Abs(Destination.X - Coordinates.X) > 1)
-                            newX = Coordinates.X + (Destination.X - Coordinates.X) / Math.Abs(Destination.X - Coordinates.X);
-                        else newX = Coordinates.X;
-
-                        if (Math.Abs(Destination.Y - Coordinates.Y) > 1)
-                            newY = Coordinates.Y + (Destination.Y - Coordinates.Y) / Math.Abs(Destination.Y - Coordinates.Y);
-                        else newY = Coordinates.Y;
-
-                        if (Mathematics.CheckPoint(new Point(newX, newY), UnitType))
-                        {
-                            DestinationReached = true;
-                            Coordinates = new Point(newX, newY);
-                        }
+                        Coordinates = new Point(newX, newY);
                     }
                     else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
                 }
@@ -149,9 +141,9 @@ namespace LevelRunner.Actors.NPC
                     {
                         if (Target != null)
                         {
-                            if (Mathematics.GetDistance(Coordinates, character.Coordinates)
+                            if (Calculate.GetDistance(Coordinates, character.Coordinates)
                                 <
-                                Mathematics.GetDistance(Coordinates, Target.Coordinates))
+                                Calculate.GetDistance(Coordinates, Target.Coordinates))
                                 Target = character;
                         }
                         else Target = character;
@@ -195,31 +187,6 @@ namespace LevelRunner.Actors.NPC
             }
         }
 
-        protected void CoolDownTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            CoolDownTimer.Stop();
-            CanAttack = true;
-        }
-
-        protected void MovementSpeedTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            MovementSpeedTimer.Stop();
-            CanMove = true;
-        }
-
-        protected void OnAttack()
-        {
-            CanAttack = false;
-            CoolDownTimer.Start();
-        }
-
-        protected void OnMove()
-        {
-            CanMove = false;
-            DestinationReached = false;
-            MovementSpeedTimer.Start();
-        }
-
         protected override void OnDeath()
         {
             #region Debugging
@@ -232,11 +199,12 @@ namespace LevelRunner.Actors.NPC
             
             DeleteTargetEvent(this);
 
-            // Unsubscribe events
+            #region Unsubscribe events
             DeleteTargetEvent -= DeleteTarget;
             CoolDownTimer.Elapsed -= CoolDownTimer_Elapsed;
             MovementSpeedTimer.Elapsed -= MovementSpeedTimer_Elapsed;
             Parent.OnTimer -= Action_Execute;
+            #endregion
 
             RespawnCharacter();
         }

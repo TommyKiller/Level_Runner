@@ -1,5 +1,6 @@
 ﻿using LevelRunner.Actors.AttackTypes;
 using LevelRunner.Actors.Fractions;
+using LevelRunner.Mathematics;
 using LevelRunner.Properties;
 using System;
 using System.Drawing;
@@ -12,12 +13,14 @@ namespace LevelRunner.Actors.NPC
         public AIArcher(World parent, Fraction fraction, Point coordinates)
             : base(parent, fraction, coordinates, Resources.AIArcher)
         {
+            #region Characteristics
             Name = Fraction.Name + " Archer";
             UnitType = UnitTypes.GroundUnit;
             Health = 80;
-            Speed = 2;
+            Speed = 3;
             UnitAttack = new GroundAndAir(9, 0.8, 8);
             SightRange = 80;
+            #endregion
 
             SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
         }
@@ -41,7 +44,7 @@ namespace LevelRunner.Actors.NPC
             #endregion
 
             Monitor.Enter(Parent.Actors);
-            Parent.Actors.Add(new AIArcher(Parent, Fraction, Mathematics.GetRandomFreePoint(UnitType)));
+            Parent.Actors.Add(new AIArcher(Parent, Fraction, Calculate.GetRandomFreePoint(UnitType)));
             Monitor.Exit(Parent.Actors);
         }
     }

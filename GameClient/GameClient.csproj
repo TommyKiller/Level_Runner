@@ -57,6 +57,7 @@
     <Compile Include="Actors\NPC\Warrior.cs" />
     <Compile Include="Actors\UnitTypes.cs" />
     <Compile Include="GameWorld\Map\Patency.cs" />
+    <Compile Include="Mathematics\Vector.cs" />
     <Compile Include="Screens\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,13 +82,14 @@
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="GameWorld\Map\Map.cs" />
-    <Compile Include="Mathematics.cs" />
+    <Compile Include="Mathematics\Calculate.cs" />
     <Compile Include="Actors\NPC\NPC.cs" />
     <Compile Include="Actors\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameWorld\Scene.cs" />
     <Compile Include="Terrains\Water.cs" />
+    <Compile Include="UserControl.cs" />
     <EmbeddedResource Include="Screens\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>

@@ -22,7 +22,7 @@ namespace LevelRunner.Actors.NPC
                 if (CanMove)
                 {
                     base.Coordinates = value;
-                    OnMove();
+                    Character_OnMove();
                 }
             }
         }
@@ -34,10 +34,7 @@ namespace LevelRunner.Actors.NPC
             : base(parent, fraction, coordinates, image)
         {
             #region Events
-            DeleteTargetEvent += DeleteTarget;
-            CoolDownTimer.Elapsed += CoolDownTimer_Elapsed;
-            MovementSpeedTimer.Elapsed += MovementSpeedTimer_Elapsed;
-            Parent.OnTimer += Action_Execute;
+            DeleteTargetEvent += NPC_DeleteTarget;
             #endregion
         }
 
@@ -84,7 +81,7 @@ namespace LevelRunner.Actors.NPC
                         if (Target != null) Monitor.Enter(Target);
                         DealDamage();
                         if (Target != null) Monitor.Exit(Target);
-                        OnAttack();
+                        Character_OnAttack();
                         ActionStack.Push(Delegates.CurrentAct = Action_Attack);
                     }
                     else ActionStack.Push(Delegates.CurrentAct = Action_Guard);
@@ -172,7 +169,7 @@ namespace LevelRunner.Actors.NPC
             }
         }
         
-        protected void DeleteTarget(Character target)
+        protected void NPC_DeleteTarget(Character target)
         {
             #region Debuggin
             if (Parent.debug)
@@ -187,23 +184,14 @@ namespace LevelRunner.Actors.NPC
             }
         }
 
-        protected override void OnDeath()
+        protected override void Character_OnDeath()
         {
-            #region Debugging
-            if (Parent.debug)
-            {
-                Parent.died++;
-                Console.WriteLine("{0} died", Name);
-            }
-            #endregion
+            base.Character_OnDeath();
             
             DeleteTargetEvent(this);
 
             #region Unsubscribe events
-            DeleteTargetEvent -= DeleteTarget;
-            CoolDownTimer.Elapsed -= CoolDownTimer_Elapsed;
-            MovementSpeedTimer.Elapsed -= MovementSpeedTimer_Elapsed;
-            Parent.OnTimer -= Action_Execute;
+            DeleteTargetEvent -= NPC_DeleteTarget;
             #endregion
 
             RespawnCharacter();

@@ -93,9 +93,17 @@ namespace LevelRunner.Actors
             }
             #endregion
 
+            #region Flags
             CanAttack = true;
             CanMove = true;
             Alive = true;
+            #endregion
+
+            #region Events
+            CoolDownTimer.Elapsed += CoolDownTimer_Elapsed;
+            MovementSpeedTimer.Elapsed += MovementSpeedTimer_Elapsed;
+            Parent.OnTimer += Action_Execute;
+            #endregion
         }
 
         protected void SetUpTimers(double coolDownInterval, double movementSpeedInterval)
@@ -142,7 +150,7 @@ namespace LevelRunner.Actors
                 Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Free;
                 Monitor.Exit(Parent.Map);
 
-                OnDeath();
+                Character_OnDeath();
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
@@ -164,19 +172,34 @@ namespace LevelRunner.Actors
             CanMove = true;
         }
 
-        protected void OnAttack()
+        protected void Character_OnAttack()
         {
             CanAttack = false;
             CoolDownTimer.Start();
         }
 
-        protected void OnMove()
+        protected void Character_OnMove()
         {
             CanMove = false;
             MovementSpeedTimer.Start();
         }
 
-        protected abstract void OnDeath();
+        protected virtual void Character_OnDeath()
+        {
+            #region Debugging
+            if (Parent.debug)
+            {
+                Parent.died++;
+                Console.WriteLine("{0} died", Name);
+            }
+            #endregion
+
+            #region Unsubscribe events
+            CoolDownTimer.Elapsed -= CoolDownTimer_Elapsed;
+            MovementSpeedTimer.Elapsed -= MovementSpeedTimer_Elapsed;
+            Parent.OnTimer -= Action_Execute;
+            #endregion
+        }
         #endregion
     }
 }

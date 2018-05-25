@@ -17,6 +17,7 @@ namespace LevelRunner
     {
         // Events
         public event Delegates.EventDelegate OnTimer;
+        public event Delegates.EventDelegate OnMoveKeyDown;
 
         #region Debugging
         public bool debug = false;
@@ -141,6 +142,11 @@ namespace LevelRunner
         private void World_KeyDown(object sender, KeyEventArgs e)
         {
             UserControl.ChangeState(e.KeyCode, true);
+            if ((UserControl.KeyPressed(Keys.Right)) || (UserControl.KeyPressed(Keys.Left)) ||
+                (UserControl.KeyPressed(Keys.Up)) || (UserControl.KeyPressed(Keys.Down)))
+            {
+                OnMoveKeyDown();
+            }
         }
 
         private void World_KeyUp(object sender, KeyEventArgs e)

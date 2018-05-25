@@ -21,7 +21,7 @@ namespace LevelRunner.Actors
                 if (CanMove)
                 {
                     base.Coordinates = value;
-                    OnMove();
+                    Character_OnMove();
                 }
             }
         }
@@ -40,10 +40,7 @@ namespace LevelRunner.Actors
             SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
 
             #region Events
-            CoolDownTimer.Elapsed += CoolDownTimer_Elapsed;
-            MovementSpeedTimer.Elapsed += MovementSpeedTimer_Elapsed;
-            Parent.OnTimer += Action_Execute;
-            Parent.KeyDown += Player_StartMoving;
+            Parent.OnMoveKeyDown += Player_StartMoving;
             #endregion
         }
 
@@ -89,26 +86,21 @@ namespace LevelRunner.Actors
             }
         }
 
-        protected void Player_StartMoving(object sender, KeyEventArgs e)
+        protected void Player_StartMoving()
         {
-            if ((UserControl.KeyPressed(Keys.Right)) || (UserControl.KeyPressed(Keys.Left)) ||
-                (UserControl.KeyPressed(Keys.Up)) || (UserControl.KeyPressed(Keys.Down)))
+            if (ActionStack.Count > 0)
             {
-                if (ActionStack.Count > 0)
-                {
-                    ActionStack.Clear();
-                }
-                ActionStack.Push(Action_Move);
+                ActionStack.Clear();
             }
+            ActionStack.Push(Action_Move);
         }
 
-        protected override void OnDeath()
+        protected override void Character_OnDeath()
         {
+            base.Character_OnDeath();
+
             #region Unsubscribe events
-            CoolDownTimer.Elapsed -= CoolDownTimer_Elapsed;
-            MovementSpeedTimer.Elapsed -= MovementSpeedTimer_Elapsed;
-            Parent.OnTimer -= Action_Execute;
-            Parent.KeyDown -= Player_StartMoving;
+            Parent.OnMoveKeyDown -= Player_StartMoving;
             #endregion
 
             RespawnCharacter();

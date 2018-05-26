@@ -11,15 +11,11 @@ namespace LevelRunner.GameWorld
         private List<Point> oldChunks;
 
         // Propereties
-        private bool BackGroundRepaint { get; set; }
+        public bool BackGroundRepaint { get; set; }
         public World Parent { get; }
-        public Point Coordinates { get; private set; }
-        public Size Size { get; private set; }
 
-        public Scene(Point coordinates, Size size, World parent)
+        public Scene(World parent)
         {
-            Coordinates = coordinates;
-            Size = size;
             Parent = parent;
             Parent.Canvas = Parent.CreateGraphics();
             oldChunks = new List<Point>();
@@ -39,11 +35,17 @@ namespace LevelRunner.GameWorld
 
         private void RepaintBackGround()
         {
-            for (int i = Coordinates.X; i < (Coordinates.X + Size.Width); i++)
+            for (int i = Parent.Camera.Coordinates.X; i < Parent.Camera.Coordinates.X + Parent.Camera.Size.Width; i++)
             {
-                for (int j = Coordinates.Y; j < (Coordinates.Y + Size.Height); j++)
+                for (int j = Parent.Camera.Coordinates.Y; j < Parent.Camera.Coordinates.Y + Parent.Camera.Size.Height; j++)
                 {
-                    Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[j, i].Image, new Point((i * Parent.Settings.ChunkSize.Width), (j * Parent.Settings.ChunkSize.Height)));
+                    if ((i >= 0) && (i < Parent.Map.Width) &&
+                        (j >= 0) && (j < Parent.Map.Height))
+                    {
+                        Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[j, i].Image, new Point(
+                        ((i - Parent.Camera.Coordinates.X) * Parent.Settings.ChunkSize.Width),
+                        ((j - Parent.Camera.Coordinates.Y) * Parent.Settings.ChunkSize.Height)));
+                    }
                 }
             }
         }
@@ -55,12 +57,13 @@ namespace LevelRunner.GameWorld
             {
                 foreach (Character character in Parent.Actors)
                 {
-                    if ((character.Coordinates.X >= Coordinates.X) &&
-                        (character.Coordinates.X <= Size.Width) &&
-                        (character.Coordinates.Y >= Coordinates.Y) &&
-                        (character.Coordinates.Y <= Size.Height))
-                        Parent.Canvas.DrawImage(character.Image, new Point(character.Coordinates.X * Parent.Settings.ChunkSize.Width,
-                            character.Coordinates.Y * Parent.Settings.ChunkSize.Height));
+                    if (((character.Coordinates.X - Parent.Camera.Coordinates.X) >= 0) &&
+                        ((character.Coordinates.X - Parent.Camera.Coordinates.X) < Parent.Camera.Size.Width) &&
+                        ((character.Coordinates.Y - Parent.Camera.Coordinates.Y) >= 0) &&
+                        ((character.Coordinates.Y - Parent.Camera.Coordinates.Y) < Parent.Camera.Size.Height))
+                        Parent.Canvas.DrawImage(character.Image, new Point(
+                            (character.Coordinates.X - Parent.Camera.Coordinates.X) * Parent.Settings.ChunkSize.Width,
+                            (character.Coordinates.Y - Parent.Camera.Coordinates.Y) * Parent.Settings.ChunkSize.Height));
                 }
             }
             Monitor.Exit(Parent.Actors);
@@ -71,8 +74,8 @@ namespace LevelRunner.GameWorld
             Monitor.Enter(oldChunks);
             foreach (Point point in oldChunks)
             {
-                if ((point.X < Parent.Map.Width) && (point.Y < Parent.Map.Height) &&
-                    (point.X >= 0) && (point.Y >= 0))
+                if ((point.X >= 0) && (point.X <= Parent.Map.Width) &&
+                    (point.Y >= 0) && (point.Y <= Parent.Map.Height))
                 {
                     RepaintChunk(point);
                 }
@@ -84,7 +87,9 @@ namespace LevelRunner.GameWorld
         private void RepaintChunk(Point point)
         {
             Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[point.Y, point.X].Image,
-                new Point(point.X * Parent.Settings.ChunkSize.Width, point.Y * Parent.Settings.ChunkSize.Height));
+                new Point(
+                    (point.X - Parent.Camera.Coordinates.X) * Parent.Settings.ChunkSize.Width,
+                    (point.Y - Parent.Camera.Coordinates.Y) * Parent.Settings.ChunkSize.Height));
         }
 
         public void AddOldChunk(Point point)

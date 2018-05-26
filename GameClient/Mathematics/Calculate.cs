@@ -1,4 +1,5 @@
 ﻿using LevelRunner.Actors;
+using LevelRunner.GameWorld.Map;
 using System;
 using System.Drawing;
 using System.Threading;
@@ -8,7 +9,7 @@ namespace LevelRunner.Mathematics
     static class Calculate
     {
         // Components
-        private static Random random = new Random();
+        private static Random _random = new Random();
 
         public static double GetDistance(Point point1, Point point2)
         {
@@ -30,13 +31,13 @@ namespace LevelRunner.Mathematics
         public static bool CheckPoint(Point point, UnitTypes unitType)
         {
             if ((point.X >= 0) && (point.Y >= 0) &&
-                (point.X < Program.World.Width) && (point.Y < Program.World.Height))
+                (point.X < Program.World.Map.Width) && (point.Y < Program.World.Map.Height))
             {
                 switch (unitType)
                 {
                     case UnitTypes.GroundUnit:
                         Monitor.Enter(Program.World.Map);
-                        if (Program.World.Map.PatencyLayer[point.Y, point.X].GroundPatency == GameWorld.Map.GroundPatencyMode.Free)
+                        if (Program.World.Map.PatencyLayer[point.Y, point.X].GroundPatency == GroundPatencyMode.Free)
                         {
                             Monitor.Exit(Program.World.Map);
                             return true;
@@ -48,7 +49,7 @@ namespace LevelRunner.Mathematics
                         break;
                     case UnitTypes.AirUnit:
                         Monitor.Enter(Program.World.Map);
-                        if (Program.World.Map.PatencyLayer[point.Y, point.X].AirPatency == GameWorld.Map.AirPatencyMode.Free)
+                        if (Program.World.Map.PatencyLayer[point.Y, point.X].AirPatency == AirPatencyMode.Free)
                         {
                             Monitor.Exit(Program.World.Map);
                             return true;
@@ -60,7 +61,7 @@ namespace LevelRunner.Mathematics
                         break;
                     case UnitTypes.WaterUnit:
                         Monitor.Enter(Program.World.Map);
-                        if (Program.World.Map.PatencyLayer[point.Y, point.X].WaterPatency == GameWorld.Map.WaterPatencyMode.Free)
+                        if (Program.World.Map.PatencyLayer[point.Y, point.X].WaterPatency == WaterPatencyMode.Free)
                         {
                             Monitor.Exit(Program.World.Map);
                             return true;
@@ -77,19 +78,19 @@ namespace LevelRunner.Mathematics
 
         public static Point GetRandomPoint(int xMax = 0, int yMax = 0)
         {
-            int x = random.Next(xMax);
-            int y = random.Next(yMax);
+            int x = _random.Next(xMax);
+            int y = _random.Next(yMax);
             return new Point(x, y);
         }
 
         public static int GetRandom()
         {
-            return random.Next();
+            return _random.Next();
         }
 
         public static int GetRandom(int max)
         {
-            return random.Next(max);
+            return _random.Next(max);
         }
     }
 }

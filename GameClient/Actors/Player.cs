@@ -9,8 +9,11 @@ using System.Windows.Forms;
 
 namespace LevelRunner.Actors
 {
-    class Player : Character, IDisposable
+    public class Player : Character, IDisposable
     {
+        // Events 
+        public Delegates.EventDelegate PlayerChangedPosition;
+
         // Propereties
         public Vector Direction { get; set; }
         public override Point Coordinates
@@ -22,6 +25,7 @@ namespace LevelRunner.Actors
                 {
                     base.Coordinates = value;
                     Character_OnMove();
+                    PlayerChangedPosition?.Invoke();
                 }
             }
         }
@@ -33,11 +37,12 @@ namespace LevelRunner.Actors
             Name = name;
             UnitType = UnitTypes.GroundUnit;
             Health = 120;
-            Speed = 3.5;
+            Speed = 5;
             UnitAttack = new GroundOnly(10, 1, 1.5);
             #endregion
 
             SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
+            Parent.Camera.Bind(this);
 
             #region Events
             Parent.OnMoveKeyDown += Player_StartMoving;
@@ -102,6 +107,8 @@ namespace LevelRunner.Actors
             #region Unsubscribe events
             Parent.OnMoveKeyDown -= Player_StartMoving;
             #endregion
+
+            MessageBox.Show("You died!");
 
             RespawnCharacter();
         }

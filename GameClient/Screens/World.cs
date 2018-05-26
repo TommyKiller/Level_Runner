@@ -31,6 +31,7 @@ namespace LevelRunner
         public List<Character> Actors { get; set; }
         public Map Map { get; set; }
         public Scene Scene { get; set; }
+        public Camera Camera { get; set; }
         public GameSettings Settings { get; set; }
         public Graphics Canvas { get; set; }
         public System.Windows.Forms.Timer Timer { get; set; }
@@ -57,16 +58,12 @@ namespace LevelRunner
             int height = ClientSize.Height / Settings.ChunkSize.Height;
             int width = ClientSize.Width / Settings.ChunkSize.Width;
             
-            #region Scene
-            Scene = new Scene(new Point(0, 0), new Size(width, height), this);
-            #endregion
-
-            #region Map
-            Map = new Map(width, height);
-            #endregion
+            Scene = new Scene(this);
+            Map = new Map(100, 100);
+            Camera = new Camera(this, new Size(width, height));
 
             Actors.Add(new Player(this, new FMern(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit), "Tommy"));
-            AddActors(15);
+            AddActors(25);
             SetTimer(Settings.TimerInterval);
         }
 
@@ -145,7 +142,7 @@ namespace LevelRunner
             if ((UserControl.KeyPressed(Keys.Right)) || (UserControl.KeyPressed(Keys.Left)) ||
                 (UserControl.KeyPressed(Keys.Up)) || (UserControl.KeyPressed(Keys.Down)))
             {
-                OnMoveKeyDown();
+                OnMoveKeyDown?.Invoke();
             }
         }
 

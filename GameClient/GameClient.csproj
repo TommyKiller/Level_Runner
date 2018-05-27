@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -52,6 +55,7 @@
     <Compile Include="Actors\Fractions\FMern.cs" />
     <Compile Include="Actors\Fractions\Fraction.cs" />
     <Compile Include="Actors\Fractions\FRivia.cs" />
+    <Compile Include="Actors\Fractions\FTerronia.cs" />
     <Compile Include="Actors\Fractions\Relations.cs" />
     <Compile Include="Actors\NPC\Archer.cs" />
     <Compile Include="Actors\NPC\Warrior.cs" />
@@ -110,6 +114,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -149,6 +154,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WoodenBridge.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MainMenuBackground.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AboutLogo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AboutBackground.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Forever.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Forever.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MainTheme.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Divinitus.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Epic.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

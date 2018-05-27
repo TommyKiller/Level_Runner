@@ -15,7 +15,8 @@ namespace LevelRunner.Actors.Fractions
             Color = Color.AliceBlue;
             RelationsList = new Dictionary<string, Relations>
             {
-                { "Rivia", Relations.Hostile }
+                { "Rivia", Relations.Hostile },
+                { "Terronia", Relations.Friendly }
             };
         }
     }

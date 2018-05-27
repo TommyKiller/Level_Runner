@@ -11,8 +11,8 @@ namespace LevelRunner
     {
         // Forms
         public static ApplicationContext Context { get; set; }
-        public static World World;
-        public static MainMenu MainMenu;
+        public static World World { get; set; }
+        public static MainMenu MainMenu { get; set; }
 
         /// <summary>
         /// Главная точка входа для приложения.

@@ -54,15 +54,11 @@ namespace LevelRunner
 
         private void World_Load(object sender, EventArgs e)
         {// All that is connected to game world
-
-            int height = ClientSize.Height / Settings.ChunkSize.Height;
-            int width = ClientSize.Width / Settings.ChunkSize.Width;
-            
             Scene = new Scene(this);
-            Map = new Map(100, 100);
-            Camera = new Camera(this, new Size(width, height));
+            Camera = new Camera(this);
+            Map = new Map(150, 120);
 
-            Actors.Add(new Player(this, new FMern(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit), "Tommy"));
+            Actors.Add(new Player(this, new FTerronia(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit), "Tommy"));
             AddActors(25);
             SetTimer(Settings.TimerInterval);
         }

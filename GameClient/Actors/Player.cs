@@ -11,24 +11,8 @@ namespace LevelRunner.Actors
 {
     public class Player : Character, IDisposable
     {
-        // Events 
-        public Delegates.EventDelegate PlayerChangedPosition;
-
         // Propereties
         public Vector Direction { get; set; }
-        public override Point Coordinates
-        {
-            get => base.Coordinates;
-            protected set
-            {
-                if (CanMove)
-                {
-                    base.Coordinates = value;
-                    Character_OnMove();
-                    PlayerChangedPosition?.Invoke();
-                }
-            }
-        }
 
         public Player(World parent, Fraction fraction, Point coordinates, string name)
             : base(parent, fraction, coordinates, Resources.PWarrior)
@@ -102,18 +86,16 @@ namespace LevelRunner.Actors
 
         protected override void Character_OnDeath()
         {
-            base.Character_OnDeath();
-
             #region Unsubscribe events
             Parent.OnMoveKeyDown -= Player_StartMoving;
             #endregion
 
-            MessageBox.Show("You died!");
+            base.Character_OnDeath();
 
-            RespawnCharacter();
+            MessageBox.Show("You died!");
         }
 
-        protected void RespawnCharacter()
+        protected override void RespawnCharacter()
         {
             #region Debugging
             if (Parent.debug)

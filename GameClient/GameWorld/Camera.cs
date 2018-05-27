@@ -11,95 +11,115 @@ namespace LevelRunner.GameWorld
 {
     public class Camera
     {
-        public Player Actor { get; private set; }
+        public Character Actor { get; private set; }
         public World Parent { get; private set; }
         public Point Coordinates { get; private set; }
         public Size Size { get; private set; }
         private Size StandardShift { get; set; }
 
-        public Camera(World parent, Size size)
+        public Camera(World parent)
         {
             Parent = parent;
-            Size = size;
+
+            int height = Parent.ClientSize.Height / Parent.Settings.ChunkSize.Height;
+            int width = Parent.ClientSize.Width / Parent.Settings.ChunkSize.Width;
+            Size = new Size(width, height);
+
             StandardShift = new Size(63, 27);
         }
 
-        public void Bind(Player actor)
+        public void Bind(Character actor)
         {
             Actor = actor;
-            Actor.PlayerChangedPosition += CheckPosition;
-            Coordinates = new Point(0, 0);
-            Centralize();
+            Centralize(Actor);
             Parent.Scene.BackGroundRepaint = true;
+
+            #region Events
+            Actor.CharacterDied += Unbind;
+            Actor.CharacterChangedPosition += CheckPosition;
+            #endregion
         }
 
         public void Unbind()
         {
+            #region Unsubscribe events
+            Actor.CharacterDied -= Unbind;
+            Actor.CharacterChangedPosition -= CheckPosition;
+            #endregion
+
             Actor = null;
-            Actor.PlayerChangedPosition -= CheckPosition;
         }
 
-        private void Centralize()
+        public void Rebind(Character actor)
         {
+            Unbind();
+            Bind(actor);
+        }
+
+        public void Centralize(Character actor)
+        {
+            // Absolute coordinates (map related)
             int newX;
             int newY;
-            if (Actor.Coordinates.X - (Size.Width / 2) < 0)
+            if (actor.Coordinates.X - (Size.Width / 2) < 0)
             {
                 newX = 0;
             }
             else
             {
-                newX = Actor.Coordinates.X - (Size.Width / 2);
+                newX = actor.Coordinates.X - (Size.Width / 2);
             }
-            if (Actor.Coordinates.Y - (Size.Height / 2) < 0)
+            if (actor.Coordinates.Y - (Size.Height / 2) < 0)
             {
                 newY = 0;
             }
             else
             {
-                newY = Actor.Coordinates.Y - (Size.Height / 2);
+                newY = actor.Coordinates.Y - (Size.Height / 2);
             }
             Coordinates = new Point(newX, newY);
         }
 
         private void CheckPosition()
         {
-            if (((Actor.Coordinates.X - Coordinates.X) < 0) || ((Actor.Coordinates.X - Coordinates.X) >= Size.Width) ||
-                ((Actor.Coordinates.Y - Coordinates.Y) < 0) || ((Actor.Coordinates.Y - Coordinates.Y) >= Size.Height))
+            // Absolute coordinates in camera area
+            if ((Actor.Coordinates.X < Coordinates.X) || (Actor.Coordinates.X >= Coordinates.X + Size.Width) ||
+                (Actor.Coordinates.Y < Coordinates.Y) || (Actor.Coordinates.Y >= Coordinates.Y + Size.Height))
             {
-                Move();
+                Vector direction = GetDirection();
+                Move(direction);
             }
         }
 
-        private void Move()
+        private void Move(Vector direction)
         {
-            Vector direction = GetDirection();
-            Coordinates = new Point(Coordinates.X + direction.X, Coordinates.Y + direction.Y);
+            Coordinates = direction.GetEndPoint(Coordinates);
             Parent.Scene.BackGroundRepaint = true;
         }
 
         private Vector GetDirection()
         {
+            // Absolute coordinates in camera area
             Vector direction = new Vector();
-            if ((Actor.Coordinates.X - Coordinates.X) < 0)
+            if (Actor.Coordinates.X < Coordinates.X)
             {
-                direction.X += Coordinates.X - StandardShift.Width < 0 ?
-                    - Coordinates.X : - StandardShift.Width;
+                direction.X += Coordinates.X - StandardShift.Width < 0 ? // 0 - absolute 
+                    - Coordinates.X : - StandardShift.Width; // coordinate (map related)
             }
-            else if ((Actor.Coordinates.X - Coordinates.X) >= Size.Width)
+            else if (Actor.Coordinates.X >= Coordinates.X + Size.Width)
             {
-                direction.X += (Coordinates.X + Size.Width) + StandardShift.Width > Parent.Map.Width ?
-                    Parent.Map.Width - (Coordinates.X + Size.Width) : StandardShift.Width;
+                direction.X += (Coordinates.X + Size.Width) + StandardShift.Width > Parent.Map.Width ? // Map.Width - absolute
+                    Parent.Map.Width - (Coordinates.X + Size.Width) : StandardShift.Width; // coordinate (map related)
             }
-            if ((Actor.Coordinates.Y - Coordinates.Y) < 0)
+            if (Actor.Coordinates.Y < Coordinates.Y)
             {
-                direction.Y += Coordinates.Y - StandardShift.Height < 0 ?
-                    - Coordinates.Y : -StandardShift.Height;
+                direction.Y += Coordinates.Y - StandardShift.Height < 0 ? // 0 - absolute 
+                    - Coordinates.Y : -StandardShift.Height; // coordinate (map related)
             }
-            else if ((Actor.Coordinates.Y - Coordinates.Y) >= Size.Height)
+            else if (Actor.Coordinates.Y >= Coordinates.Y + Size.Height)
             {
-                direction.Y += (Coordinates.Y + Size.Height) + StandardShift.Height > Parent.Map.Height ?
-                    Parent.Map.Height - (Coordinates.Y + Size.Height) : StandardShift.Height;
+                direction.Y += (Coordinates.Y + Size.Height) + StandardShift.Height > Parent.Map.Height ? // Map.Height - absolute
+                    Parent.Map.Height - (Coordinates.Y + Size.Height) : StandardShift.Height; // coordinate (map related)
             }
             return direction;
         }

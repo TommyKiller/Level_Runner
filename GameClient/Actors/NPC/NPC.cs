@@ -14,18 +14,6 @@ namespace LevelRunner.Actors.NPC
         private static event Delegates.DeleteTargetDelegate DeleteTargetEvent;
 
         // Propereties
-        public override Point Coordinates
-        {
-            get => base.Coordinates;
-            protected set
-            {
-                if (CanMove)
-                {
-                    base.Coordinates = value;
-                    Character_OnMove();
-                }
-            }
-        }
         protected Point Destination { get; set; }
         protected Character Target { get; set; }
         protected int SightRange { get; set; }
@@ -123,8 +111,6 @@ namespace LevelRunner.Actors.NPC
 
         protected abstract void DealDamage();
 
-        protected abstract void RespawnCharacter();
-
         protected void ScanArea()
         {
             Monitor.Enter(Parent.Actors);
@@ -186,15 +172,13 @@ namespace LevelRunner.Actors.NPC
 
         protected override void Character_OnDeath()
         {
-            base.Character_OnDeath();
-            
-            DeleteTargetEvent(this);
-
             #region Unsubscribe events
             DeleteTargetEvent -= NPC_DeleteTarget;
             #endregion
 
-            RespawnCharacter();
+            base.Character_OnDeath();
+
+            DeleteTargetEvent(this);
         }
     }
 }

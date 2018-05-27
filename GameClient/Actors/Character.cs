@@ -10,6 +10,10 @@ namespace LevelRunner.Actors
 {
     public abstract class Character : IDisposable
     {
+        // Events
+        public Delegates.EventDelegate CharacterChangedPosition;
+        public Delegates.EventDelegate CharacterDied;
+
         // Fields
         private bool disposed = false;
         private int _health;
@@ -35,7 +39,7 @@ namespace LevelRunner.Actors
                     }
                     #endregion
 
-                    Dispose();
+                    CharacterDied();
                 }
             }
         }
@@ -48,15 +52,20 @@ namespace LevelRunner.Actors
             get => _coordinates;
             protected set
             {
-                Monitor.Enter(Parent.Scene);
-                Parent.Scene.AddOldChunk(Coordinates);
-                Monitor.Exit(Parent.Scene);
+                if (CanMove)
+                {
+                    Monitor.Enter(Parent.Scene);
+                    Parent.Scene.AddOldChunk(Coordinates);
+                    Monitor.Exit(Parent.Scene);
 
-                Monitor.Enter(Parent.Map);
-                Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Free;
-                _coordinates = value;
-                Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Occupied;
-                Monitor.Exit(Parent.Map);
+                    Monitor.Enter(Parent.Map);
+                    Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Free;
+                    _coordinates = value;
+                    Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Occupied;
+                    Monitor.Exit(Parent.Map);
+
+                    CharacterChangedPosition?.Invoke();
+                }
             }
         }
         public Bitmap Image { get; }
@@ -100,6 +109,8 @@ namespace LevelRunner.Actors
             #endregion
 
             #region Events
+            CharacterDied += Character_OnDeath;
+            CharacterChangedPosition += Character_OnMove;
             CoolDownTimer.Elapsed += CoolDownTimer_Elapsed;
             MovementSpeedTimer.Elapsed += MovementSpeedTimer_Elapsed;
             Parent.OnTimer += Action_Execute;
@@ -123,6 +134,8 @@ namespace LevelRunner.Actors
 
         protected abstract void Action_Execute();
 
+        protected abstract void RespawnCharacter();
+
         #region Dispose
         public void Dispose()
         {
@@ -136,8 +149,6 @@ namespace LevelRunner.Actors
 
             if (disposing)
             {
-                Alive = false;
-
                 Monitor.Enter(Parent.Actors);
                 Parent.Actors.Remove(this);
                 Monitor.Exit(Parent.Actors);
@@ -149,8 +160,7 @@ namespace LevelRunner.Actors
                 Monitor.Enter(Parent.Map);
                 Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Free;
                 Monitor.Exit(Parent.Map);
-
-                Character_OnDeath();
+                
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
@@ -195,10 +205,16 @@ namespace LevelRunner.Actors
             #endregion
 
             #region Unsubscribe events
+            CharacterDied -= Character_OnDeath;
+            CharacterChangedPosition -= Character_OnMove;
             CoolDownTimer.Elapsed -= CoolDownTimer_Elapsed;
             MovementSpeedTimer.Elapsed -= MovementSpeedTimer_Elapsed;
             Parent.OnTimer -= Action_Execute;
             #endregion
+
+            Alive = false;
+            Dispose();
+            RespawnCharacter();
         }
         #endregion
     }

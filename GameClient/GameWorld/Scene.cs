@@ -35,13 +35,16 @@ namespace LevelRunner.GameWorld
 
         private void RepaintBackGround()
         {
+            // Absolute coordinates in camera area
             for (int i = Parent.Camera.Coordinates.X; i < Parent.Camera.Coordinates.X + Parent.Camera.Size.Width; i++)
             {
                 for (int j = Parent.Camera.Coordinates.Y; j < Parent.Camera.Coordinates.Y + Parent.Camera.Size.Height; j++)
                 {
+                    // Absolute coordinates in map area
                     if ((i >= 0) && (i < Parent.Map.Width) &&
                         (j >= 0) && (j < Parent.Map.Height))
                     {
+                        // Reduced coordinates (camera related)
                         Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[j, i].Image, new Point(
                         ((i - Parent.Camera.Coordinates.X) * Parent.Settings.ChunkSize.Width),
                         ((j - Parent.Camera.Coordinates.Y) * Parent.Settings.ChunkSize.Height)));
@@ -57,13 +60,17 @@ namespace LevelRunner.GameWorld
             {
                 foreach (Character character in Parent.Actors)
                 {
-                    if (((character.Coordinates.X - Parent.Camera.Coordinates.X) >= 0) &&
-                        ((character.Coordinates.X - Parent.Camera.Coordinates.X) < Parent.Camera.Size.Width) &&
-                        ((character.Coordinates.Y - Parent.Camera.Coordinates.Y) >= 0) &&
-                        ((character.Coordinates.Y - Parent.Camera.Coordinates.Y) < Parent.Camera.Size.Height))
+                    // Absolute coordinates in camera area
+                    if ((character.Coordinates.X >= Parent.Camera.Coordinates.X) &&
+                        (character.Coordinates.X < Parent.Camera.Coordinates.X + Parent.Camera.Size.Width) &&
+                        (character.Coordinates.Y >= Parent.Camera.Coordinates.Y) &&
+                        (character.Coordinates.Y < Parent.Camera.Coordinates.Y + Parent.Camera.Size.Height))
+                    {
+                        // Reduced coordinates (camera related)
                         Parent.Canvas.DrawImage(character.Image, new Point(
-                            (character.Coordinates.X - Parent.Camera.Coordinates.X) * Parent.Settings.ChunkSize.Width,
-                            (character.Coordinates.Y - Parent.Camera.Coordinates.Y) * Parent.Settings.ChunkSize.Height));
+                               (character.Coordinates.X - Parent.Camera.Coordinates.X) * Parent.Settings.ChunkSize.Width,
+                               (character.Coordinates.Y - Parent.Camera.Coordinates.Y) * Parent.Settings.ChunkSize.Height));
+                    }
                 }
             }
             Monitor.Exit(Parent.Actors);
@@ -74,6 +81,7 @@ namespace LevelRunner.GameWorld
             Monitor.Enter(oldChunks);
             foreach (Point point in oldChunks)
             {
+                // Absolute coordinates (map related)
                 if ((point.X >= 0) && (point.X <= Parent.Map.Width) &&
                     (point.Y >= 0) && (point.Y <= Parent.Map.Height))
                 {
@@ -86,6 +94,7 @@ namespace LevelRunner.GameWorld
 
         private void RepaintChunk(Point point)
         {
+            // Reduced coordinates (camera related)
             Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[point.Y, point.X].Image,
                 new Point(
                     (point.X - Parent.Camera.Coordinates.X) * Parent.Settings.ChunkSize.Width,

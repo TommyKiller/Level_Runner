@@ -1,4 +1,5 @@
 ﻿using LevelRunner.Actors;
+using LevelRunner.Terrains;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
@@ -45,7 +46,7 @@ namespace LevelRunner.GameWorld
                         (j >= 0) && (j < Parent.Map.Height))
                     {
                         // Reduced coordinates (camera related)
-                        Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[j, i].Image, new Point(
+                        Parent.Canvas.DrawImage(Terrain.TerrainImage[Parent.Map.TerrainLayer[j, i]], new Point(
                         ((i - Parent.Camera.Coordinates.X) * GameSettings.ChunkSize.Width),
                         ((j - Parent.Camera.Coordinates.Y) * GameSettings.ChunkSize.Height)));
                     }
@@ -95,7 +96,7 @@ namespace LevelRunner.GameWorld
         private void RepaintChunk(Point point)
         {
             // Reduced coordinates (camera related)
-            Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[point.Y, point.X].Image,
+            Parent.Canvas.DrawImage(Terrain.TerrainImage[Parent.Map.TerrainLayer[point.Y, point.X]],
                 new Point(
                     (point.X - Parent.Camera.Coordinates.X) * GameSettings.ChunkSize.Width,
                     (point.Y - Parent.Camera.Coordinates.Y) * GameSettings.ChunkSize.Height));

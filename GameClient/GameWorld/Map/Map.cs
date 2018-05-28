@@ -6,8 +6,8 @@ namespace LevelRunner.GameWorld.Map
 {
     public class Map
     {
-        public Terrain[,] TerrainLayer { get; set; }
-        public Patency[,] PatencyLayer { get; set; }
+        public Terrain.Terrains[,] TerrainLayer { get; set; }
+        public Terrain.Patency[,] PatencyLayer { get; set; }
         public int Width
         {
             get
@@ -25,8 +25,8 @@ namespace LevelRunner.GameWorld.Map
 
         public Map(int sizeX, int sizeY)
         {
-            TerrainLayer = new Terrain[sizeY, sizeX];
-            PatencyLayer = new Patency[sizeY, sizeX];
+            TerrainLayer = new Terrain.Terrains[sizeY, sizeX];
+            PatencyLayer = new Terrain.Patency[sizeY, sizeX];
             GeneratePlateau();
             GenerateRiver();
         }
@@ -37,14 +37,14 @@ namespace LevelRunner.GameWorld.Map
             PatencyLayer = savedMap.PatencyLayer;
         }
 
-        private void GeneratePlateau() // !!!!!
+        private void GeneratePlateau()
         {
             for (int i = 0; i < Height; i++)
             {
                 for (int j = 0; j < Width; j++)
                 {
-                    TerrainLayer[i, j] = new Grass();
-                    PatencyLayer[i, j] = TerrainLayer[i, j].Patency;
+                    TerrainLayer[i, j] = Terrain.Terrains.Grass;
+                    PatencyLayer[i, j] = new Terrain.Patency(Terrain.GrassPatency.GroundPatency, Terrain.GrassPatency.AirPatency, Terrain.GrassPatency.WaterPatency);
                 }
             }
         }
@@ -56,8 +56,8 @@ namespace LevelRunner.GameWorld.Map
             Point currentChunk = start;
             while (currentChunk.Y <= end.Y)
             {
-                TerrainLayer[currentChunk.Y, currentChunk.X] = new Water();
-                PatencyLayer[currentChunk.Y, currentChunk.X] = TerrainLayer[currentChunk.Y++, currentChunk.X].Patency;
+                TerrainLayer[currentChunk.Y, currentChunk.X] = Terrain.Terrains.Water;
+                PatencyLayer[currentChunk.Y++, currentChunk.X] = new Terrain.Patency(Terrain.WaterPatency.GroundPatency, Terrain.WaterPatency.AirPatency, Terrain.WaterPatency.WaterPatency);
             }
         }
     }

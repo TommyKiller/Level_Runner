@@ -1,5 +1,4 @@
 ﻿using LevelRunner.Actors.AttackTypes;
-using LevelRunner.Actors.Fractions;
 using LevelRunner.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ namespace LevelRunner.Actors.NPC
         protected Character Target { get; set; }
         protected int SightRange { get; set; }
 
-        public NPC(World parent, Fraction fraction, Point coordinates, Bitmap image)
+        public NPC(World parent, Fraction.Fractions fraction, Point coordinates, Bitmap image)
             : base(parent, fraction, coordinates, image)
         {
             #region Events
@@ -138,16 +137,9 @@ namespace LevelRunner.Actors.NPC
 
         protected bool CheckStatus(Character character)
         {
-            if (Fraction.Name != character.Fraction.Name)
+            if (Fraction.RelationsList[FractionName][character.FractionName] == Fraction.Relations.Hostile)
             {
-                if (Fraction.RelationsList[character.Fraction.Name] == Relations.Hostile)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
             }
             else
             {

@@ -1,6 +1,6 @@
 ﻿using LevelRunner.Actors.AttackTypes;
-using LevelRunner.Actors.Fractions;
 using LevelRunner.GameWorld.Map;
+using LevelRunner.Terrains;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -38,12 +38,13 @@ namespace LevelRunner.Actors
                     #endif
                     #endregion
 
-                    CharacterDied();
+                    CharacterDied?.Invoke();
+                    Character_OnDeath();
                 }
             }
         }
         public UnitTypes UnitType { get; protected set; }
-        public Fraction Fraction { get; }
+        public Fraction.Fractions FractionName { get; }
         public UnitAttack UnitAttack { get; protected set; }
         protected double Speed { get; set; }
         public virtual Point Coordinates
@@ -58,10 +59,12 @@ namespace LevelRunner.Actors
                     Monitor.Exit(Parent.Scene);
 
                     Monitor.Enter(Parent.Map);
-                    Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Free;
+                    Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = Terrain.PatencyMode.Free;
                     _coordinates = value;
-                    Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Occupied;
+                    Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = Terrain.PatencyMode.Occupied;
                     Monitor.Exit(Parent.Map);
+
+                    Console.WriteLine(Terrain.GrassPatency);
 
                     CharacterChangedPosition?.Invoke();
                 }
@@ -76,11 +79,12 @@ namespace LevelRunner.Actors
         protected Stack<Delegates.ActDelegate> ActionStack { get; }
         protected Thread ActionThread { get; set; }
 
-        public Character(World parent, Fraction fraction, Point coordinates, Bitmap image)
+        public Character(World parent, Fraction.Fractions fraction, Point coordinates, Bitmap image)
         {
             Parent = parent;
-            Fraction = fraction;
-            _coordinates = coordinates; // !!!
+            FractionName = fraction;
+            CanMove = true;
+            Coordinates = coordinates;
             
             CoolDownTimer = new System.Timers.Timer();
             MovementSpeedTimer = new System.Timers.Timer();
@@ -95,7 +99,7 @@ namespace LevelRunner.Actors
                 {
                     if (Image.GetPixel(i, j) == Color.FromArgb(255, 255, 0, 0))
                     {
-                        Image.SetPixel(i, j, Fraction.Color);
+                        Image.SetPixel(i, j, Fraction.FractionColor[FractionName]);
                     }
                 }
             }
@@ -108,7 +112,6 @@ namespace LevelRunner.Actors
             #endregion
 
             #region Events
-            CharacterDied += Character_OnDeath;
             CharacterChangedPosition += Character_OnMove;
             CoolDownTimer.Elapsed += CoolDownTimer_Elapsed;
             MovementSpeedTimer.Elapsed += MovementSpeedTimer_Elapsed;
@@ -157,7 +160,7 @@ namespace LevelRunner.Actors
                 Monitor.Exit(Parent.Scene);
 
                 Monitor.Enter(Parent.Map);
-                Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = GroundPatencyMode.Free;
+                Parent.Map.PatencyLayer[Coordinates.Y, Coordinates.X].GroundPatency = Terrain.PatencyMode.Free;
                 Monitor.Exit(Parent.Map);
                 
                 GC.Collect();
@@ -203,7 +206,6 @@ namespace LevelRunner.Actors
             #endregion
 
             #region Unsubscribe events
-            CharacterDied -= Character_OnDeath;
             CharacterChangedPosition -= Character_OnMove;
             CoolDownTimer.Elapsed -= CoolDownTimer_Elapsed;
             MovementSpeedTimer.Elapsed -= MovementSpeedTimer_Elapsed;

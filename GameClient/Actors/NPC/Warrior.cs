@@ -1,5 +1,4 @@
 ﻿using LevelRunner.Actors.AttackTypes;
-using LevelRunner.Actors.Fractions;
 using LevelRunner.Mathematics;
 using LevelRunner.Properties;
 using System;
@@ -10,11 +9,11 @@ namespace LevelRunner.Actors.NPC
 {
     class AIWarrior : NPC
     {
-        public AIWarrior(World parent, Fraction fraction, Point coordinates)
+        public AIWarrior(World parent, Fraction.Fractions fraction, Point coordinates)
             : base(parent, fraction, coordinates, Resources.AIWarrior)
         {
             #region Characteristics
-            Name = Fraction.Name + " Warrior";
+            Name = FractionName.ToString() + " Warrior";
             UnitType = UnitTypes.GroundUnit;
             Health = 120;
             Speed = 1;
@@ -43,7 +42,7 @@ namespace LevelRunner.Actors.NPC
             #endregion
 
             Monitor.Enter(Parent.Actors);
-            Parent.Actors.Add(new AIWarrior(Parent, Fraction, Calculate.GetRandomFreePoint(UnitType)));
+            Parent.Actors.Add(new AIWarrior(Parent, FractionName, Calculate.GetRandomFreePoint(UnitType)));
             Monitor.Exit(Parent.Actors);
         }
     }

@@ -1,7 +1,6 @@
 ﻿#define DEBUG
 
 using LevelRunner.Actors;
-using LevelRunner.Actors.Fractions;
 using LevelRunner.Actors.NPC;
 using LevelRunner.GameWorld;
 using LevelRunner.GameWorld.Map;
@@ -51,35 +50,35 @@ namespace LevelRunner
             Actors = new List<Character>();
             Scene = new Scene(this);
             Camera = new Camera(this);
-            Map = new Map(150, 120);
+            Map = new Map(150, 150);
         }
 
         private void World_Load(object sender, EventArgs e)
         {// All that is connected to game world
-            Actors.Add(new Player(this, new FTerronia(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit), "Tommy"));
-            AddActors(25);
+            Actors.Add(new Player(this, Fraction.Fractions.Player, new Point(0, 0), "Tommy"));
+            AddActors(30);
             SetTimer(GameSettings.TimerInterval);
         }
 
         private void AddActors(int number)
         {
-            Random rnd = new Random();
+            Random random = new Random();
             for (int i = 0; i < number; i++)
             {
-                int res = rnd.Next(4);
-                switch (res)
+                int index = random.Next(4);
+                switch (index)
                 {
                     case 0:
-                        Actors.Add(new AIWarrior(this, new FMern(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
+                        Actors.Add(new AIWarrior(this, Fraction.Fractions.Mern, Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                     case 1:
-                        Actors.Add(new AIArcher(this, new FMern(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
+                        Actors.Add(new AIArcher(this, Fraction.Fractions.Mern, Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                     case 2:
-                        Actors.Add(new AIWarrior(this, new FRivia(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
+                        Actors.Add(new AIWarrior(this, Fraction.Fractions.Rivia, Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                     case 3:
-                        Actors.Add(new AIArcher(this, new FRivia(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
+                        Actors.Add(new AIArcher(this, Fraction.Fractions.Rivia, Calculate.GetRandomFreePoint(UnitTypes.GroundUnit)));
                         break;
                 }
             }

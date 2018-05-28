@@ -1,5 +1,6 @@
 ﻿using LevelRunner.Actors;
 using LevelRunner.GameWorld.Map;
+using LevelRunner.Terrains;
 using System;
 using System.Drawing;
 using System.Threading;
@@ -37,7 +38,7 @@ namespace LevelRunner.Mathematics
                 {
                     case UnitTypes.GroundUnit:
                         Monitor.Enter(Program.World.Map);
-                        if (Program.World.Map.PatencyLayer[point.Y, point.X].GroundPatency == GroundPatencyMode.Free)
+                        if (Program.World.Map.PatencyLayer[point.Y, point.X].GroundPatency == Terrain.PatencyMode.Free)
                         {
                             Monitor.Exit(Program.World.Map);
                             return true;
@@ -49,7 +50,7 @@ namespace LevelRunner.Mathematics
                         break;
                     case UnitTypes.AirUnit:
                         Monitor.Enter(Program.World.Map);
-                        if (Program.World.Map.PatencyLayer[point.Y, point.X].AirPatency == AirPatencyMode.Free)
+                        if (Program.World.Map.PatencyLayer[point.Y, point.X].AirPatency == Terrain.PatencyMode.Free)
                         {
                             Monitor.Exit(Program.World.Map);
                             return true;
@@ -61,7 +62,7 @@ namespace LevelRunner.Mathematics
                         break;
                     case UnitTypes.WaterUnit:
                         Monitor.Enter(Program.World.Map);
-                        if (Program.World.Map.PatencyLayer[point.Y, point.X].WaterPatency == WaterPatencyMode.Free)
+                        if (Program.World.Map.PatencyLayer[point.Y, point.X].WaterPatency == Terrain.PatencyMode.Free)
                         {
                             Monitor.Exit(Program.World.Map);
                             return true;

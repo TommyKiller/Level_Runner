@@ -52,16 +52,11 @@
     <Compile Include="Actors\AttackTypes\UnitAttack.cs" />
     <Compile Include="Actors\AttackTypes\GroundAndAir.cs" />
     <Compile Include="Actors\AttackTypes\GroundOnly.cs" />
-    <Compile Include="Actors\Fractions\FMern.cs" />
-    <Compile Include="Actors\Fractions\Fraction.cs" />
-    <Compile Include="Actors\Fractions\FRivia.cs" />
-    <Compile Include="Actors\Fractions\FTerronia.cs" />
-    <Compile Include="Actors\Fractions\Relations.cs" />
+    <Compile Include="Actors\Fraction.cs" />
     <Compile Include="Actors\NPC\Archer.cs" />
     <Compile Include="Actors\NPC\Warrior.cs" />
     <Compile Include="Actors\UnitTypes.cs" />
     <Compile Include="GameWorld\Camera.cs" />
-    <Compile Include="GameWorld\Map\Patency.cs" />
     <Compile Include="Mathematics\Vector.cs" />
     <Compile Include="Screens\About.cs">
       <SubType>Form</SubType>
@@ -78,7 +73,6 @@
     <Compile Include="Screens\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Terrains\Grass.cs" />
     <Compile Include="Terrains\Terrain.cs" />
     <Compile Include="Screens\World.cs">
       <SubType>Form</SubType>
@@ -99,7 +93,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameWorld\Scene.cs" />
-    <Compile Include="Terrains\Water.cs" />
     <Compile Include="UserControl.cs" />
     <EmbeddedResource Include="Screens\About.resx">
       <DependentUpon>About.cs</DependentUpon>

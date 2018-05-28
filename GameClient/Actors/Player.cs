@@ -1,5 +1,4 @@
 ﻿using LevelRunner.Actors.AttackTypes;
-using LevelRunner.Actors.Fractions;
 using LevelRunner.Mathematics;
 using LevelRunner.Properties;
 using System;
@@ -14,7 +13,7 @@ namespace LevelRunner.Actors
         // Propereties
         public Vector Direction { get; set; }
 
-        public Player(World parent, Fraction fraction, Point coordinates, string name)
+        public Player(World parent, Fraction.Fractions fraction, Point coordinates, string name)
             : base(parent, fraction, coordinates, Resources.PWarrior)
         {
             #region Characteristics
@@ -105,7 +104,7 @@ namespace LevelRunner.Actors
             #endregion
 
             Monitor.Enter(Parent.Actors);
-            Parent.Actors.Add(new Player(Parent, Fraction, Calculate.GetRandomFreePoint(UnitType), Name));
+            Parent.Actors.Add(new Player(Parent, FractionName, Calculate.GetRandomFreePoint(UnitType), Name));
             Monitor.Exit(Parent.Actors);
         }
     }

@@ -98,11 +98,10 @@ namespace LevelRunner.Actors
         protected override void RespawnCharacter()
         {
             #region Debugging
-            if (Parent.debug)
-            {
+            #if DEBUG
                 Parent.respawned++;
                 Console.WriteLine("{0} respawned", Name);
-            }
+            #endif
             #endregion
 
             Monitor.Enter(Parent.Actors);

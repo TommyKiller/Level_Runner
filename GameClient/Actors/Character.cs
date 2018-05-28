@@ -31,12 +31,11 @@ namespace LevelRunner.Actors
                 if ((Alive) && (_health <= 0))
                 {
                     #region Debugging
-                    if (Program.World.debug)
-                    {
+                    #if DEBUG
                         Program.World.wounded++;
                         Console.WriteLine("{0} deadly wounded", Name);
                         Console.WriteLine(Thread.CurrentThread.Name);
-                    }
+                    #endif
                     #endregion
 
                     CharacterDied();
@@ -197,11 +196,10 @@ namespace LevelRunner.Actors
         protected virtual void Character_OnDeath()
         {
             #region Debugging
-            if (Parent.debug)
-            {
+            #if DEBUG
                 Parent.died++;
                 Console.WriteLine("{0} died", Name);
-            }
+            #endif
             #endregion
 
             #region Unsubscribe events

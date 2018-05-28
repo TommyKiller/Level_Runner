@@ -1,4 +1,6 @@
-﻿using LevelRunner.Actors;
+﻿#define DEBUG
+
+using LevelRunner.Actors;
 using LevelRunner.Actors.Fractions;
 using LevelRunner.Actors.NPC;
 using LevelRunner.GameWorld;
@@ -20,12 +22,13 @@ namespace LevelRunner
         public event Delegates.EventDelegate OnMoveKeyDown;
 
         #region Debugging
-        public bool debug = false;
-        public long summ = 0;
-        public long counter = 0;
-        public int wounded = 0;
-        public int died = 0;
-        public int respawned = 0;
+        #if DEBUG
+            public long summ = 0;
+            public long counter = 0;
+            public int wounded = 0;
+            public int died = 0;
+            public int respawned = 0;
+        #endif
         #endregion
 
         public List<Character> Actors { get; set; }
@@ -107,8 +110,7 @@ namespace LevelRunner
             OnTimer?.Invoke();
 
             #region Debugging
-            if (debug)
-            {
+            #if DEBUG
                 if ((wounded > 0) || (died > 0) || (respawned > 0))
                 {
                     Console.WriteLine("____________________________________");
@@ -118,7 +120,7 @@ namespace LevelRunner
                     died = 0;
                     respawned = 0;
                 }
-            }
+            #endif
             #endregion
         }
 

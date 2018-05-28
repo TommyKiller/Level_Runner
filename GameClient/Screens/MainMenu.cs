@@ -18,7 +18,8 @@ namespace LevelRunner
     {
         private WaveOut WaveOut { get; set; }
         private WaveFileReader WaveFileReader { get; set; }
-        private Dictionary<UnmanagedMemoryStream, bool> TrackList { get; set; }
+        private List<UnmanagedMemoryStream> TrackList { get; set; }
+        private List<UnmanagedMemoryStream> ListenedTracks { get; set; }
 
         public MainMenu()
         {
@@ -27,12 +28,13 @@ namespace LevelRunner
             // Form settings
             FormBorderStyle = GameSettings.FormBorderStyle;
 
-            TrackList = new Dictionary<UnmanagedMemoryStream, bool>
+            ListenedTracks = new List<UnmanagedMemoryStream>();
+            TrackList = new List<UnmanagedMemoryStream>
             {
-                { Resources.MainTheme, true },
-                { Resources.Forever, true },
-                { Resources.Divinitus, true },
-                { Resources.Epic, true }
+                Resources.MainTheme,
+                Resources.Forever,
+                Resources.Divinitus,
+                Resources.Epic
             };
 
             // Events
@@ -71,41 +73,25 @@ namespace LevelRunner
 
         private void ChooseTrack(out UnmanagedMemoryStream Track)
         {
-            int listenedTracks = 0;
-            UnmanagedMemoryStream chosenTrack = null;
-
-            foreach (UnmanagedMemoryStream track in TrackList.Keys)
+            if (ListenedTracks.Count == TrackList.Count)
             {
-                if (TrackList[track])
-                {
-                    TrackList[track] = false;
-                    chosenTrack = track;
-                    break;
-                }
-                else
-                {
-                    listenedTracks++;
-                }
-            }
-            if (listenedTracks == TrackList.Count)
-            {
-                ReshuffleTracks();
+                ListenedTracks.Clear();
                 ChooseTrack(out Track);
             }
             else
             {
-                Track = chosenTrack;
+                Random random = new Random();
+                List<UnmanagedMemoryStream> TempTrackList = new List<UnmanagedMemoryStream>();
+                foreach(UnmanagedMemoryStream track in TrackList)
+                {
+                    if (!ListenedTracks.Contains(track))
+                    {
+                        TempTrackList.Add(track);
+                    }
+                }
+                int TrackIndex = random.Next(TempTrackList.Count);
+                Track = TempTrackList[TrackIndex];
             }
-        }
-
-        private void ReshuffleTracks()
-        {
-            Dictionary<UnmanagedMemoryStream, bool> TempTrackList = new Dictionary<UnmanagedMemoryStream, bool>();
-            foreach (UnmanagedMemoryStream track in TrackList.Keys)
-            {
-                TempTrackList.Add(track, true);
-            }
-            TrackList = TempTrackList;
         }
 
         private void WaveOut_OnPlaybackStopped(object sender, EventArgs e)

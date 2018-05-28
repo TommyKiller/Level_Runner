@@ -36,11 +36,10 @@ namespace LevelRunner.Actors.NPC
         protected override void RespawnCharacter()
         {
             #region Debugging
-            if (Parent.debug)
-            {
+            #if DEBUG
                 Parent.respawned++;
                 Console.WriteLine("{0} respawned", Name);
-            }
+            #endif
             #endregion
 
             Monitor.Enter(Parent.Actors);

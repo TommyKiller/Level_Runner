@@ -157,13 +157,6 @@ namespace LevelRunner.Actors.NPC
         
         protected void NPC_DeleteTarget(Character target)
         {
-            #region Debuggin
-            if (Parent.debug)
-            {
-                Console.WriteLine("Delete target for {0} is managed by {1}", Name, Thread.CurrentThread.Name);
-            }
-            #endregion
-
             if (Target == target)
             {
                 Target = null;

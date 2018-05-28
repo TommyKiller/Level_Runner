@@ -16,7 +16,7 @@ namespace LevelRunner.Actors.Fractions
         public FTerronia()
         {
             Name = "Terronia";
-            Color = Color.LightPink;
+            Color = GameWorld.GameSettings.PlayerColor;
             RelationsList = new Dictionary<string, Relations>
             {
                 { "Rivia", Relations.Hostile },

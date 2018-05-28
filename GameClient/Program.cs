@@ -12,7 +12,6 @@ namespace LevelRunner
         // Forms
         public static ApplicationContext Context { get; set; }
         public static World World { get; set; }
-        public static MainMenu MainMenu { get; set; }
 
         /// <summary>
         /// Главная точка входа для приложения.
@@ -23,7 +22,7 @@ namespace LevelRunner
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Context = new ApplicationContext();
-            MainMenu = new MainMenu();
+            MainMenu MainMenu = new MainMenu();
             Context.MainForm = MainMenu;
             Application.Run(Context);
         }

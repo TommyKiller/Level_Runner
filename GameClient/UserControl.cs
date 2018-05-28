@@ -16,16 +16,5 @@ namespace LevelRunner
         {
             _keyTable[key] = state;
         }
-
-        public static void Reset()
-        {
-            if (_keyTable.Count != 0)
-            {
-                foreach(Keys key in _keyTable.Keys)
-                {
-                    _keyTable[key] = false;
-                }
-            }
-        }
     }
 }

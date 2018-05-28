@@ -46,8 +46,8 @@ namespace LevelRunner.GameWorld
                     {
                         // Reduced coordinates (camera related)
                         Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[j, i].Image, new Point(
-                        ((i - Parent.Camera.Coordinates.X) * Parent.Settings.ChunkSize.Width),
-                        ((j - Parent.Camera.Coordinates.Y) * Parent.Settings.ChunkSize.Height)));
+                        ((i - Parent.Camera.Coordinates.X) * GameSettings.ChunkSize.Width),
+                        ((j - Parent.Camera.Coordinates.Y) * GameSettings.ChunkSize.Height)));
                     }
                 }
             }
@@ -68,8 +68,8 @@ namespace LevelRunner.GameWorld
                     {
                         // Reduced coordinates (camera related)
                         Parent.Canvas.DrawImage(character.Image, new Point(
-                               (character.Coordinates.X - Parent.Camera.Coordinates.X) * Parent.Settings.ChunkSize.Width,
-                               (character.Coordinates.Y - Parent.Camera.Coordinates.Y) * Parent.Settings.ChunkSize.Height));
+                               (character.Coordinates.X - Parent.Camera.Coordinates.X) * GameSettings.ChunkSize.Width,
+                               (character.Coordinates.Y - Parent.Camera.Coordinates.Y) * GameSettings.ChunkSize.Height));
                     }
                 }
             }
@@ -97,8 +97,8 @@ namespace LevelRunner.GameWorld
             // Reduced coordinates (camera related)
             Parent.Canvas.DrawImage(Parent.Map.TerrainLayer[point.Y, point.X].Image,
                 new Point(
-                    (point.X - Parent.Camera.Coordinates.X) * Parent.Settings.ChunkSize.Width,
-                    (point.Y - Parent.Camera.Coordinates.Y) * Parent.Settings.ChunkSize.Height));
+                    (point.X - Parent.Camera.Coordinates.X) * GameSettings.ChunkSize.Width,
+                    (point.Y - Parent.Camera.Coordinates.Y) * GameSettings.ChunkSize.Height));
         }
 
         public void AddOldChunk(Point point)

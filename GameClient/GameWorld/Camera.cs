@@ -21,8 +21,8 @@ namespace LevelRunner.GameWorld
         {
             Parent = parent;
 
-            int height = Parent.ClientSize.Height / Parent.Settings.ChunkSize.Height;
-            int width = Parent.ClientSize.Width / Parent.Settings.ChunkSize.Width;
+            int height = Parent.ClientSize.Height / GameSettings.ChunkSize.Height;
+            int width = Parent.ClientSize.Width / GameSettings.ChunkSize.Width;
             Size = new Size(width, height);
 
             StandardShift = new Size(63, 27);

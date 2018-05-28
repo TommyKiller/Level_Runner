@@ -72,6 +72,12 @@
     <Compile Include="Actors\Character.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="GameWorld\GameSettings.cs" />
+    <Compile Include="Screens\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Screens\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Terrains\Grass.cs" />
     <Compile Include="Terrains\Terrain.cs" />
     <Compile Include="Screens\World.cs">
@@ -97,6 +103,9 @@
     <Compile Include="UserControl.cs" />
     <EmbeddedResource Include="Screens\About.resx">
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Screens\World.resx">
       <DependentUpon>World.cs</DependentUpon>
@@ -178,6 +187,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Epic.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingsBackground.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

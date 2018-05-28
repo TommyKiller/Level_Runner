@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LevelRunner.Properties;
+using LevelRunner.GameWorld;
 
 namespace LevelRunner
 {
@@ -23,19 +24,30 @@ namespace LevelRunner
         {
             InitializeComponent();
 
+            // Form settings
+            FormBorderStyle = GameSettings.FormBorderStyle;
+
             TrackList = new Dictionary<UnmanagedMemoryStream, bool>
             {
-                { Resources.Forever, true },
                 { Resources.MainTheme, true },
+                { Resources.Forever, true },
                 { Resources.Divinitus, true },
                 { Resources.Epic, true }
             };
+
+            // Events
+            GameSettings.SettingsChanged += GameSettings_OnChange;
         }
 
         private void MainMenu_Load(object sender, EventArgs e)
         {
             ChooseTrack(out UnmanagedMemoryStream Track);
             StartWaveOut(Track);
+        }
+
+        private void GameSettings_OnChange()
+        {
+            FormBorderStyle = GameSettings.FormBorderStyle;
         }
 
         private void StartWaveOut(UnmanagedMemoryStream track)
@@ -54,24 +66,6 @@ namespace LevelRunner
                 WaveFileReader = new WaveFileReader(track);
                 WaveOut.Init(WaveFileReader);
                 WaveOut.Play();
-            }
-        }
-
-        private void CloseWaveOut()
-        {
-            if (WaveOut != null)
-            {
-                WaveOut.Stop();
-            }
-            if (WaveFileReader != null)
-            {
-                WaveFileReader.Dispose();
-                WaveFileReader = null;
-            }
-            if (WaveOut != null)
-            {
-                WaveOut.Dispose();
-                WaveOut = null;
             }
         }
 
@@ -120,6 +114,24 @@ namespace LevelRunner
             StartWaveOut(Track);
         }
 
+        private void CloseWaveOut()
+        {
+            if (WaveOut != null)
+            {
+                WaveOut.Stop();
+            }
+            if (WaveFileReader != null)
+            {
+                WaveFileReader.Dispose();
+                WaveFileReader = null;
+            }
+            if (WaveOut != null)
+            {
+                WaveOut.Dispose();
+                WaveOut = null;
+            }
+        }
+
         private void newGameButton_Click(object sender, EventArgs e)
         {
             Program.World = new World();
@@ -139,14 +151,18 @@ namespace LevelRunner
             Close();
         }
 
-        private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            CloseWaveOut();
-        }
-
         private void settingsButton_Click(object sender, EventArgs e)
         {
-            
+            Settings Settings = new Settings();
+            Settings.Show(this);
+        }
+
+        private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Events
+            GameSettings.SettingsChanged -= GameSettings_OnChange;
+
+            CloseWaveOut();
         }
     }
 }

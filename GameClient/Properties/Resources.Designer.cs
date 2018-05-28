@@ -189,6 +189,16 @@ namespace LevelRunner.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SettingsBackground {
+            get {
+                object obj = ResourceManager.GetObject("SettingsBackground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Stone {
             get {
                 object obj = ResourceManager.GetObject("Stone", resourceCulture);

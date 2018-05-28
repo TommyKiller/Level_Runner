@@ -32,7 +32,6 @@ namespace LevelRunner
         public Map Map { get; set; }
         public Scene Scene { get; set; }
         public Camera Camera { get; set; }
-        public GameSettings Settings { get; set; }
         public Graphics Canvas { get; set; }
         public System.Windows.Forms.Timer Timer { get; set; }
 
@@ -41,26 +40,22 @@ namespace LevelRunner
             InitializeComponent();
 
             // Form settings
+            FormBorderStyle = GameSettings.FormBorderStyle;
             WindowState = FormWindowState.Maximized;
             Thread.CurrentThread.IsBackground = true;
 
-            // Propereties
-            Settings = new GameSettings(new Size(18, 24), // Standard chunk size
-                1); // Timer interval
-
-            // Lists
+            // Components
             Actors = new List<Character>();
+            Scene = new Scene(this);
+            Camera = new Camera(this);
+            Map = new Map(150, 120);
         }
 
         private void World_Load(object sender, EventArgs e)
         {// All that is connected to game world
-            Scene = new Scene(this);
-            Camera = new Camera(this);
-            Map = new Map(150, 120);
-
             Actors.Add(new Player(this, new FTerronia(), Calculate.GetRandomFreePoint(UnitTypes.GroundUnit), "Tommy"));
             AddActors(25);
-            SetTimer(Settings.TimerInterval);
+            SetTimer(GameSettings.TimerInterval);
         }
 
         private void AddActors(int number)
@@ -139,6 +134,23 @@ namespace LevelRunner
                 (UserControl.KeyPressed(Keys.Up)) || (UserControl.KeyPressed(Keys.Down)))
             {
                 OnMoveKeyDown?.Invoke();
+            }
+            if (UserControl.KeyPressed(Keys.Escape))
+            {
+                Timer.Stop();
+                DialogResult result = MessageBox.Show("Do you really want to quit?", "Exit to main menu?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (result == DialogResult.OK)
+                {
+                    MainMenu MainMenu = new MainMenu();
+                    Program.Context.MainForm = MainMenu;
+                    Close();
+                    Program.Context.MainForm.Show();
+                }
+                else
+                {
+                    Timer.Start();
+                }
+                UserControl.ChangeState(Keys.Escape, false);
             }
         }
 

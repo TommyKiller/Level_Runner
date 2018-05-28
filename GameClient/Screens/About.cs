@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LevelRunner.GameWorld;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -20,6 +21,9 @@ namespace LevelRunner
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
             this.textBoxDescription.Text = AssemblyDescription;
+
+            // Form settings
+            FormBorderStyle = GameSettings.FormBorderStyle;
         }
 
         #region Методы доступа к атрибутам сборки

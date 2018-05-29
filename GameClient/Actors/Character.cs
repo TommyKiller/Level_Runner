@@ -1,6 +1,5 @@
 ﻿using LevelRunner.Actors.AttackTypes;
 using LevelRunner.GameWorld.Map;
-using LevelRunner.Terrains;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

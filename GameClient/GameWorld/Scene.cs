@@ -1,5 +1,5 @@
 ﻿using LevelRunner.Actors;
-using LevelRunner.Terrains;
+using LevelRunner.GameWorld.Map;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;

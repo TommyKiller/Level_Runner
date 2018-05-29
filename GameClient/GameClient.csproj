@@ -61,6 +61,7 @@
     <Compile Include="Actors\UnitTypes.cs" />
     <Compile Include="GameWorld\Camera.cs" />
     <Compile Include="Mathematics\Vector.cs" />
+    <Compile Include="Music.cs" />
     <Compile Include="Screens\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,7 +77,7 @@
     <Compile Include="Screens\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Terrains\Terrain.cs" />
+    <Compile Include="GameWorld\Map\Terrain.cs" />
     <Compile Include="Screens\World.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -32,6 +32,25 @@ namespace LevelRunner.Actors
             #endregion
         }
 
+        public Player(World parent, Fraction.Fractions fraction, Point coordinates, string name, Bitmap image)
+            : base(parent, fraction, coordinates, image)
+        {
+            #region Characteristics
+            Name = name;
+            UnitType = UnitTypes.GroundUnit;
+            Health = 120;
+            Speed = 5;
+            UnitAttack = new GroundOnly(10, 1, 1.5);
+            #endregion
+
+            SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
+            Parent.Camera.Bind(this);
+
+            #region Events
+            Parent.OnMoveKeyDown += Player_StartMoving;
+            #endregion
+        }
+
         protected override void Action_Execute()
         {
             if (ActionStack.Count > 0)

@@ -24,6 +24,21 @@ namespace LevelRunner.Actors.NPC
             SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
         }
 
+        public AIArcher(World parent, Fraction.Fractions fraction, Point coordinates, Bitmap image)
+            : base(parent, fraction, coordinates, image)
+        {
+            #region Characteristics
+            Name = FractionName.ToString() + " Archer";
+            UnitType = UnitTypes.GroundUnit;
+            Health = 80;
+            Speed = 3;
+            UnitAttack = new GroundAndAir(9, 0.8, 8);
+            SightRange = 80;
+            #endregion
+
+            SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
+        }
+
         protected override void DealDamage()
         {
             if (Target != null)

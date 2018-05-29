@@ -1,5 +1,4 @@
 ﻿using LevelRunner.Mathematics;
-using LevelRunner.Terrains;
 using System.Drawing;
 
 namespace LevelRunner.GameWorld.Map

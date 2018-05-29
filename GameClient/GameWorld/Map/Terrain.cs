@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace LevelRunner.Terrains
+namespace LevelRunner.GameWorld.Map
 {
     public static class Terrain
     {

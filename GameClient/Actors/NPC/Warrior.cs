@@ -24,6 +24,21 @@ namespace LevelRunner.Actors.NPC
             SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
         }
 
+        public AIWarrior(World parent, Fraction.Fractions fraction, Point coordinates, Bitmap image)
+            : base(parent, fraction, coordinates, image)
+        {
+            #region Characteristics
+            Name = FractionName.ToString() + " Warrior";
+            UnitType = UnitTypes.GroundUnit;
+            Health = 120;
+            Speed = 1;
+            UnitAttack = new GroundOnly(7, 1.1, 1.5);
+            SightRange = 80;
+            #endregion
+
+            SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
+        }
+
         protected override void DealDamage()
         {
             if (Target != null)

@@ -190,6 +190,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="LevelRunner.ico" />
+    <None Include="Resources\Track5.wav" />
+    <None Include="Resources\Track4.wav" />
+    <None Include="Resources\Track3.wav" />
+    <None Include="Resources\Track2.wav" />
+    <None Include="Resources\Track1.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

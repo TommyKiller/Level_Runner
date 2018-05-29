@@ -169,4 +169,19 @@
   <data name="SettingsBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SettingsBackground.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Track1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Track1.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Track2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Track2.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Track3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Track3.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Track4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Track4.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Track5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Track5.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

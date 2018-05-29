@@ -24,6 +24,7 @@ namespace LevelRunner
             Context = new ApplicationContext();
             MainMenu MainMenu = new MainMenu();
             Context.MainForm = MainMenu;
+            Music.Initialize();
             Application.Run(Context);
         }
     }

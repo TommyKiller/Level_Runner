@@ -108,7 +108,10 @@ namespace LevelRunner
 
         private void okButton_Click(object sender, EventArgs e)
         {
+            MainMenu MainMenu = new MainMenu();
+            Program.Context.MainForm = MainMenu;
             Close();
+            Program.Context.MainForm.Show();
         }
     }
 }

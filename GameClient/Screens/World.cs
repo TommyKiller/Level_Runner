@@ -19,6 +19,7 @@ namespace LevelRunner
         // Events
         public event Delegates.EventDelegate OnTimer;
         public event Delegates.EventDelegate OnMoveKeyDown;
+        public static event Delegates.EventDelegate WorldLoaded;
 
         #region Debugging
         #if DEBUG
@@ -61,6 +62,7 @@ namespace LevelRunner
             Actors.Add(new Player(this, Fraction.Fractions.Player, Calculate.GetRandomFreePoint(UnitTypes.GroundUnit), "Tommy"));
             AddActors(Calculate.GetRandom(15) + 20);
             SetTimer(GameSettings.TimerInterval);
+            WorldLoaded();
         }
 
         private void AddActors(int number)
@@ -145,6 +147,7 @@ namespace LevelRunner
                 DialogResult result = MessageBox.Show("Do you really want to quit?", "Exit to main menu?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (result == DialogResult.OK)
                 {
+                    Music.CloseWaveOut();
                     MainMenu MainMenu = new MainMenu();
                     Program.Context.MainForm = MainMenu;
                     Close();

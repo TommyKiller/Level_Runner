@@ -61,7 +61,7 @@
     <Compile Include="Actors\UnitTypes.cs" />
     <Compile Include="GameWorld\Camera.cs" />
     <Compile Include="Mathematics\Vector.cs" />
-    <Compile Include="Music.cs" />
+    <Compile Include="MusicPlayer.cs" />
     <Compile Include="Screens\About.cs">
       <SubType>Form</SubType>
     </Compile>

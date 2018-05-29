@@ -27,7 +27,7 @@ namespace LevelRunner
             FormBorderStyle = GameSettings.FormBorderStyle;
 
             // Events
-            GameSettings.SettingsChanged += GameSettings_OnChange;
+            GameSettings.FormBorderStyleChanged += GameSettings_OnChange;
         }
 
         private void MainMenu_Load(object sender, EventArgs e)
@@ -35,14 +35,14 @@ namespace LevelRunner
             MainMenuLoaded();
         }
 
-        private void GameSettings_OnChange()
+        private void GameSettings_OnChange(FormBorderStyle value)
         {
-            FormBorderStyle = GameSettings.FormBorderStyle;
+            FormBorderStyle = value;
         }
 
         private void newGameButton_Click(object sender, EventArgs e)
         {
-            Music.CloseWaveOut();
+            MusicPlayer.CloseWaveOut();
             Program.World = new World();
             Program.Context.MainForm = Program.World;
             Close();
@@ -73,7 +73,7 @@ namespace LevelRunner
         private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Events
-            GameSettings.SettingsChanged -= GameSettings_OnChange;
+            GameSettings.FormBorderStyleChanged -= GameSettings_OnChange;
         }
     }
 }

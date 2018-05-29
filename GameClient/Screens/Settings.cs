@@ -25,12 +25,12 @@ namespace LevelRunner
             screenModePicker.Text = screenModePicker.Items[0].ToString();
 
             // Events
-            GameSettings.SettingsChanged += GameSettings_OnChange;
+            GameSettings.FormBorderStyleChanged += GameSettings_OnChange;
         }
 
-        private void GameSettings_OnChange()
+        private void GameSettings_OnChange(FormBorderStyle value)
         {
-            FormBorderStyle = GameSettings.FormBorderStyle;
+            FormBorderStyle = value;
         }
 
         private void playerColorPickButton_Click(object sender, EventArgs e)
@@ -44,7 +44,7 @@ namespace LevelRunner
 
         private void volumeTracker_Scroll(object sender, EventArgs e)
         {
-            GameSettings.VolumeLevel = volumeTracker.Value;
+            GameSettings.VolumeLevel = (float)(volumeTracker.Value / 100.100);
         }
 
         private void screenModePicker_SelectedIndexChanged(object sender, EventArgs e)
@@ -71,7 +71,7 @@ namespace LevelRunner
         private void Settings_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Events
-            GameSettings.SettingsChanged -= GameSettings_OnChange;
+            GameSettings.FormBorderStyleChanged -= GameSettings_OnChange;
         }
     }
 }

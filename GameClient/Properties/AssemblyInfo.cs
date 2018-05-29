@@ -9,7 +9,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("2D rouglike RPG. Your main aim is to reach the new level by entering the portal that is located somewhere on your current level.\r\n" +
     "Beware the enemy's minions and use allied to kite.\r\n\r\n" +
     "Controls:\r\n" +
-    "-Use arrow keys to control your character.")]
+    "- Use arrow keys to control your character;\r\n" +
+    "- Press Esc to exit to the main menu.")]
 [assembly: AssemblyConfiguration("Debug (Early Alpha)")]
 [assembly: AssemblyCompany("NGuys Asoc. Group")]
 [assembly: AssemblyProduct("Level Runner 2D")]

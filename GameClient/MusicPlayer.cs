@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LevelRunner
 {
-    public static class Music
+    public static class MusicPlayer
     {
         private static bool Started { get; set; }
         public static WaveOut WaveOut { get; set; }
@@ -20,6 +20,7 @@ namespace LevelRunner
         public static void Initialize()
         {
             WaveOut = new WaveOut();
+            WaveOut.Volume = GameSettings.VolumeLevel;
             Started = false;
 
             // Events
@@ -28,6 +29,7 @@ namespace LevelRunner
             World.WorldLoaded += LoadGamePlaylist;
             World.WorldLoaded += StartWaveOut;
             WaveOut.PlaybackStopped += WaveOut_OnPlaybackStopped;
+            GameSettings.VolumeLevelChanged += ChangeVolumeLevel;
         }
 
         private static void StartWaveOut()
@@ -50,7 +52,6 @@ namespace LevelRunner
                 ChooseTrack(out UnmanagedMemoryStream track);
                 WaveFileReader WaveFileReader = new WaveFileReader(track);
                 WaveOut.Init(WaveFileReader);
-                WaveOut.Volume = (float)0.07;
                 WaveOut.Play();
             }
             catch(Exception)
@@ -95,27 +96,41 @@ namespace LevelRunner
 
         public static void LoadMenuPlaylist()
         {
-            TrackList = new List<UnmanagedMemoryStream>
+            if (!Started)
             {
-                Resources.MainTheme,
-                Resources.Forever,
-                Resources.Divinitus,
-                Resources.Epic
-            };
-            ListenedTracks = new List<UnmanagedMemoryStream>();
+                TrackList = new List<UnmanagedMemoryStream>
+                {
+                    Resources.MainTheme,
+                    Resources.Forever,
+                    Resources.Divinitus,
+                    Resources.Epic
+                };
+                ListenedTracks = new List<UnmanagedMemoryStream>();
+            }
         }
 
         public static void LoadGamePlaylist()
         {
-            TrackList = new List<UnmanagedMemoryStream>
+            if (!Started)
             {
-                Resources.Track1,
-                Resources.Track2,
-                Resources.Track3,
-                Resources.Track4,
-                Resources.Track5
-            };
-            ListenedTracks = new List<UnmanagedMemoryStream>();
+                TrackList = new List<UnmanagedMemoryStream>
+                {
+                    Resources.Track1,
+                    Resources.Track2,
+                    Resources.Track3,
+                    Resources.Track4,
+                    Resources.Track5
+                };
+                ListenedTracks = new List<UnmanagedMemoryStream>();
+            }
+        }
+
+        public static void ChangeVolumeLevel(float value)
+        {
+            if (WaveOut != null)
+            {
+                WaveOut.Volume = value;
+            }
         }
 
         private static void WaveOut_OnPlaybackStopped(object sender, EventArgs e)

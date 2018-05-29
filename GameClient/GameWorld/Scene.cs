@@ -82,31 +82,32 @@ namespace LevelRunner.GameWorld
             Monitor.Enter(oldChunks);
             foreach (Point point in oldChunks)
             {
-                // Absolute coordinates (map related)
-                if ((point.X >= 0) && (point.X <= Parent.Map.Width) &&
-                    (point.Y >= 0) && (point.Y <= Parent.Map.Height))
+                // Absolute coordinates in camera area
+                if ((point.X >= Parent.Camera.Coordinates.X) &&
+                    (point.X < Parent.Camera.Coordinates.X + Parent.Camera.Size.Width) &&
+                    (point.Y >= Parent.Camera.Coordinates.Y) &&
+                    (point.Y < Parent.Camera.Coordinates.Y + Parent.Camera.Size.Height))
                 {
-                    RepaintChunk(point);
+                    // Reduced coordinates (camera related)
+                    Parent.Canvas.DrawImage(Terrain.TerrainImage[Parent.Map.TerrainLayer[point.Y, point.X]], new Point(
+                            (point.X - Parent.Camera.Coordinates.X) * GameSettings.ChunkSize.Width,
+                            (point.Y - Parent.Camera.Coordinates.Y) * GameSettings.ChunkSize.Height));
                 }
             }
             oldChunks.Clear();
             Monitor.Exit(oldChunks);
         }
 
-        private void RepaintChunk(Point point)
-        {
-            // Reduced coordinates (camera related)
-            Parent.Canvas.DrawImage(Terrain.TerrainImage[Parent.Map.TerrainLayer[point.Y, point.X]],
-                new Point(
-                    (point.X - Parent.Camera.Coordinates.X) * GameSettings.ChunkSize.Width,
-                    (point.Y - Parent.Camera.Coordinates.Y) * GameSettings.ChunkSize.Height));
-        }
-
         public void AddOldChunk(Point point)
         {
-            Monitor.Enter(oldChunks);
-            if (!oldChunks.Contains(point)) oldChunks.Add(point);
-            Monitor.Exit(oldChunks);
+            // Absolute coordinates (map related)
+            if ((point.X >= 0) && (point.X <= Parent.Map.Width) &&
+                (point.Y >= 0) && (point.Y <= Parent.Map.Height))
+            {
+                Monitor.Enter(oldChunks);
+                if (!oldChunks.Contains(point)) oldChunks.Add(point);
+                Monitor.Exit(oldChunks);
+            }
         }
     }
 }

@@ -147,7 +147,7 @@ namespace LevelRunner
                 DialogResult result = MessageBox.Show("Do you really want to quit?", "Exit to main menu?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (result == DialogResult.OK)
                 {
-                    Music.CloseWaveOut();
+                    MusicPlayer.CloseWaveOut();
                     MainMenu MainMenu = new MainMenu();
                     Program.Context.MainForm = MainMenu;
                     Close();

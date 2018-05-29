@@ -25,7 +25,9 @@ namespace LevelRunner.GameWorld
             int width = Parent.ClientSize.Width / GameSettings.ChunkSize.Width;
             Size = new Size(width, height);
 
-            StandardShift = new Size(63, 27);
+            double x = width / 100.00 * 85.00;
+            double y = height / 100.00 * 85.00;
+            StandardShift = new Size((int)x, (int)y);
         }
 
         public void Bind(Character actor)

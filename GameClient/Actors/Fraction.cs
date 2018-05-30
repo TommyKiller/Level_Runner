@@ -17,7 +17,7 @@ namespace LevelRunner.Actors
         {
             { Fractions.Mern, Color.AliceBlue },
             { Fractions.Rivia, Color.Cyan },
-            { Fractions.Player, GameWorld.GameSettings.PlayerColor }
+            { Fractions.Player, Program.Settings.PlayerColor }
         };
 
         public static Dictionary<Fractions, Dictionary<Fractions, Relations>> RelationsList { get; set; } = new Dictionary<Fractions, Dictionary<Fractions, Relations>>

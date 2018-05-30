@@ -12,9 +12,8 @@ namespace LevelRunner.Actors.NPC
         // Events
         private static event Delegates.DeleteTargetDelegate DeleteTargetEvent;
 
-        // Propereties
+        // Properties
         protected Point Destination { get; set; }
-        protected Character Target { get; set; }
         protected int SightRange { get; set; }
 
         public NPC(World parent, Fraction.Fractions fraction, Point coordinates, Bitmap image)
@@ -119,7 +118,7 @@ namespace LevelRunner.Actors.NPC
                     Math.Pow((character.Coordinates.Y - Coordinates.Y), 2) <=
                     Math.Pow(SightRange, 2)) && (UnitAttack.EligibleTargets.Contains(character.UnitType)))
                 {
-                    if (CheckStatus(character))
+                    if (CheckStatus(character) == Fraction.Relations.Hostile)
                     {
                         if (Target != null)
                         {
@@ -130,21 +129,25 @@ namespace LevelRunner.Actors.NPC
                         }
                         else Target = character;
                     }
+                    else if ((CheckStatus(character) == Fraction.Relations.Friendly) && (CheckStatus(character.Target) == Fraction.Relations.Hostile))
+                    {
+                        if (Target != null)
+                        {
+                            if (Calculate.GetDistance(Coordinates, character.Target.Coordinates)
+                                <
+                                Calculate.GetDistance(Coordinates, Target.Coordinates))
+                                Target = character.Target;
+                        }
+                        else Target = character.Target;
+                    }
                 }
             }
             Monitor.Exit(Parent.Actors);
         }
 
-        protected bool CheckStatus(Character character)
+        protected Fraction.Relations CheckStatus(Character character)
         {
-            if (Fraction.RelationsList[FractionName][character.FractionName] == Fraction.Relations.Hostile)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return Fraction.RelationsList[FractionName][character.FractionName];
         }
         
         protected void NPC_DeleteTarget(Character target)

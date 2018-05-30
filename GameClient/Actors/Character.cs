@@ -18,8 +18,9 @@ namespace LevelRunner.Actors
         private int _health;
         private Point _coordinates;
 
-        // Propereties
+        // Properties
         protected World Parent { get; }
+        public Character Target { get; protected set; }
         public string Name { get; protected set; }
         public int Health
         {

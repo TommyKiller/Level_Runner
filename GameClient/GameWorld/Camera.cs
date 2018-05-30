@@ -11,23 +11,26 @@ namespace LevelRunner.GameWorld
 {
     public class Camera
     {
+        // Fields
+        private Size _standardShift;
+
+        // Properties
         public Character Actor { get; private set; }
         public World Parent { get; private set; }
         public Point Coordinates { get; private set; }
         public Size Size { get; private set; }
-        private Size StandardShift { get; set; }
 
         public Camera(World parent)
         {
             Parent = parent;
 
-            int height = Parent.ClientSize.Height / GameSettings.ChunkSize.Height;
-            int width = Parent.ClientSize.Width / GameSettings.ChunkSize.Width;
+            int height = Parent.ClientSize.Height / Program.Settings.ChunkSize.Height;
+            int width = Parent.ClientSize.Width / Program.Settings.ChunkSize.Width;
             Size = new Size(width, height);
 
             double x = width / 100.00 * 85.00;
             double y = height / 100.00 * 85.00;
-            StandardShift = new Size((int)x, (int)y);
+            _standardShift = new Size((int)x, (int)y);
         }
 
         public void Bind(Character actor)
@@ -105,23 +108,23 @@ namespace LevelRunner.GameWorld
             Vector direction = new Vector();
             if (Actor.Coordinates.X < Coordinates.X)
             {
-                direction.X += Coordinates.X - StandardShift.Width < 0 ? // 0 - absolute 
-                    - Coordinates.X : - StandardShift.Width; // coordinate (map related)
+                direction.X += Coordinates.X - _standardShift.Width < 0 ? // 0 - absolute 
+                    - Coordinates.X : - _standardShift.Width; // coordinate (map related)
             }
             else if (Actor.Coordinates.X >= Coordinates.X + Size.Width)
             {
-                direction.X += (Coordinates.X + Size.Width) + StandardShift.Width > Parent.Map.Width ? // Map.Width - absolute
-                    Parent.Map.Width - (Coordinates.X + Size.Width) : StandardShift.Width; // coordinate (map related)
+                direction.X += (Coordinates.X + Size.Width) + _standardShift.Width > Parent.Map.Width ? // Map.Width - absolute
+                    Parent.Map.Width - (Coordinates.X + Size.Width) : _standardShift.Width; // coordinate (map related)
             }
             if (Actor.Coordinates.Y < Coordinates.Y)
             {
-                direction.Y += Coordinates.Y - StandardShift.Height < 0 ? // 0 - absolute 
-                    - Coordinates.Y : -StandardShift.Height; // coordinate (map related)
+                direction.Y += Coordinates.Y - _standardShift.Height < 0 ? // 0 - absolute 
+                    - Coordinates.Y : -_standardShift.Height; // coordinate (map related)
             }
             else if (Actor.Coordinates.Y >= Coordinates.Y + Size.Height)
             {
-                direction.Y += (Coordinates.Y + Size.Height) + StandardShift.Height > Parent.Map.Height ? // Map.Height - absolute
-                    Parent.Map.Height - (Coordinates.Y + Size.Height) : StandardShift.Height; // coordinate (map related)
+                direction.Y += (Coordinates.Y + Size.Height) + _standardShift.Height > Parent.Map.Height ? // Map.Height - absolute
+                    Parent.Map.Height - (Coordinates.Y + Size.Height) : _standardShift.Height; // coordinate (map related)
             }
             return direction;
         }

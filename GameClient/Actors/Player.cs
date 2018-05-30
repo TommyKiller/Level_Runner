@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace LevelRunner.Actors
 {
-    public class Player : Character, IDisposable
+    public class Player : Character
     {
-        // Propereties
+        // Properties
         public Vector Direction { get; set; }
 
         public Player(World parent, Fraction.Fractions fraction, Point coordinates, string name)

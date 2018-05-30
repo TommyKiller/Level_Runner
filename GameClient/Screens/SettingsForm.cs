@@ -11,16 +11,16 @@ using LevelRunner.GameWorld;
 
 namespace LevelRunner
 {
-    public partial class Settings : Form
+    public partial class SettingsForm : Form
     {
-        public Settings()
+        public SettingsForm()
         {
             InitializeComponent();
 
             // Form settings
-            FormBorderStyle = GameSettings.FormBorderStyle;
+            FormBorderStyle = Program.Settings.FormBorderStyle;
 
-            volumeTracker.Value = (int)(GameSettings.VolumeLevel * 100);
+            volumeTracker.Value = (int)(Program.Settings.VolumeLevel * 100);
             screenModePicker.DropDownStyle = ComboBoxStyle.DropDownList;
             screenModePicker.Text = screenModePicker.Items[0].ToString();
 
@@ -38,13 +38,13 @@ namespace LevelRunner
             ColorDialog colorDialog = new ColorDialog();
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                GameSettings.PlayerColor = colorDialog.Color;
+                Program.Settings.PlayerColor = colorDialog.Color;
             }
         }
 
         private void volumeTracker_Scroll(object sender, EventArgs e)
         {
-            GameSettings.VolumeLevel = (float)(volumeTracker.Value / 100.100);
+            Program.Settings.VolumeLevel = (float)(volumeTracker.Value / 100.100);
         }
 
         private void screenModePicker_SelectedIndexChanged(object sender, EventArgs e)
@@ -52,10 +52,10 @@ namespace LevelRunner
             switch (screenModePicker.Text)
             {
                 case "FULLSCREEN":
-                    GameSettings.FormBorderStyle = FormBorderStyle.None;
+                    Program.Settings.FormBorderStyle = FormBorderStyle.None;
                     break;
                 case "WINDOWED":
-                    GameSettings.FormBorderStyle = FormBorderStyle.Sizable;
+                    Program.Settings.FormBorderStyle = FormBorderStyle.Sizable;
                     break;
             }
         }
@@ -70,6 +70,8 @@ namespace LevelRunner
 
         private void Settings_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Program.Settings.Save("settings.json");
+
             // Events
             GameSettings.FormBorderStyleChanged -= GameSettings_OnChange;
         }

@@ -24,7 +24,7 @@ namespace LevelRunner
             InitializeComponent();
 
             // Settings
-            FormBorderStyle = GameSettings.FormBorderStyle;
+            FormBorderStyle = Program.Settings.FormBorderStyle;
 
             // Events
             GameSettings.FormBorderStyleChanged += GameSettings_OnChange;
@@ -59,7 +59,7 @@ namespace LevelRunner
 
         private void settingsButton_Click(object sender, EventArgs e)
         {
-            Settings Settings = new Settings();
+            SettingsForm Settings = new SettingsForm();
             Program.Context.MainForm = Settings;
             Close();
             Program.Context.MainForm.Show();

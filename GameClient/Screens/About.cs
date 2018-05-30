@@ -23,7 +23,7 @@ namespace LevelRunner
             this.textBoxDescription.Text = AssemblyDescription;
 
             // Form settings
-            FormBorderStyle = GameSettings.FormBorderStyle;
+            FormBorderStyle = Program.Settings.FormBorderStyle;
         }
 
         #region Методы доступа к атрибутам сборки

@@ -43,7 +43,7 @@ namespace LevelRunner
             InitializeComponent();
 
             // Form settings
-            FormBorderStyle = GameSettings.FormBorderStyle;
+            FormBorderStyle = Program.Settings.FormBorderStyle;
             WindowState = FormWindowState.Maximized;
             Thread.CurrentThread.IsBackground = true;
 
@@ -61,7 +61,7 @@ namespace LevelRunner
         {// All that is connected to game world
             Actors.Add(new Player(this, Fraction.Fractions.Player, Calculate.GetRandomFreePoint(UnitTypes.GroundUnit), "Tommy"));
             AddActors(Calculate.GetRandom(15) + 20);
-            SetTimer(GameSettings.TimerInterval);
+            SetTimer(Program.Settings.TimerInterval);
             WorldLoaded();
         }
 

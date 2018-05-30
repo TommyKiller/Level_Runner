@@ -20,7 +20,7 @@ namespace LevelRunner
         public static void Initialize()
         {
             WaveOut = new WaveOut();
-            WaveOut.Volume = GameSettings.VolumeLevel;
+            WaveOut.Volume = Program.Settings.VolumeLevel;
             Started = false;
 
             // Events

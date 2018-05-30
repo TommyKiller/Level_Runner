@@ -47,8 +47,8 @@ namespace LevelRunner.GameWorld
                     {
                         // Reduced coordinates (camera related)
                         Parent.Canvas.DrawImage(Terrain.TerrainImage[Parent.Map.TerrainLayer[j, i]], new Point(
-                        ((i - Parent.Camera.Coordinates.X) * GameSettings.ChunkSize.Width),
-                        ((j - Parent.Camera.Coordinates.Y) * GameSettings.ChunkSize.Height)));
+                        ((i - Parent.Camera.Coordinates.X) * Program.Settings.ChunkSize.Width),
+                        ((j - Parent.Camera.Coordinates.Y) * Program.Settings.ChunkSize.Height)));
                     }
                 }
             }
@@ -69,8 +69,8 @@ namespace LevelRunner.GameWorld
                     {
                         // Reduced coordinates (camera related)
                         Parent.Canvas.DrawImage(character.Image, new Point(
-                               (character.Coordinates.X - Parent.Camera.Coordinates.X) * GameSettings.ChunkSize.Width,
-                               (character.Coordinates.Y - Parent.Camera.Coordinates.Y) * GameSettings.ChunkSize.Height));
+                               (character.Coordinates.X - Parent.Camera.Coordinates.X) * Program.Settings.ChunkSize.Width,
+                               (character.Coordinates.Y - Parent.Camera.Coordinates.Y) * Program.Settings.ChunkSize.Height));
                     }
                 }
             }
@@ -90,8 +90,8 @@ namespace LevelRunner.GameWorld
                 {
                     // Reduced coordinates (camera related)
                     Parent.Canvas.DrawImage(Terrain.TerrainImage[Parent.Map.TerrainLayer[point.Y, point.X]], new Point(
-                            (point.X - Parent.Camera.Coordinates.X) * GameSettings.ChunkSize.Width,
-                            (point.Y - Parent.Camera.Coordinates.Y) * GameSettings.ChunkSize.Height));
+                            (point.X - Parent.Camera.Coordinates.X) * Program.Settings.ChunkSize.Width,
+                            (point.Y - Parent.Camera.Coordinates.Y) * Program.Settings.ChunkSize.Height));
                 }
             }
             oldChunks.Clear();

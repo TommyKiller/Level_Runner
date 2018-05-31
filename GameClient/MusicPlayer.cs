@@ -4,9 +4,6 @@ using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LevelRunner
 {
@@ -19,8 +16,10 @@ namespace LevelRunner
 
         public static void Initialize()
         {
-            WaveOut = new WaveOut();
-            WaveOut.Volume = Program.Settings.VolumeLevel;
+            WaveOut = new WaveOut
+            {
+                Volume = Program.Settings.VolumeLevel
+            };
             Started = false;
 
             // Events

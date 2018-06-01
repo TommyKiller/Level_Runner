@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -18,6 +19,8 @@ namespace LevelRunner
 
             // Form settings
             FormBorderStyle = Program.Settings.FormBorderStyle;
+            WindowState = FormWindowState.Maximized;
+            BackgroundImage = new Bitmap(Image.FromFile(@"Resources\Assets\Backgrounds\AboutBackground.jpg"), ClientSize);
         }
 
         #region Методы доступа к атрибутам сборки

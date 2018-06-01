@@ -10,30 +10,31 @@ namespace LevelRunner.Actors.NPC
     class AIWarrior : NPC
     {
         public AIWarrior(World parent, Fraction.Fractions fraction, Point coordinates)
-            : base(parent, fraction, coordinates, Resources.AIWarrior)
+            : base(parent, fraction, coordinates, Warrior.Image)
         {
             #region Characteristics
             Name = FractionName.ToString() + " Warrior";
-            UnitType = UnitTypes.GroundUnit;
-            Health = 120;
-            Speed = 1;
-            UnitAttack = new GroundOnly(7, 1.1, 1.5);
-            SightRange = 80;
+            UnitType = Warrior.UnitType;
+            Health = Warrior.Health;
+            Speed = Warrior.Speed;
+            UnitAttack = Warrior.UnitAttack;
+            SightRange = Warrior.SightRange;
             #endregion
 
             SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
         }
 
-        public AIWarrior(World parent, Fraction.Fractions fraction, Point coordinates, Bitmap image)
+        public AIWarrior(World parent, Fraction.Fractions fraction, Point coordinates,
+            string name, int health, double speed, int sightRange, Bitmap image)
             : base(parent, fraction, coordinates, image)
         {
             #region Characteristics
-            Name = FractionName.ToString() + " Warrior";
-            UnitType = UnitTypes.GroundUnit;
-            Health = 120;
-            Speed = 1;
-            UnitAttack = new GroundOnly(7, 1.1, 1.5);
-            SightRange = 80;
+            Name = name;
+            UnitType = Warrior.UnitType;
+            Health = health;
+            Speed = speed;
+            UnitAttack = Warrior.UnitAttack;
+            SightRange = sightRange;
             #endregion
 
             SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);

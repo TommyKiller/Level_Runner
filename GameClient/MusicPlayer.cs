@@ -1,5 +1,4 @@
 ﻿using LevelRunner.GameWorld;
-using LevelRunner.Properties;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -11,8 +10,8 @@ namespace LevelRunner
     {
         private static bool Started { get; set; }
         public static WaveOut WaveOut { get; set; }
-        public static List<UnmanagedMemoryStream> TrackList { get; set; }
-        public static List<UnmanagedMemoryStream> ListenedTracks { get; set; }
+        public static List<string> TrackList { get; set; }
+        public static List<string> ListenedTracks { get; set; }
 
         public static void Initialize()
         {
@@ -46,17 +45,11 @@ namespace LevelRunner
 
         public static void NextTrack()
         {
-            try
-            {
-                ChooseTrack(out UnmanagedMemoryStream track);
-                WaveFileReader WaveFileReader = new WaveFileReader(track);
-                WaveOut.Init(WaveFileReader);
-                WaveOut.Play();
-            }
-            catch(Exception)
-            {
-
-            }
+            ChooseTrack(out string track);
+            FileStream inputStream = File.OpenRead(track);
+            WaveFileReader WaveFileReader = new WaveFileReader(inputStream);
+            WaveOut.Init(WaveFileReader);
+            WaveOut.Play();
         }
 
         public static void CloseWaveOut()
@@ -70,7 +63,7 @@ namespace LevelRunner
             }
         }
 
-        private static void ChooseTrack(out UnmanagedMemoryStream Track)
+        private static void ChooseTrack(out string Track)
         {
             if (ListenedTracks.Count == TrackList.Count)
             {
@@ -80,8 +73,8 @@ namespace LevelRunner
             else
             {
                 Random random = new Random();
-                List<UnmanagedMemoryStream> TempTrackList = new List<UnmanagedMemoryStream>();
-                foreach (UnmanagedMemoryStream track in TrackList)
+                List<string> TempTrackList = new List<string>();
+                foreach (string track in TrackList)
                 {
                     if (!ListenedTracks.Contains(track))
                     {
@@ -97,14 +90,14 @@ namespace LevelRunner
         {
             if (!Started)
             {
-                TrackList = new List<UnmanagedMemoryStream>
+                TrackList = new List<string>
                 {
-                    Resources.MainTheme,
-                    Resources.Forever,
-                    Resources.Divinitus,
-                    Resources.Epic
+                    @"Resources\Music\MainTheme.wav",
+                    @"Resources\Music\Divinitus.wav",
+                    @"Resources\Music\Epic.wav",
+                    @"Resources\Music\Forever.wav"
                 };
-                ListenedTracks = new List<UnmanagedMemoryStream>();
+                ListenedTracks = new List<string>();
             }
         }
 
@@ -112,15 +105,15 @@ namespace LevelRunner
         {
             if (!Started)
             {
-                TrackList = new List<UnmanagedMemoryStream>
+                TrackList = new List<string>
                 {
-                    Resources.Track1,
-                    Resources.Track2,
-                    Resources.Track3,
-                    Resources.Track4,
-                    Resources.Track5
+                    @"Resources\Music\Track1.wav",
+                    @"Resources\Music\Track2.wav",
+                    @"Resources\Music\Track3.wav",
+                    @"Resources\Music\Track4.wav",
+                    @"Resources\Music\Track5.wav"
                 };
-                ListenedTracks = new List<UnmanagedMemoryStream>();
+                ListenedTracks = new List<string>();
             }
         }
 

@@ -46,7 +46,8 @@ namespace LevelRunner.GameWorld
                         (j >= 0) && (j < Parent.Map.Height))
                     {
                         // Reduced coordinates (camera related)
-                        Parent.Canvas.DrawImage(Terrain.TerrainImage[Parent.Map.TerrainLayer[j, i]], new Point(
+                        Bitmap chunk = new Bitmap(Terrain.TerrainImage[Parent.Map.TerrainLayer[j, i]], Program.Settings.ChunkSize);
+                        Parent.Canvas.DrawImage(chunk, new Point(
                         ((i - Parent.Camera.Coordinates.X) * Program.Settings.ChunkSize.Width),
                         ((j - Parent.Camera.Coordinates.Y) * Program.Settings.ChunkSize.Height)));
                     }
@@ -68,7 +69,8 @@ namespace LevelRunner.GameWorld
                         (character.Coordinates.Y < Parent.Camera.Coordinates.Y + Parent.Camera.Size.Height))
                     {
                         // Reduced coordinates (camera related)
-                        Parent.Canvas.DrawImage(character.Image, new Point(
+                        Bitmap chunk = new Bitmap(character.Image, Program.Settings.ChunkSize);
+                        Parent.Canvas.DrawImage(chunk, new Point(
                                (character.Coordinates.X - Parent.Camera.Coordinates.X) * Program.Settings.ChunkSize.Width,
                                (character.Coordinates.Y - Parent.Camera.Coordinates.Y) * Program.Settings.ChunkSize.Height));
                     }
@@ -89,7 +91,8 @@ namespace LevelRunner.GameWorld
                     (point.Y < Parent.Camera.Coordinates.Y + Parent.Camera.Size.Height))
                 {
                     // Reduced coordinates (camera related)
-                    Parent.Canvas.DrawImage(Terrain.TerrainImage[Parent.Map.TerrainLayer[point.Y, point.X]], new Point(
+                    Bitmap chunk = new Bitmap(Terrain.TerrainImage[Parent.Map.TerrainLayer[point.Y, point.X]], Program.Settings.ChunkSize);
+                    Parent.Canvas.DrawImage(chunk, new Point(
                             (point.X - Parent.Camera.Coordinates.X) * Program.Settings.ChunkSize.Width,
                             (point.Y - Parent.Camera.Coordinates.Y) * Program.Settings.ChunkSize.Height));
                 }

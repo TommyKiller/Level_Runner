@@ -1,5 +1,6 @@
 ﻿using LevelRunner.GameWorld;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace LevelRunner
@@ -15,6 +16,8 @@ namespace LevelRunner
 
             // Settings
             FormBorderStyle = Program.Settings.FormBorderStyle;
+            WindowState = FormWindowState.Maximized;
+            BackgroundImage = new Bitmap(Image.FromFile(@"Resources\Assets\Backgrounds\MainMenuBackground.jpg"), ClientSize);
 
             // Events
             GameSettings.FormBorderStyleChanged += GameSettings_OnChange;

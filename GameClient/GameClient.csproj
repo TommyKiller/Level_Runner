@@ -58,6 +58,7 @@
     <Compile Include="Actors\AttackTypes\GroundOnly.cs" />
     <Compile Include="Actors\Fraction.cs" />
     <Compile Include="Actors\NPC\Archer.cs" />
+    <Compile Include="Actors\NPC\Characterstics.cs" />
     <Compile Include="Actors\NPC\Warrior.cs" />
     <Compile Include="Actors\UnitTypes.cs" />
     <Compile Include="GameWorld\Camera.cs" />
@@ -136,66 +137,83 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PWarrior.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AIWarrior.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AIArcher.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Grass.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\RoadLeft-Right.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\RoadTop-Bottom.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Stone.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Water.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\WoodenBridge.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MainMenuBackground.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AboutLogo.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AboutBackground.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Forever.mp3" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Forever.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MainTheme.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Divinitus.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Epic.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SettingsBackground.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="LevelRunner.ico" />
-    <None Include="Resources\Track5.wav" />
-    <None Include="Resources\Track4.wav" />
-    <None Include="Resources\Track3.wav" />
-    <None Include="Resources\Track2.wav" />
-    <None Include="Resources\Track1.wav" />
+    <Content Include="Resources\Assets\Backgrounds\AboutBackground.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Backgrounds\Background 1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Backgrounds\Background 2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Backgrounds\Background 3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Backgrounds\Background 4.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Backgrounds\MainMenuBackground.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Backgrounds\SettingsBackground.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Characters\AIArcher.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Characters\AIWarrior.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Characters\PWarrior.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Terrain\Grass.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Terrain\RoadLeft-Right.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Terrain\RoadTop-Bottom.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Terrain\Stone.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Terrain\Water.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Assets\Terrain\WoodenBridge.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\Divinitus.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\Epic.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\Forever.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\MainTheme.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\Track1.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\Track2.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\Track3.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\Track4.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\Track5.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

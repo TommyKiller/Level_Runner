@@ -1,5 +1,6 @@
 ﻿using LevelRunner.GameWorld;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace LevelRunner
@@ -12,7 +13,10 @@ namespace LevelRunner
 
             // Form settings
             FormBorderStyle = Program.Settings.FormBorderStyle;
+            WindowState = FormWindowState.Maximized;
+            BackgroundImage = new Bitmap(Image.FromFile(@"Resources\Assets\Backgrounds\SettingsBackground.jpg"), ClientSize);
 
+            // Form elements
             volumeTracker.Value = (int)(Program.Settings.VolumeLevel * 100);
             screenModePicker.DropDownStyle = ComboBoxStyle.DropDownList;
             screenModePicker.Text = screenModePicker.Items[0].ToString();

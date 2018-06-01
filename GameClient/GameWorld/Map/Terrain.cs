@@ -15,10 +15,10 @@ namespace LevelRunner.GameWorld.Map
         public static Patency GrassPatency = new Patency(PatencyMode.Free, PatencyMode.Free, PatencyMode.None);
         public static Patency WaterPatency = new Patency(PatencyMode.None, PatencyMode.Free, PatencyMode.Free);
 
-        public static Dictionary<Terrains, Image> TerrainImage { get; set; } = new Dictionary<Terrains, Image>
+        public static Dictionary<Terrains, Bitmap> TerrainImage { get; set; } = new Dictionary<Terrains, Bitmap>
         {
-            { Terrains.Grass, Properties.Resources.Grass },
-            { Terrains.Water, Properties.Resources.Water }
+            { Terrains.Grass, new Bitmap(@"Resources\Assets\Terrain\Grass.jpg") },
+            { Terrains.Water, new Bitmap(@"Resources\Assets\Terrain\Water.jpg") }
         };
 
         public class Patency

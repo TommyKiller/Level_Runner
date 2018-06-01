@@ -14,7 +14,7 @@ namespace LevelRunner.Actors
         public Vector Direction { get; set; }
 
         public Player(World parent, Fraction.Fractions fraction, Point coordinates, string name)
-            : base(parent, fraction, coordinates, Resources.PWarrior)
+            : base(parent, fraction, coordinates, new Bitmap(@"Resources\Assets\Characters\PWarrior.png"))
         {
             #region Characteristics
             Name = name;
@@ -32,14 +32,15 @@ namespace LevelRunner.Actors
             #endregion
         }
 
-        public Player(World parent, Fraction.Fractions fraction, Point coordinates, string name, Bitmap image)
+        public Player(World parent, Fraction.Fractions fraction, Point coordinates,
+            string name, int health, double speed, Bitmap image)
             : base(parent, fraction, coordinates, image)
         {
             #region Characteristics
             Name = name;
             UnitType = UnitTypes.GroundUnit;
-            Health = 120;
-            Speed = 5;
+            Health = health;
+            Speed = speed;
             UnitAttack = new GroundOnly(10, 1, 1.5);
             #endregion
 

@@ -51,7 +51,7 @@
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.tableLayoutPanel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tableLayoutPanel.ForeColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.tableLayoutPanel.Location = new System.Drawing.Point(9, 9);
+            this.tableLayoutPanel.Location = new System.Drawing.Point(934, 9);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 6;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.925094F));
@@ -60,7 +60,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.925094F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 46.06741F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.23221F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(417, 265);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(417, 750);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // labelProductName
@@ -77,7 +77,7 @@
             // labelVersion
             // 
             this.labelVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelVersion.Location = new System.Drawing.Point(6, 26);
+            this.labelVersion.Location = new System.Drawing.Point(6, 74);
             this.labelVersion.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelVersion.MaximumSize = new System.Drawing.Size(0, 17);
             this.labelVersion.Name = "labelVersion";
@@ -88,7 +88,7 @@
             // labelCopyright
             // 
             this.labelCopyright.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCopyright.Location = new System.Drawing.Point(6, 52);
+            this.labelCopyright.Location = new System.Drawing.Point(6, 148);
             this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCopyright.MaximumSize = new System.Drawing.Size(0, 17);
             this.labelCopyright.Name = "labelCopyright";
@@ -99,7 +99,7 @@
             // labelCompanyName
             // 
             this.labelCompanyName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCompanyName.Location = new System.Drawing.Point(6, 78);
+            this.labelCompanyName.Location = new System.Drawing.Point(6, 222);
             this.labelCompanyName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCompanyName.MaximumSize = new System.Drawing.Size(0, 17);
             this.labelCompanyName.Name = "labelCompanyName";
@@ -110,7 +110,7 @@
             // textBoxDescription
             // 
             this.textBoxDescription.AutoSize = true;
-            this.textBoxDescription.Location = new System.Drawing.Point(3, 104);
+            this.textBoxDescription.Location = new System.Drawing.Point(3, 296);
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.Size = new System.Drawing.Size(0, 13);
             this.textBoxDescription.TabIndex = 25;
@@ -125,7 +125,7 @@
             this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.okButton.Font = new System.Drawing.Font("Courier New", 16F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.okButton.ForeColor = System.Drawing.Color.Brown;
-            this.okButton.Location = new System.Drawing.Point(3, 229);
+            this.okButton.Location = new System.Drawing.Point(3, 679);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(411, 33);
             this.okButton.TabIndex = 26;
@@ -137,8 +137,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::LevelRunner.Properties.Resources.AboutBackground;
-            this.ClientSize = new System.Drawing.Size(435, 283);
+            this.ClientSize = new System.Drawing.Size(1360, 768);
             this.Controls.Add(this.tableLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;

@@ -10,30 +10,31 @@ namespace LevelRunner.Actors.NPC
     class AIArcher : NPC
     {
         public AIArcher(World parent, Fraction.Fractions fraction, Point coordinates)
-            : base(parent, fraction, coordinates, Resources.AIArcher)
+            : base(parent, fraction, coordinates, Archer.Image)
         {
             #region Characteristics
             Name = FractionName.ToString() + " Archer";
-            UnitType = UnitTypes.GroundUnit;
-            Health = 80;
-            Speed = 3;
-            UnitAttack = new GroundAndAir(9, 0.8, 8);
-            SightRange = 80;
+            UnitType = Archer.UnitType;
+            Health = Archer.Health;
+            Speed = Archer.Speed;
+            UnitAttack = Archer.UnitAttack;
+            SightRange = Archer.SightRange;
             #endregion
 
             SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);
         }
 
-        public AIArcher(World parent, Fraction.Fractions fraction, Point coordinates, Bitmap image)
+        public AIArcher(World parent, Fraction.Fractions fraction, Point coordinates,
+            string name, int health, double speed, int sightRange, Bitmap image)
             : base(parent, fraction, coordinates, image)
         {
             #region Characteristics
-            Name = FractionName.ToString() + " Archer";
-            UnitType = UnitTypes.GroundUnit;
-            Health = 80;
-            Speed = 3;
-            UnitAttack = new GroundAndAir(9, 0.8, 8);
-            SightRange = 80;
+            Name = name;
+            UnitType = Archer.UnitType;
+            Health = health;
+            Speed = speed;
+            UnitAttack = Archer.UnitAttack;
+            SightRange = sightRange;
             #endregion
 
             SetUpTimers(UnitAttack.AttackSpeed * 1000, 1000 / Speed);

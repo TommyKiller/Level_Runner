@@ -129,7 +129,8 @@ namespace LevelRunner.Actors.NPC
                         }
                         else Target = character;
                     }
-                    else if ((CheckStatus(character) == Fraction.Relations.Friendly) && (CheckStatus(character.Target) == Fraction.Relations.Hostile))
+                    /*
+                    else if ((CheckStatus(character) == Fraction.Relations.Friendly) && (character.Target != null) && (CheckStatus(character.Target) == Fraction.Relations.Hostile))
                     {
                         if (Target != null)
                         {
@@ -140,6 +141,7 @@ namespace LevelRunner.Actors.NPC
                         }
                         else Target = character.Target;
                     }
+                    */
                 }
             }
             Monitor.Exit(Parent.Actors);

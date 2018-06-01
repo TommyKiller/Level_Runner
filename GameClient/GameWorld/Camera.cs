@@ -14,6 +14,7 @@ namespace LevelRunner.GameWorld
         public World Parent { get; private set; }
         public Point Coordinates { get; private set; }
         public Size Size { get; private set; }
+        public bool Binded { get; private set; }
 
         public Camera(World parent)
         {
@@ -26,13 +27,19 @@ namespace LevelRunner.GameWorld
             double x = width / 100.00 * 85.00;
             double y = height / 100.00 * 85.00;
             _standardShift = new Size((int)x, (int)y);
+            Binded = false;
         }
 
         public void Bind(Character actor)
         {
+            if (Binded)
+            {
+                Unbind();
+            }
             Actor = actor;
             Centralize(Actor);
             Parent.Scene.BackGroundRepaint = true;
+            Binded = true;
 
             #region Events
             Actor.CharacterDied += Unbind;
@@ -48,12 +55,7 @@ namespace LevelRunner.GameWorld
             #endregion
 
             Actor = null;
-        }
-
-        public void Rebind(Character actor)
-        {
-            Unbind();
-            Bind(actor);
+            Binded = false;
         }
 
         public void Centralize(Character actor)

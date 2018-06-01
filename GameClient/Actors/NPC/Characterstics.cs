@@ -23,8 +23,8 @@ namespace LevelRunner.Actors.NPC
         public static Bitmap Image { get; } = new Bitmap(@"Resources\Assets\Characters\AIWarrior.png");
         public static UnitTypes UnitType { get; } = UnitTypes.GroundUnit;
         public static int Health { get; } = 120;
-        public static double Speed { get; } = 1;
+        public static double Speed { get; } = 2;
         public static UnitAttack UnitAttack { get; } = new GroundOnly(7, 1.1, 1.5);
-        public static int SightRange { get; } = 200;
+        public static int SightRange { get; } = 80;
     }
 }

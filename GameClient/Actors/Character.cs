@@ -91,7 +91,7 @@ namespace LevelRunner.Actors
             ActionStack = new Stack<Delegates.ActDelegate>();
 
             #region Image editing
-            Image = image;
+            Image = new Bitmap(image);
             Image.MakeTransparent(Color.White);
             for (int i = 0; i < Image.Width; i++)
             {

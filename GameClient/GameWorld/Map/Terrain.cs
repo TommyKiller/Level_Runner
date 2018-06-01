@@ -33,6 +33,13 @@ namespace LevelRunner.GameWorld.Map
                 AirPatency = airPatency;
                 WaterPatency = waterPatency;
             }
+
+            public Patency(Patency patency)
+            {
+                GroundPatency = patency.GroundPatency;
+                AirPatency = patency.AirPatency;
+                WaterPatency = patency.WaterPatency;
+            }
         }
 
         public enum PatencyMode

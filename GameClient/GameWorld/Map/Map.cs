@@ -43,7 +43,7 @@ namespace LevelRunner.GameWorld.Map
                 for (int j = 0; j < Width; j++)
                 {
                     TerrainLayer[i, j] = Terrain.Terrains.Grass;
-                    PatencyLayer[i, j] = new Terrain.Patency(Terrain.GrassPatency.GroundPatency, Terrain.GrassPatency.AirPatency, Terrain.GrassPatency.WaterPatency);
+                    PatencyLayer[i, j] = new Terrain.Patency(Terrain.GrassPatency);
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace LevelRunner.GameWorld.Map
             while (currentChunk.Y <= end.Y)
             {
                 TerrainLayer[currentChunk.Y, currentChunk.X] = Terrain.Terrains.Water;
-                PatencyLayer[currentChunk.Y++, currentChunk.X] = new Terrain.Patency(Terrain.WaterPatency.GroundPatency, Terrain.WaterPatency.AirPatency, Terrain.WaterPatency.WaterPatency);
+                PatencyLayer[currentChunk.Y++, currentChunk.X] = new Terrain.Patency(Terrain.WaterPatency);
             }
         }
     }

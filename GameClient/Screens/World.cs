@@ -54,12 +54,12 @@ namespace LevelRunner
 
             int mapWidth = Calculate.GetRandom(150) + 70;
             int mapHeight = Calculate.GetRandom(150) + 70;
-            Map = new Map(80, 80);
+            Map = new Map(mapWidth, mapHeight);
         }
 
         private void World_Load(object sender, EventArgs e)
         {// All that is connected to game world
-            //Actors.Add(new Player(this, Fraction.Fractions.Player, Calculate.GetRandomFreePoint(UnitTypes.GroundUnit), "Tommy"));
+            Actors.Add(new Player(this, Fraction.Fractions.Player, Calculate.GetRandomFreePoint(UnitTypes.GroundUnit), "Tommy"));
             AddActors(Calculate.GetRandom(15) + 20);
             SetTimer(Program.Settings.TimerInterval);
             WorldLoaded();

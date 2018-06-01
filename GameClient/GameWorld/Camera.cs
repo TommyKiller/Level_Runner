@@ -6,13 +6,25 @@ namespace LevelRunner.GameWorld
 {
     public class Camera
     {
+        // Events
+        public static event Delegates.EventDelegate CameraChangedPosition;
+
         // Fields
         private Size _standardShift;
+        private Point _coordinates;
 
         // Properties
         public Character Actor { get; private set; }
         public World Parent { get; private set; }
-        public Point Coordinates { get; private set; }
+        public Point Coordinates
+        {
+            get => _coordinates;
+            private set
+            {
+                _coordinates = value;
+                CameraChangedPosition?.Invoke();
+            }
+        }
         public Size Size { get; private set; }
         public bool Binded { get; private set; }
 
@@ -38,7 +50,6 @@ namespace LevelRunner.GameWorld
             }
             Actor = actor;
             Centralize(Actor);
-            Parent.Scene.BackGroundRepaint = true;
             Binded = true;
 
             #region Events
@@ -96,7 +107,6 @@ namespace LevelRunner.GameWorld
         private void Move(Vector direction)
         {
             Coordinates = direction.GetEndPoint(Coordinates);
-            Parent.Scene.BackGroundRepaint = true;
         }
 
         private Vector GetDirection()
@@ -106,7 +116,7 @@ namespace LevelRunner.GameWorld
             if (Actor.Coordinates.X < Coordinates.X)
             {
                 direction.X += Coordinates.X - _standardShift.Width < 0 ? // 0 - absolute 
-                    - Coordinates.X : - _standardShift.Width; // coordinate (map related)
+                    -Coordinates.X : -_standardShift.Width; // coordinate (map related)
             }
             else if (Actor.Coordinates.X >= Coordinates.X + Size.Width)
             {
@@ -116,7 +126,7 @@ namespace LevelRunner.GameWorld
             if (Actor.Coordinates.Y < Coordinates.Y)
             {
                 direction.Y += Coordinates.Y - _standardShift.Height < 0 ? // 0 - absolute 
-                    - Coordinates.Y : -_standardShift.Height; // coordinate (map related)
+                    -Coordinates.Y : -_standardShift.Height; // coordinate (map related)
             }
             else if (Actor.Coordinates.Y >= Coordinates.Y + Size.Height)
             {

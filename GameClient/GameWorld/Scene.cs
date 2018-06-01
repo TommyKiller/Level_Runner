@@ -12,7 +12,7 @@ namespace LevelRunner.GameWorld
         private List<Point> oldChunks;
 
         // Propereties
-        public bool BackGroundRepaint { get; set; }
+        public bool BackgroundRepainted { get; private set; }
         public World Parent { get; }
 
         public Scene(World parent)
@@ -20,18 +20,26 @@ namespace LevelRunner.GameWorld
             Parent = parent;
             Parent.Canvas = Parent.CreateGraphics();
             oldChunks = new List<Point>();
-            BackGroundRepaint = true;
+            BackgroundRepainted = false;
+
+            #region Events
+            Camera.CameraChangedPosition += ChangeBackground;
+            #endregion
         }
 
         public void Repaint()
         {
-            if (BackGroundRepaint)
+            if (!BackgroundRepainted)
             {
                 RepaintBackGround();
-                BackGroundRepaint = false;
             }
             RepaintOldChunks();
             RepaintActors();
+        }
+
+        private void ChangeBackground()
+        {
+            BackgroundRepainted = false;
         }
 
         private void RepaintBackGround()
@@ -48,11 +56,12 @@ namespace LevelRunner.GameWorld
                         // Reduced coordinates (camera related)
                         Bitmap chunk = new Bitmap(Terrain.TerrainImage[Parent.Map.TerrainLayer[j, i]], Program.Settings.ChunkSize);
                         Parent.Canvas.DrawImage(chunk, new Point(
-                        ((i - Parent.Camera.Coordinates.X) * Program.Settings.ChunkSize.Width),
-                        ((j - Parent.Camera.Coordinates.Y) * Program.Settings.ChunkSize.Height)));
+                            ((i - Parent.Camera.Coordinates.X) * Program.Settings.ChunkSize.Width),
+                            ((j - Parent.Camera.Coordinates.Y) * Program.Settings.ChunkSize.Height)));
                     }
                 }
             }
+            BackgroundRepainted = true;
         }
 
         private void RepaintActors()

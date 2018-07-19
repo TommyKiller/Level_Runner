@@ -51,7 +51,7 @@
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.tableLayoutPanel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tableLayoutPanel.ForeColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.tableLayoutPanel.Location = new System.Drawing.Point(934, 9);
+            this.tableLayoutPanel.Location = new System.Drawing.Point(874, 9);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 6;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.925094F));
@@ -124,7 +124,7 @@
             this.okButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.okButton.Font = new System.Drawing.Font("Courier New", 16F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.okButton.ForeColor = System.Drawing.Color.Brown;
+            this.okButton.ForeColor = System.Drawing.Color.Sienna;
             this.okButton.Location = new System.Drawing.Point(3, 679);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(411, 33);
@@ -137,7 +137,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1360, 768);
+            this.ClientSize = new System.Drawing.Size(1300, 768);
             this.Controls.Add(this.tableLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
